@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Center,
   Link,
@@ -5,12 +7,12 @@ import {
   Text,
   VStack,
   useBreakpointValue,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import { Title } from '../../components/parts';
-import { formatDate } from '../../libs/date';
-import { ArticleItem } from './components/ArticleItem';
-import { Article } from './types/article';
+} from "@chakra-ui/react";
+import { useState } from "react";
+import { Title } from "../../components/parts";
+import { formatDate } from "../../libs/date";
+import { ArticleItem } from "./components/ArticleItem";
+import { Article } from "./types/article";
 
 interface ArticleListProps {
   articles: Article[];
@@ -19,7 +21,7 @@ interface ArticleListProps {
 export function ArticleList({ articles }: ArticleListProps) {
   const [displayNumber, setDisplayNumber] = useState(10);
   const [isScrollable, setIsScrollable] = useState(true);
-  const boxWidth = useBreakpointValue({ base: '95%', md: '80%' });
+  const boxWidth = useBreakpointValue({ base: "95%", md: "80%" });
   const displayArticles = articles.slice(0, displayNumber);
 
   const handleClickedMore = () => {
@@ -61,7 +63,7 @@ export function ArticleList({ articles }: ArticleListProps) {
       <Spacer height={8} />
       <Center>
         <Link href="/" textDecoration="underline">
-          <Text>{'< '}ホームへ戻る</Text>
+          <Text>{"< "}ホームへ戻る</Text>
         </Link>
       </Center>
       <Spacer height={8} />

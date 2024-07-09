@@ -8,8 +8,8 @@ import {
   Spacer,
   Text,
   VStack,
-} from '@chakra-ui/react';
-import parse from 'html-react-parser';
+} from "@chakra-ui/react";
+import parse from "html-react-parser";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -19,10 +19,10 @@ import {
   LineShareButton,
   TwitterShareButton,
   XIcon,
-} from 'react-share';
-import Seo, { MetaData } from '../../components/layouts/Seo';
-import { formatDate } from '../../libs/date';
-import { News } from './types/news';
+} from "react-share";
+import Seo, { MetaData } from "../../components/layouts/Seo";
+import { formatDate } from "../../libs/date";
+import { News } from "./types/news";
 
 interface NewsDetailProps {
   news: News;
@@ -36,7 +36,7 @@ export function NewsDetail({ news }: NewsDetailProps) {
     pageImg: news.image.url,
   };
   const shareProps = {
-    url: metaData.pagePath,
+    url: metaData.pagePath as string,
     title: metaData.pageTitle,
   };
   const shareButtonSize = 48;
@@ -65,7 +65,7 @@ export function NewsDetail({ news }: NewsDetailProps) {
             </Center>
             <Spacer height={4} />
             <Box fontSize="md">
-              <Text>{'公開日: ' + formatDate(news.openAt)}</Text>
+              <Text>{"公開日: " + formatDate(news.openAt)}</Text>
             </Box>
             <Box fontSize="xl" lineHeight="1.8">
               {parse(news.body)}
@@ -91,7 +91,7 @@ export function NewsDetail({ news }: NewsDetailProps) {
             </HatenaShareButton>
           </HStack>
           <Link href="/" textDecoration="underline">
-            <Text>{'< '}ホームへ戻る</Text>
+            <Text>{"< "}ホームへ戻る</Text>
           </Link>
         </Box>
       </VStack>

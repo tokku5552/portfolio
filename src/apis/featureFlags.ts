@@ -9,7 +9,11 @@ export const getFeatureFlags = async (): Promise<FeatureFlags> => {
   const data = await client.get<ListProps<FeatureFlagContent>>({
     endpoint: "featureflags",
   });
-  const result = {};
+  const result: FeatureFlags = {
+    news: false,
+    works: false,
+    youtube: false,
+  };
   data.contents.forEach((content) => {
     result[content.id] = content.isEnabled;
   });
