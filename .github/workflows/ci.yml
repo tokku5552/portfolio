@@ -11,6 +11,12 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+env:
+  NEXT_PUBLIC_ENVIRONMENT: production
+  NEXT_PUBLIC_SERVICE_DOMAIN: ${{ secrets.NEXT_PUBLIC_SERVICE_DOMAIN }}
+  NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
+  NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
+  NEXT_PUBLIC_QIITA_TOKEN: ${{ secrets.NEXT_PUBLIC_QIITA_TOKEN }
 
 jobs:
   prepare:
