@@ -1,5 +1,3 @@
-'use client'
-
 import { VStack, useBreakpointValue } from '@chakra-ui/react';
 import { formatDate } from '../../../libs/date';
 import { Article } from '../types/article';

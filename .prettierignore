@@ -1,0 +1,10 @@
+# Add files here to ignore them from prettier formatting
+
+/dist
+/coverage
+
+*.md
+renovate.json
+
+# ignore each project
+apps/portfolio/public/site.webmanifest

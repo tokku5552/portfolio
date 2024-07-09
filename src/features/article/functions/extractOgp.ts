@@ -4,12 +4,11 @@ export type OgpData = {
 
 export const extractOgp = (metaElements: HTMLMetaElement[]): OgpData => {
   const ogp = metaElements
-    .filter((element: Element) => element.hasAttribute("property"))
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .filter((element: Element) => element.hasAttribute('property'))
     .reduce((previous: any, current: Element) => {
-      const property = current.getAttribute("property")?.trim();
+      const property = current.getAttribute('property')?.trim();
       if (!property) return;
-      const content = current.getAttribute("content");
+      const content = current.getAttribute('content');
       previous[property] = content;
       return previous;
     }, {});

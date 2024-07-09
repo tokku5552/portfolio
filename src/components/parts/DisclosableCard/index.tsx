@@ -1,5 +1,3 @@
-'use client'
-
 import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import { Box, Flex, IconButton, Text } from '@chakra-ui/react';
 import { useState } from 'react';

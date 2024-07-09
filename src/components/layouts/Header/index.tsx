@@ -1,5 +1,3 @@
-'use client'
-
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
 import {
   Box,

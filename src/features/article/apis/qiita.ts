@@ -1,9 +1,9 @@
-import { JSDOM } from "jsdom";
-import { config } from "../../../config/environment";
-import { stripHtmlTags, truncateText } from "../../../libs/text";
-import { extractOgp, OgpData } from "../functions/extractOgp";
-import { Article } from "../types/article";
-import { QiitaArticle, QiitaArticleResponse } from "../types/qiita";
+import { JSDOM } from 'jsdom';
+import { config } from '../../../config/environment';
+import { stripHtmlTags, truncateText } from '../../../libs/text';
+import { extractOgp, OgpData } from '../functions/extractOgp';
+import { Article } from '../types/article';
+import { QiitaArticle, QiitaArticleResponse } from '../types/qiita';
 
 /**
  * Qiitaの記事を取得する
@@ -12,7 +12,7 @@ import { QiitaArticle, QiitaArticleResponse } from "../types/qiita";
  */
 export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
   const res = await fetch(
-    "https://qiita.com/api/v2/authenticated_user/items?per_page=100&page=1",
+    'https://qiita.com/api/v2/authenticated_user/items?per_page=100&page=1',
     {
       headers: {
         Authorization: `Bearer ${config.qiitaToken}`,
@@ -33,7 +33,7 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
     })
   );
   return result.map((item) =>
-    toArticleFromQiita(item.qiitaArticle, item.ogp["og:image"])
+    toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'])
   );
 };
 
@@ -41,14 +41,14 @@ const fetchOgpDataFromQiita = async (url: string): Promise<OgpData> => {
   const encodedUri = encodeURI(url);
   const res = await fetch(encodedUri, {
     headers: {
-      "User-Agent": "bot",
+      'User-Agent': 'bot',
     },
   });
   const html = await res.text();
   const dom = new JSDOM(html);
 
   // metaデータを取得し、ogpの各データを抽出
-  const meta = dom.window.document.head.querySelectorAll("meta");
+  const meta = dom.window.document.head.querySelectorAll('meta');
   const metaElements = Array.from(meta);
   const ogp = extractOgp([...metaElements]);
 
@@ -105,7 +105,7 @@ const toArticleFromQiita = (
   return {
     title: qiitaArticle.title,
     bodySummary: truncateText(stripHtmlTags(qiitaArticle.renderedBody), 100),
-    source: "qiita",
+    source: 'qiita',
     url: qiitaArticle.url,
     publishedAt: qiitaArticle.createdAt,
     imageUrl: imageUrl,

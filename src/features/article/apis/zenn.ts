@@ -1,12 +1,12 @@
-import { JSDOM } from "jsdom";
-import { stripHtmlTags, truncateText } from "../../../libs/text";
-import { extractOgp, OgpData } from "../functions/extractOgp";
-import { Article } from "../types/article";
-import { ZennArticle, ZennArticleResponse } from "../types/zenn";
+import { JSDOM } from 'jsdom';
+import { stripHtmlTags, truncateText } from '../../../libs/text';
+import { extractOgp, OgpData } from '../functions/extractOgp';
+import { Article } from '../types/article';
+import { ZennArticle, ZennArticleResponse } from '../types/zenn';
 
 export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
   const res = await fetch(
-    "https://zenn.dev/api/articles?username=tokku5552&order=latest"
+    'https://zenn.dev/api/articles?username=tokku5552&order=latest'
   );
   const response: ZennArticleResponse = await res.json();
 
@@ -25,7 +25,7 @@ export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
   );
 
   return result.map((item) =>
-    toArticleFromZenn(item.zennArticle, item.description, item.ogp["og:image"])
+    toArticleFromZenn(item.zennArticle, item.description, item.ogp['og:image'])
   );
 };
 
@@ -35,19 +35,19 @@ const fetchOgpDataFromZenn = async (
   const encodedUri = encodeURI(url);
   const res = await fetch(encodedUri, {
     headers: {
-      "User-Agent": "bot",
+      'User-Agent': 'bot',
     },
   });
   const html = await res.text();
   const dom = new JSDOM(html);
 
   // metaデータを取得し、ogpの各データを抽出
-  const meta = dom.window.document.head.querySelectorAll("meta");
+  const meta = dom.window.document.head.querySelectorAll('meta');
   const metaElements = Array.from(meta);
   const ogp = extractOgp([...metaElements]);
 
   // bodyからdescriptionを生成
-  const body = dom.window.document.body.querySelectorAll("p");
+  const body = dom.window.document.body.querySelectorAll('p');
   const bodyElements = Array.from(body);
   const textContents = bodyElements.map((element) => element.textContent);
   const description = truncateText(stripHtmlTags(textContents.join()), 100);
@@ -90,7 +90,7 @@ const toArticleFromZenn = (
   return {
     title: zennArticle.title,
     bodySummary: bodySummary,
-    source: "zenn",
+    source: 'zenn',
     url: `https://zenn.dev/${zennArticle.user.username}/articles/${zennArticle.slug}`,
     publishedAt: zennArticle.publishedAt,
     imageUrl: imageUrl,
