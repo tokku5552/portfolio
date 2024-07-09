@@ -1,8 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
+import { ChakraProvider } from '@chakra-ui/react';
+import Head from 'next/head';
+import { useRouter } from 'next/navigation';
+import Script from 'next/script';
+import { useEffect } from 'react';
+import { BaseLayout } from '../components/layouts/BaseLayout';
+import { globalPageTitle } from '../config/constants';
+import { GA_MEASUREMENT_ID, pageview } from '../libs/gtag';
+import { theme } from '../theme/theme';
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,9 +20,73 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // const router = useRouter();
+  // useEffect(() => {
+  //   const handleRouterChange = (url: string) => {
+  //     pageview(url);
+  //   };
+  //   router.events.on('routeChangeComplete', handleRouterChange);
+  //   return () => {
+  //     router.events.off('routeChangeComplete', handleRouterChange);
+  //   };
+  // }, [router.events]);
+
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="jp">
+      <Head>
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/favicon-16x16.png"
+        />
+        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+        <meta name="msapplication-TileColor" content="#da532c" />
+        <meta name="theme-color" content="#ffffff" />
+      </Head>
+       <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '${GA_MEASUREMENT_ID}');
+        `,
+        }}
+      />
+      <Head>
+        <title>{globalPageTitle}</title>
+      </Head>
+      <main className="app">
+        <body>
+        <ChakraProvider theme={theme}>
+          <BaseLayout>
+          {children}
+          </BaseLayout>
+        </ChakraProvider>
+        </body>
+      </main>
     </html>
   );
 }
+
+
