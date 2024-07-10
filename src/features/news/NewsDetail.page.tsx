@@ -21,7 +21,6 @@ import {
   TwitterShareButton,
   XIcon,
 } from 'react-share';
-import Seo, { MetaData } from '../../components/layouts/Seo';
 import { formatDate } from '../../libs/date';
 import { News } from './types/news';
 
@@ -30,20 +29,13 @@ interface NewsDetailProps {
 }
 
 export function NewsDetail({ news }: NewsDetailProps) {
-  const metaData: MetaData = {
-    pageTitle: news.title,
-    pageDescription: news.body,
-    pagePath: `${baseURL}/news/${news.id}`,
-    pageImg: news.image.url,
-  };
   const shareProps = {
-    url: metaData.pagePath as string,
-    title: metaData.pageTitle,
+    url: `${baseURL}/news/${news.id}`,
+    title: news.title,
   };
   const shareButtonSize = 48;
   return (
     <>
-      <Seo {...metaData} />
       <Spacer height={8} />
       <VStack spacing={6} align="stretch" px={[4, 4, 8, 8]}>
         <Center>

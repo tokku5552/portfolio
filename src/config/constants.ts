@@ -1,5 +1,10 @@
 export const baseURL = 'https://www.tokku-tech.dev';
 export const globalPageTitle = "tokku's portfolio";
+export const globalDescription = `
+1991年1月生まれ福岡出身。九州大学理学部物理学科卒業後、都内SIerにてインフラエンジニアとして働いた後、ミロゴス株式会社でフロント・バックエンド・インフラをフルスタックにこなすエンジニアを経験。
+現在はCyberAgentのAI事業本部でバックエンドエンジニアとして従事中。
+好きな技術はFlutter/Next.js/AWS。現在娘の子育てに奮闘中。
+`;
 export const globalCoverUrl = `${baseURL}/assets/hero_skills_2023.png`;
 export const linedcUrl =
   'https://developers.line.biz/ja/community/api-experts/jp-shinnosuke-tokuda/';
