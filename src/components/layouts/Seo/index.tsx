@@ -1,6 +1,11 @@
 /* eslint-disable @next/next/no-page-custom-font */
 import Head from 'next/head';
-import { globalCoverUrl, globalPageTitle } from '../../../config/constants';
+import {
+  baseURL,
+  globalCoverUrl,
+  globalDescription,
+  globalPageTitle,
+} from '../../../config/constants';
 import { stripHtmlTags } from '../../../libs/text';
 
 export interface MetaData {
@@ -21,13 +26,13 @@ const Seo = ({
   pageImgHeight,
 }: MetaData) => {
   const defaultTitle = globalPageTitle;
-  const defaultDescription = '';
+  const defaultDescription = globalDescription;
 
   const title = pageTitle ? `${pageTitle} | ${defaultTitle}` : defaultTitle;
   const description = pageDescription
     ? stripHtmlTags(pageDescription)
     : stripHtmlTags(defaultDescription);
-  const url = pagePath;
+  const url = pagePath ? pagePath : baseURL;
   const imgUrl = pageImg ? pageImg : globalCoverUrl;
   const imgWidth = pageImgWidth ? pageImgWidth : 1280;
   const imgHeight = pageImgHeight ? pageImgHeight : 640;

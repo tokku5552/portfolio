@@ -1,3 +1,4 @@
+import Seo from '@/components/layouts/Seo';
 import { GetStaticProps } from 'next';
 import { client } from '../clients/microcms';
 import { fetchArticles } from '../features/article/apis/article';
@@ -13,6 +14,7 @@ interface HomePageProps {
 export default function HomePage({ news, articles }: HomePageProps) {
   return (
     <>
+      <Seo />
       <Home news={news} articles={articles} />
     </>
   );
