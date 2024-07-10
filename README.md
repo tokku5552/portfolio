@@ -6,7 +6,7 @@ This is tokku's portfolio repository.
 
 ---
 
-[tokku's portfolio](https://portfolio-tokku5552.vercel.app/)
+[tokku's portfolio](https://www.tokku-tech.dev/)
 
 ![vercel](https://img.shields.io/badge/-Next.js-181717.svg?logo=nextdotjs&style=flat)
 ![vercel](https://img.shields.io/badge/-TypeScript-007ACC.svg?logo=typescript&style=flat)

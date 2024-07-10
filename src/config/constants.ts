@@ -1,6 +1,6 @@
+export const baseURL = 'https://www.tokku-tech.dev';
 export const globalPageTitle = "tokku's portfolio";
-export const globalCoverUrl =
-  'https://portfolio-tokku5552.vercel.app/assets/hero_skills_2023.png';
+export const globalCoverUrl = `${baseURL}/assets/hero_skills_2023.png`;
 export const linedcUrl =
   'https://developers.line.biz/ja/community/api-experts/jp-shinnosuke-tokuda/';
 export const xUrl = 'https://twitter.com/tokkuu';
