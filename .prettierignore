@@ -3,8 +3,5 @@
 /dist
 /coverage
 
-*.md
 renovate.json
 
-# ignore each project
-apps/portfolio/public/site.webmanifest

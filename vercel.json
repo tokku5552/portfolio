@@ -1,0 +1,14 @@
+{
+  "github": {
+    "enabled": true,
+    "deployments": {
+      "preview": {
+        "enabled": true,
+        "types": ["pull_request"]
+      },
+      "production": {
+        "enabled": true
+      }
+    }
+  }
+}
