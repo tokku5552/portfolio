@@ -1,3 +1,4 @@
+import { baseURL } from '@/config/constants';
 import {
   Box,
   Center,
@@ -32,7 +33,7 @@ export function NewsDetail({ news }: NewsDetailProps) {
   const metaData: MetaData = {
     pageTitle: news.title,
     pageDescription: news.body,
-    pagePath: `https://portfolio-tokku5552.vercel.app/news/${news.id}`,
+    pagePath: `${baseURL}/news/${news.id}`,
     pageImg: news.image.url,
   };
   const shareProps = {
