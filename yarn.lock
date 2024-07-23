@@ -3493,9 +3493,9 @@ form-data@^4.0.0:
     mime-types "^2.1.12"
 
 framer-motion@^11.2.14:
-  version "11.3.8"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.3.8.tgz#682df8cbac6a9667b48af427e5a8bdaea7203713"
-  integrity sha512-1D+RDTsIp4Rz2dq/oToqSEc9idEQwgBRQyBq4rGpFba+0Z+GCbj9z1s0+ikFbanWe3YJ0SqkNlDe08GcpFGj5A==
+  version "11.3.9"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.3.9.tgz#79323d5fb186a8ac1b0dc37ff46272fede88d858"
+  integrity sha512-6oW/GDxuLBZqWJJeC8+zkEQeYDe6BYXPaNDUiJNCbzj4KDfVpcScWpM+6A7YoQGCfbtL7Q3ZqAZDYXPUF5r54w==
   dependencies:
     tslib "^2.4.0"
 
@@ -6034,10 +6034,10 @@ typed-array-length@^1.0.6:
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
 
-typescript@5.5.3:
-  version "5.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.3.tgz#e1b0a3c394190838a0b168e771b0ad56a0af0faa"
-  integrity sha512-/hreyEujaB0w76zKo6717l3L0o/qEUtRgdvUBvlkhoWeOVMjMuHNHk0BRBzikzuGDqNmPQbg5ifMEqsHLiIUcQ==
+typescript@5.5.4:
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.4.tgz#d9852d6c82bad2d2eda4fd74a5762a8f5909e9ba"
+  integrity sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
