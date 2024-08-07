@@ -3518,9 +3518,9 @@ form-data@^4.0.0:
     mime-types "^2.1.12"
 
 framer-motion@^11.2.14:
-  version "11.3.21"
-  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.3.21.tgz#bdf06cf3ced9f14ddf055e098c1566795f353466"
-  integrity sha512-D+hfIsvzV8eL/iycld4K+tKlg2Q2LdwnrcBEohtGw3cG1AIuNYATbT5RUqIM1ndsAk+EfGhoSGf0UaiFodc5Tw==
+  version "11.3.22"
+  resolved "https://registry.yarnpkg.com/framer-motion/-/framer-motion-11.3.22.tgz#59b09479e3e8919edb44171bb5e9a5a814ba2351"
+  integrity sha512-NS9TnPOJhkUrKKe7sl9zAMmQlzm70bwzJ6/gs/DkYP3kCqc0wO350CEqiEcBuVjhyqVNnDf33SkenzByi8x8Gg==
   dependencies:
     tslib "^2.4.0"
 
