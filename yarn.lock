@@ -4707,9 +4707,9 @@ react-focus-lock@^2.9.6:
     use-sidecar "^1.1.2"
 
 react-icons@^5.2.1:
-  version "5.4.0"
-  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.4.0.tgz#443000f6e5123ee1b21ea8c0a716f6e7797f7416"
-  integrity sha512-7eltJxgVt7X64oHh6wSWNwwbKTCtMfK35hcjvJS0yxEAhPM8oUKdS3+kqaW1vicIltw+kR2unHaa12S9pPALoQ==
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/react-icons/-/react-icons-5.5.0.tgz#8aa25d3543ff84231685d3331164c00299cdfaf2"
+  integrity sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==
 
 react-is@^16.13.1, react-is@^16.7.0:
   version "16.13.1"
@@ -4746,9 +4746,9 @@ react-remove-scroll@^2.5.7:
     use-sidecar "^1.1.2"
 
 react-share@^5.1.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/react-share/-/react-share-5.2.0.tgz#7627bff0227a82f0916e5ec5affab09f114f3bf5"
-  integrity sha512-0gFXnW1qMO4BITbf0lSX03J0GWmYPRqMXcP9obl+T+8nvFeOpqhiow8tGryeY9vx35fprQvri0Q0fkqb3t9uag==
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/react-share/-/react-share-5.2.1.tgz#92bb145a4b057501ba07f4e562b993e4cf7b9928"
+  integrity sha512-M69VhqBLpY89zgkOmuXz67EfVYHNTcVALMUirTRpVAUxRrkJicYl3OKp6ZM8dNYl86VrzXrArzoiwbyubJRYqg==
   dependencies:
     classnames "^2.3.2"
     jsonp "^0.2.1"
