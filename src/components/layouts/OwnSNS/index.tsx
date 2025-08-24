@@ -127,7 +127,7 @@ export function OwnSNS() {
       {/* gridを使ってbaseは横一列で、スマホの場合は数を変えながら複数列にする */}
       <HStack overflowX="auto" p={4}>
         {snsIcons.map((snsIcon) => (
-          <div key={snsIcon.sns}>
+          <div key={snsIcon.sns} style={{ flexShrink: 0 }}>
             <Link href={snsIcon.href} isExternal>
               {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
               <Spacer w={2} />
