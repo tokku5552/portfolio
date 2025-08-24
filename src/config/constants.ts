@@ -15,6 +15,7 @@ export const linkdinUrl =
   'https://www.linkedin.com/in/shinnosuke-tokuda-853b78207/';
 export const githubUrl = 'https://github.com/tokku5552';
 export const wantedlyUrl = 'https://www.wantedly.com/id/shinnosuke_tokuda';
+export const noteUrl = 'https://note.com/tokku5552';
 export const podcastUrl = 'https://podcasters.spotify.com/pod/show/5rh9uag8ah';
 export const podcastEmbedUrl =
   'https://podcasters.spotify.com/pod/show/5rh9uag8ah/embed';

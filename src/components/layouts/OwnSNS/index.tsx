@@ -13,6 +13,7 @@ import {
   githubUrl,
   instagramUrl,
   linkdinUrl,
+  noteUrl,
   wantedlyUrl,
   xUrl,
 } from '../../../config/constants';
@@ -28,6 +29,7 @@ export function OwnSNS() {
     instagram: 60,
     linkdin: 60,
     wantedly: 68,
+    note: 60,
   };
 
   // アイコンの幅と間のスペースの合計
@@ -38,7 +40,8 @@ export function OwnSNS() {
     baseIconSize.instagram +
     baseIconSize.linkdin +
     baseIconSize.wantedly +
-    2 * 5;
+    baseIconSize.note +
+    2 * 6;
 
   const snsIcons: SNSIconProps[] = [
     {
@@ -89,6 +92,14 @@ export function OwnSNS() {
       baseSize: baseIconSize.wantedly,
       sizerate: baseIconSize.wantedly / limitWidth,
     },
+    {
+      sns: 'note',
+      src: '/assets/note-icon.ico',
+      alt: 'note',
+      href: noteUrl,
+      baseSize: baseIconSize.note,
+      sizerate: baseIconSize.note / limitWidth,
+    },
   ];
 
   const iconSizes = {
@@ -107,6 +118,9 @@ export function OwnSNS() {
     wantedly: isLargerThan768
       ? `${baseIconSize.wantedly}px`
       : `${baseIconSize.wantedly * 0.8}px`,
+    note: isLargerThan768
+      ? `${baseIconSize.note}px`
+      : `${baseIconSize.note * 0.8}px`,
   };
   return (
     <>
