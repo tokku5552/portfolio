@@ -53,6 +53,14 @@ export function OwnSNS() {
       sizerate: baseIconSize.x / limitWidth,
     },
     {
+      sns: 'note',
+      src: '/assets/note-icon.ico',
+      alt: 'note',
+      href: noteUrl,
+      baseSize: baseIconSize.note,
+      sizerate: baseIconSize.note / limitWidth,
+    },
+    {
       sns: 'github',
       src: '/assets/github-icon.png',
       alt: 'github',
@@ -92,14 +100,6 @@ export function OwnSNS() {
       baseSize: baseIconSize.wantedly,
       sizerate: baseIconSize.wantedly / limitWidth,
     },
-    {
-      sns: 'note',
-      src: '/assets/note-icon.ico',
-      alt: 'note',
-      href: noteUrl,
-      baseSize: baseIconSize.note,
-      sizerate: baseIconSize.note / limitWidth,
-    },
   ];
 
   const iconSizes = {
@@ -125,69 +125,35 @@ export function OwnSNS() {
   return (
     <>
       {/* gridを使ってbaseは横一列で、スマホの場合は数を変えながら複数列にする */}
-      {isLargerThan768 ? (
-        <HStack>
-          {snsIcons.map((snsIcon) => (
-            <div key={snsIcon.sns}>
-              <Link href={snsIcon.href} isExternal>
-                {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
-                <Spacer w={2} />
-                {snsIcon.sns === 'github' ? (
-                  <FaGithub size={iconSizes.github} />
-                ) : snsIcon.sns === 'wantedly' ? (
-                  <Image
-                    w={iconSizes.wantedly}
-                    objectFit="cover"
-                    rounded={'md'}
-                    alt={snsIcon.alt}
-                    src={snsIcon.src}
-                  />
-                ) : (
-                  <Image
-                    boxSize={iconSizes[snsIcon.sns]}
-                    objectFit="cover"
-                    rounded={'md'}
-                    alt={snsIcon.alt}
-                    src={snsIcon.src}
-                  />
-                )}
-              </Link>
-            </div>
-          ))}
-        </HStack>
-      ) : (
-        <Center>
-          <SimpleGrid columns={snsIcons.length / 2} spacing={8}>
-            {snsIcons.map((snsIcon) => (
-              <div key={snsIcon.sns}>
-                <Link href={snsIcon.href} isExternal>
-                  {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
-                  <Spacer w={2} />
-                  {snsIcon.sns === 'github' ? (
-                    <FaGithub size={iconSizes.github} />
-                  ) : snsIcon.sns === 'wantedly' ? (
-                    <Image
-                      w={iconSizes.wantedly}
-                      objectFit="cover"
-                      rounded={'md'}
-                      alt={snsIcon.alt}
-                      src={snsIcon.src}
-                    />
-                  ) : (
-                    <Image
-                      boxSize={iconSizes[snsIcon.sns]}
-                      objectFit="cover"
-                      rounded={'md'}
-                      alt={snsIcon.alt}
-                      src={snsIcon.src}
-                    />
-                  )}
-                </Link>
-              </div>
-            ))}
-          </SimpleGrid>
-        </Center>
-      )}
+      <HStack overflowX="auto" p={4}>
+        {snsIcons.map((snsIcon) => (
+          <div key={snsIcon.sns}>
+            <Link href={snsIcon.href} isExternal>
+              {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
+              <Spacer w={2} />
+              {snsIcon.sns === 'github' ? (
+                <FaGithub size={iconSizes.github} />
+              ) : snsIcon.sns === 'wantedly' ? (
+                <Image
+                  w={iconSizes.wantedly}
+                  objectFit="cover"
+                  rounded={'md'}
+                  alt={snsIcon.alt}
+                  src={snsIcon.src}
+                />
+              ) : (
+                <Image
+                  boxSize={iconSizes[snsIcon.sns]}
+                  objectFit="cover"
+                  rounded={'md'}
+                  alt={snsIcon.alt}
+                  src={snsIcon.src}
+                />
+              )}
+            </Link>
+          </div>
+        ))}
+      </HStack>
     </>
   );
 }
