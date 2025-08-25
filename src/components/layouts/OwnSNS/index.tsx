@@ -29,7 +29,7 @@ export function OwnSNS() {
     instagram: 60,
     linkdin: 60,
     wantedly: 68,
-    note: 60,
+    note: 68,
   };
 
   // アイコンの幅と間のスペースの合計
