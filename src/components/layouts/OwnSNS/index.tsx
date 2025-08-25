@@ -13,6 +13,7 @@ import {
   githubUrl,
   instagramUrl,
   linkdinUrl,
+  noteUrl,
   wantedlyUrl,
   xUrl,
 } from '../../../config/constants';
@@ -28,6 +29,7 @@ export function OwnSNS() {
     instagram: 60,
     linkdin: 60,
     wantedly: 68,
+    note: 68,
   };
 
   // アイコンの幅と間のスペースの合計
@@ -38,7 +40,8 @@ export function OwnSNS() {
     baseIconSize.instagram +
     baseIconSize.linkdin +
     baseIconSize.wantedly +
-    2 * 5;
+    baseIconSize.note +
+    2 * 6;
 
   const snsIcons: SNSIconProps[] = [
     {
@@ -48,6 +51,14 @@ export function OwnSNS() {
       href: xUrl,
       baseSize: baseIconSize.x,
       sizerate: baseIconSize.x / limitWidth,
+    },
+    {
+      sns: 'note',
+      src: '/assets/note-icon.ico',
+      alt: 'note',
+      href: noteUrl,
+      baseSize: baseIconSize.note,
+      sizerate: baseIconSize.note / limitWidth,
     },
     {
       sns: 'github',
@@ -107,73 +118,42 @@ export function OwnSNS() {
     wantedly: isLargerThan768
       ? `${baseIconSize.wantedly}px`
       : `${baseIconSize.wantedly * 0.8}px`,
+    note: isLargerThan768
+      ? `${baseIconSize.note}px`
+      : `${baseIconSize.note * 0.8}px`,
   };
   return (
     <>
       {/* gridを使ってbaseは横一列で、スマホの場合は数を変えながら複数列にする */}
-      {isLargerThan768 ? (
-        <HStack>
-          {snsIcons.map((snsIcon) => (
-            <div key={snsIcon.sns}>
-              <Link href={snsIcon.href} isExternal>
-                {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
-                <Spacer w={2} />
-                {snsIcon.sns === 'github' ? (
-                  <FaGithub size={iconSizes.github} />
-                ) : snsIcon.sns === 'wantedly' ? (
-                  <Image
-                    w={iconSizes.wantedly}
-                    objectFit="cover"
-                    rounded={'md'}
-                    alt={snsIcon.alt}
-                    src={snsIcon.src}
-                  />
-                ) : (
-                  <Image
-                    boxSize={iconSizes[snsIcon.sns]}
-                    objectFit="cover"
-                    rounded={'md'}
-                    alt={snsIcon.alt}
-                    src={snsIcon.src}
-                  />
-                )}
-              </Link>
-            </div>
-          ))}
-        </HStack>
-      ) : (
-        <Center>
-          <SimpleGrid columns={snsIcons.length / 2} spacing={8}>
-            {snsIcons.map((snsIcon) => (
-              <div key={snsIcon.sns}>
-                <Link href={snsIcon.href} isExternal>
-                  {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
-                  <Spacer w={2} />
-                  {snsIcon.sns === 'github' ? (
-                    <FaGithub size={iconSizes.github} />
-                  ) : snsIcon.sns === 'wantedly' ? (
-                    <Image
-                      w={iconSizes.wantedly}
-                      objectFit="cover"
-                      rounded={'md'}
-                      alt={snsIcon.alt}
-                      src={snsIcon.src}
-                    />
-                  ) : (
-                    <Image
-                      boxSize={iconSizes[snsIcon.sns]}
-                      objectFit="cover"
-                      rounded={'md'}
-                      alt={snsIcon.alt}
-                      src={snsIcon.src}
-                    />
-                  )}
-                </Link>
-              </div>
-            ))}
-          </SimpleGrid>
-        </Center>
-      )}
+      <HStack overflowX="auto" p={4}>
+        {snsIcons.map((snsIcon) => (
+          <div key={snsIcon.sns} style={{ flexShrink: 0 }}>
+            <Link href={snsIcon.href} isExternal>
+              {/* GitHubの場合のみFaのアイコンをつかい、それ以外はImage、Wantedlyの場合はboxSizeではなくwで横幅を指定 */}
+              <Spacer w={2} />
+              {snsIcon.sns === 'github' ? (
+                <FaGithub size={iconSizes.github} />
+              ) : snsIcon.sns === 'wantedly' ? (
+                <Image
+                  w={iconSizes.wantedly}
+                  objectFit="cover"
+                  rounded={'md'}
+                  alt={snsIcon.alt}
+                  src={snsIcon.src}
+                />
+              ) : (
+                <Image
+                  boxSize={iconSizes[snsIcon.sns]}
+                  objectFit="cover"
+                  rounded={'md'}
+                  alt={snsIcon.alt}
+                  src={snsIcon.src}
+                />
+              )}
+            </Link>
+          </div>
+        ))}
+      </HStack>
     </>
   );
 }
