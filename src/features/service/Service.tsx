@@ -52,7 +52,7 @@ const ServiceCard = ({ title, description }: ServiceCardProps) => {
 export default function ServiceGrid() {
   return (
     <>
-      <SimpleGrid columns={3} spacing={8}>
+      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
         {data.map((d, i) => (
           <ServiceCard key={i} title={d.title} description={d.description} />
         ))}
