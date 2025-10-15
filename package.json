@@ -43,6 +43,6 @@
     "swr": "^2.2.5",
     "ts-jest": "^29.2.0",
     "ts-node": "^10.9.2",
-    "typescript": "5.9.2"
+    "typescript": "5.9.3"
   }
 }
