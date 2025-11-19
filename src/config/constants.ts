@@ -23,8 +23,6 @@ export const podcastSpotifyUrl =
   'https://open.spotify.com/show/6h7WBgX1XlTuypPKhyL3qI';
 export const podcastApplePodcastsUrl =
   'https://podcasts.apple.com/us/podcast/%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%8C%E3%82%82%E3%81%8C%E3%81%8F%E3%83%A9%E3%82%B8%E3%82%AA/id1682202380';
-export const podcastGooglePodcastsUrl =
-  'https://podcasts.google.com/feed/aHR0cHM6Ly9hbmNob3IuZm0vcy9kZWQ2ZGI1MC9wb2RjYXN0L3Jzcw';
 export const podcastAmazonMusicUrl =
   'https://music.amazon.co.jp/podcasts/3cc76d7c-f8e0-4a88-9344-1645b7a7aaa0';
 export const contactGoogleFormUrl = 'https://forms.gle/fvHkjYuSExq6EvUr9';
