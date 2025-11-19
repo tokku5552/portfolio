@@ -16,7 +16,6 @@ import {
   podcastAmazonMusicUrl,
   podcastApplePodcastsUrl,
   podcastEmbedUrl,
-  podcastGooglePodcastsUrl,
   podcastSpotifyUrl,
   podcastUrl,
 } from '../../../config/constants';
@@ -61,14 +60,6 @@ export function Podcast() {
                   isExternal
                 >
                   Apple Podcast
-                </Link>
-                /
-                <Link
-                  href={podcastGooglePodcastsUrl}
-                  textDecoration={'underline'}
-                  isExternal
-                >
-                  Google Podcast
                 </Link>
                 /
                 <Link
