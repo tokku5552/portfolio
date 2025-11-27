@@ -1,6 +1,6 @@
 import Seo from '@/components/layouts/Seo';
 import { GetStaticProps } from 'next';
-import { client } from '../clients/microcms';
+import { client, isMicrocmsConfigured } from '../clients/microcms';
 import { fetchArticles } from '../features/article/apis/article';
 import { Article } from '../features/article/types/article';
 import Home from '../features/home/Home.page';
@@ -21,11 +21,13 @@ export default function HomePage({ news, articles }: HomePageProps) {
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const data = await client.get<ListProps<News>>({ endpoint: 'news' });
+  const news = isMicrocmsConfigured
+    ? (await client.get<ListProps<News>>({ endpoint: 'news' })).contents
+    : [];
   const articles = await fetchArticles(3);
   return {
     props: {
-      news: data.contents,
+      news: news,
       articles: articles,
     },
   };
