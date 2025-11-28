@@ -11,30 +11,46 @@ import { QiitaArticle, QiitaArticleResponse } from '../types/qiita';
  * @returns
  */
 export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
-  const res = await fetch(
-    'https://qiita.com/api/v2/authenticated_user/items?per_page=100&page=1',
-    {
-      headers: {
-        Authorization: `Bearer ${config.qiitaToken}`,
-      },
-    }
-  )
-    .then((res) => res.json())
-    .catch((err) => console.error(err));
+  if (!config.qiitaToken) {
+    console.warn('NEXT_PUBLIC_QIITA_TOKEN is not set; skipping Qiita fetch.');
+    return [];
+  }
 
-  const qiitaArticles = toQiitaArticles(res);
-  const result = await Promise.all(
-    qiitaArticles.map(async (qiitaArticle) => {
-      const ogp = await fetchOgpDataFromQiita(qiitaArticle.url);
-      return {
-        qiitaArticle,
-        ogp,
-      };
-    })
-  );
-  return result.map((item) =>
-    toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'])
-  );
+  try {
+    const res = await fetch(
+      'https://qiita.com/api/v2/authenticated_user/items?per_page=100&page=1',
+      {
+        headers: {
+          Authorization: `Bearer ${config.qiitaToken}`,
+        },
+      }
+    ).then((response) => response.json());
+
+    if (!res || !Array.isArray(res)) {
+      console.warn('Invalid response from Qiita API');
+      return [];
+    }
+
+    const qiitaArticles = toQiitaArticles(res);
+    const result = await Promise.all(
+      qiitaArticles.map(async (qiitaArticle) => {
+        const ogp = await fetchOgpDataFromQiita(qiitaArticle.url);
+        return {
+          qiitaArticle,
+          ogp,
+        };
+      })
+    );
+    return result.map((item) =>
+      toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'])
+    );
+  } catch (error) {
+    console.warn(
+      'Failed to fetch Qiita articles:',
+      error instanceof Error ? error.message : error
+    );
+    return [];
+  }
 };
 
 const fetchOgpDataFromQiita = async (url: string): Promise<OgpData> => {
