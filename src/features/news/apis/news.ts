@@ -2,30 +2,51 @@ import { client, isMicrocmsConfigured } from '../../../clients/microcms';
 import { ListProps } from '../../../types/ListCMS';
 import { News } from '../types/news';
 
-export const fetchNewsList = async () => {
+const createEmptyNewsList = (): ListProps<News> => ({
+  contents: [],
+  totalCount: 0,
+  offset: 0,
+  limit: 0,
+});
+
+export const fetchNewsList = async (): Promise<ListProps<News>> => {
   if (!isMicrocmsConfigured) {
     console.warn('MicroCMS is not configured; returning empty news list.');
-    const emptyNews: ListProps<News> = {
-      contents: [],
-      totalCount: 0,
-      offset: 0,
-      limit: 0,
-    };
-    return emptyNews;
+    return createEmptyNewsList();
   }
 
-  return client.get<ListProps<News>>({
-    endpoint: 'news?limit=100&orders=-openAt',
-  });
+  try {
+    return await client.get<ListProps<News>>({
+      endpoint: 'news?limit=100&orders=-openAt',
+    });
+  } catch (error) {
+    console.warn(
+      'Failed to fetch news list:',
+      error instanceof Error ? error.message : error
+    );
+    return createEmptyNewsList();
+  }
 };
 
-export const fetchNews = async (id: string) => {
+export const fetchNews = async (id: string): Promise<News | null> => {
   if (!isMicrocmsConfigured) {
-    throw new Error('MicroCMS is not configured; cannot fetch news content.');
+    console.warn(
+      'MicroCMS is not configured; cannot fetch news content for id:',
+      id
+    );
+    return null;
   }
 
-  return client.get<News>({
-    endpoint: 'news',
-    contentId: id,
-  });
+  try {
+    return await client.get<News>({
+      endpoint: 'news',
+      contentId: id,
+    });
+  } catch (error) {
+    console.warn(
+      `Failed to fetch news content (id: ${id}):`,
+      error instanceof Error ? error.message : error
+    );
+    return null;
+  }
 };

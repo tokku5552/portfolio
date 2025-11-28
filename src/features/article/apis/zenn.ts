@@ -33,7 +33,10 @@ export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
       )
     );
   } catch (error) {
-    console.warn('Failed to fetch Zenn articles.', error);
+    console.warn(
+      'Failed to fetch Zenn articles:',
+      error instanceof Error ? error.message : error
+    );
     return [];
   }
 };

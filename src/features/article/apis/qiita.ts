@@ -26,7 +26,10 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
       }
     ).then((response) => response.json());
 
-    if (!Array.isArray(res)) return [];
+    if (!res || !Array.isArray(res)) {
+      console.warn('Invalid response from Qiita API');
+      return [];
+    }
 
     const qiitaArticles = toQiitaArticles(res);
     const result = await Promise.all(
@@ -42,7 +45,10 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
       toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'])
     );
   } catch (error) {
-    console.warn('Failed to fetch Qiita articles.', error);
+    console.warn(
+      'Failed to fetch Qiita articles:',
+      error instanceof Error ? error.message : error
+    );
     return [];
   }
 };
