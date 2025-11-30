@@ -54,6 +54,12 @@ export const getStaticProps: GetStaticProps<
   const id = params.news_id;
   const data = await fetchNews(id);
 
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       news: {

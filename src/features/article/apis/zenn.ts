@@ -5,28 +5,40 @@ import { Article } from '../types/article';
 import { ZennArticle, ZennArticleResponse } from '../types/zenn';
 
 export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
-  const res = await fetch(
-    'https://zenn.dev/api/articles?username=tokku5552&order=latest'
-  );
-  const response: ZennArticleResponse = await res.json();
+  try {
+    const res = await fetch(
+      'https://zenn.dev/api/articles?username=tokku5552&order=latest'
+    );
+    const response: ZennArticleResponse = await res.json();
 
-  const zennArticles = toZennArticles(response);
-  const result = await Promise.all(
-    zennArticles.map(async (zennArticle) => {
-      const [ogp, description] = await fetchOgpDataFromZenn(
-        `https://zenn.dev/${zennArticle.user.username}/articles/${zennArticle.slug}`
-      );
-      return {
-        zennArticle,
-        ogp,
-        description,
-      };
-    })
-  );
+    const zennArticles = toZennArticles(response);
+    const result = await Promise.all(
+      zennArticles.map(async (zennArticle) => {
+        const [ogp, description] = await fetchOgpDataFromZenn(
+          `https://zenn.dev/${zennArticle.user.username}/articles/${zennArticle.slug}`
+        );
+        return {
+          zennArticle,
+          ogp,
+          description,
+        };
+      })
+    );
 
-  return result.map((item) =>
-    toArticleFromZenn(item.zennArticle, item.description, item.ogp['og:image'])
-  );
+    return result.map((item) =>
+      toArticleFromZenn(
+        item.zennArticle,
+        item.description,
+        item.ogp['og:image']
+      )
+    );
+  } catch (error) {
+    console.warn(
+      'Failed to fetch Zenn articles:',
+      error instanceof Error ? error.message : error
+    );
+    return [];
+  }
 };
 
 const fetchOgpDataFromZenn = async (
