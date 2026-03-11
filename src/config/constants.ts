@@ -26,3 +26,4 @@ export const podcastApplePodcastsUrl =
 export const podcastAmazonMusicUrl =
   'https://music.amazon.co.jp/podcasts/3cc76d7c-f8e0-4a88-9344-1645b7a7aaa0';
 export const contactGoogleFormUrl = 'https://forms.gle/fvHkjYuSExq6EvUr9';
+export const timeTicketUrl = 'https://www.timeticket.jp/items/192937/';
