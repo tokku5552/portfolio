@@ -7,7 +7,7 @@ import { AdjustableArticleList } from '../article/components/AdjustableArticleLi
 import { Article } from '../article/types/article';
 import { AdjustableNewsList } from '../news/components/AdjustableNewsList';
 import { News } from '../news/types/news';
-import ServiceGrid from '../service/Service';
+import TimeTicketConsultation from '../service/Service';
 
 interface HomeProps {
   news: News[];
@@ -76,7 +76,7 @@ export default function Home({ news, articles }: HomeProps) {
       </Center>
       <Spacer height={8} />
       <Center>
-        <ServiceGrid />
+        <TimeTicketConsultation />
       </Center>
 
       {/* Articles */}

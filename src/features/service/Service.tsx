@@ -1,62 +1,60 @@
-import { Box, Heading, SimpleGrid, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Container,
+  Heading,
+  List,
+  ListItem,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import { timeTicketUrl } from '../../config/constants';
 
-const data: ServiceCardProps[] = [
-  {
-    title: 'IT Consulting',
-    description: `
-    お客様のビジネスを一歩先へ導くために、提案段階からシステム開発、デジタル変革までサポートします。
-    LTVの向上、効果的なマーケティング戦略の構築、DXを通じて、お客様の事業成長と市場での競争力を強化します。
-    スタートアップや小規模企業の変革を技術面から全面的にバックアップします。
-    `,
-  },
-  {
-    title: 'Education',
-    description: `
-    エンジニアとしてスキルアップを目指すあなたを全力でサポートします。
-    React、Next.js、Go、Node.js、Flutterといったフロントエンド・バックエンドの技術から、AWS、Google Cloud、Firebaseのクラウドサービス、
-    さらにはLINE APIの活用まで、幅広い技術に対応しています。
-    MENTAでの実績は75件、平均評価4.7と、多くの受講者に評価されています。
-    `,
-  },
-  {
-    title: 'Event Planning',
-    description: `
-    エンジニア向けのイベントの企画と運営をサポートしています。
-    さまざまな規模のイベントに対応し、一貫したサポートを提供することで、参加者が新しいつながりを築き、有意義な時間を過ごせるよう努めています。
-    独自のアプローチで集客を図り、イベントの成功を手助けします。
-    `,
-  },
-];
-
-interface ServiceCardProps {
-  title: string;
-  description: string;
-}
-
-const ServiceCard = ({ title, description }: ServiceCardProps) => {
+export default function TimeTicketConsultation() {
   return (
-    <>
-      <Box>
+    <Container maxW="3xl">
+      <VStack spacing={8} align="stretch">
         <Heading as="h3" size="lg" textAlign="center">
-          {title}
+          AIを試したけど業務に落とし込めない方へ
         </Heading>
 
-        <Box m={8}>
-          <Text>{description}</Text>
-        </Box>
-      </Box>
-    </>
-  );
-};
+        <Text color={'gray.500'} fontSize={'lg'} whiteSpace={'pre-line'}>
+          {`ChatGPTやAIツールを試してみたものの、単発利用で終わっていたり、現場の業務フローにうまく組み込めていない方向けの相談です。
 
-export default function ServiceGrid() {
-  return (
-    <>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8}>
-        {data.map((d, i) => (
-          <ServiceCard key={i} title={d.title} description={d.description} />
-        ))}
-      </SimpleGrid>
-    </>
+現状の業務や手作業を整理しながら、
+・どこをAIで補助するか
+・どこをスクリプトやワークフローに落とすか
+・どこを人が判断するか
+を切り分け、無理なく進めるための現実的な一歩を明確にします。`}
+        </Text>
+
+        <Box>
+          <Text fontWeight="bold" mb={4}>
+            こんな悩みがある方向け
+          </Text>
+          <List spacing={2} color={'gray.500'} styleType="disc" pl={4}>
+            <ListItem>
+              AIを使って改善しろと言われたが、何から始めるべきか分からない
+            </ListItem>
+            <ListItem>ChatGPTを試しているが、業務に定着していない</ListItem>
+            <ListItem>AIとスクリプト、SaaS、手作業の役割分担が曖昧</ListItem>
+            <ListItem>PoCっぽいものはあるが、実運用に乗らない</ListItem>
+          </List>
+        </Box>
+
+        <Box textAlign="center" pt={4}>
+          <Button
+            as="a"
+            href={timeTicketUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            colorScheme="blue"
+            size="lg"
+          >
+            TimeTicketで相談する
+          </Button>
+        </Box>
+      </VStack>
+    </Container>
   );
 }
