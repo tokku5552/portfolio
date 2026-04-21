@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tok — Hero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700;900&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A12;
+    --fg: #FFFFFF;
+    --muted: #6B6B7B;
+    --line: rgba(255,255,255,0.08);
+    --line-strong: rgba(255,255,255,0.14);
+    --indigo: #4F46E5;
+    --violet: #8B5CF6;
+    --pink:   #EC4899;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Geist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+  }
+
+  /* ── Shell ───────────────────────────────────────── */
+  .shell {
+    position: relative;
+    min-height: 100vh;
+    width: 100%;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  /* subtle grain */
+  .shell::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 3px 3px;
+    mix-blend-mode: overlay;
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* optional grid overlay */
+  .grid-overlay {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: calc(100% / 12) 100%, 100% 88px;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+  .grid-on .grid-overlay { opacity: 1; }
+
+  /* ── Nav ────────────────────────────────────────── */
+  nav.top {
+    position: relative;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 28px 48px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mark {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+  }
+  .mark .dot {
+    width: 10px; height: 10px;
+    background: linear-gradient(135deg, var(--indigo), var(--violet) 50%, var(--pink));
+    border-radius: 0;
+    transform: rotate(45deg);
+  }
+  .mark strong { font-weight: 900; letter-spacing: -0.01em; font-family: 'Geist', sans-serif; font-size: 15px; }
+  nav.top ul { display: flex; gap: 32px; list-style: none; }
+  nav.top ul a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 13px;
+    font-family: 'Geist Mono', monospace;
+    letter-spacing: 0.02em;
+    transition: color .2s;
+  }
+  nav.top ul a:hover { color: var(--fg); }
+  .nav-cta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--fg);
+    text-decoration: none;
+    padding: 8px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    letter-spacing: 0.04em;
+    transition: background .2s, border-color .2s;
+  }
+  .nav-cta:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.3); }
+
+  /* ── Hero content ───────────────────────────────── */
+  .hero {
+    position: relative;
+    z-index: 4;
+    padding: 120px 48px 96px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 40px;
+  }
+  .eyebrow .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--violet);
+    box-shadow: 0 0 0 0 rgba(139,92,246,0.6);
+    animation: pulse 2.4s infinite;
+  }
+  @keyframes pulse {
+    0%   { box-shadow: 0 0 0 0 rgba(139,92,246,0.55); }
+    70%  { box-shadow: 0 0 0 10px rgba(139,92,246,0); }
+    100% { box-shadow: 0 0 0 0 rgba(139,92,246,0); }
+  }
+
+  h1.name {
+    font-family: 'Geist', sans-serif;
+    font-weight: 900;
+    font-size: clamp(72px, 11vw, 180px);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    margin-bottom: 28px;
+    color: var(--fg);
+  }
+  h1.name .jp {
+    display: block;
+    font-size: 0.55em;
+    letter-spacing: -0.03em;
+    color: var(--fg);
+    opacity: 0.92;
+  }
+  h1.name .en {
+    display: block;
+    font-size: 1em;
+    color: var(--fg);
+  }
+  h1.name .en .period {
+    display: inline-block;
+    color: transparent;
+    background: linear-gradient(135deg, var(--indigo), var(--violet) 50%, var(--pink));
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .titles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    align-items: center;
+    margin-bottom: 40px;
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: clamp(16px, 1.35vw, 20px);
+    letter-spacing: -0.01em;
+    color: var(--fg);
+  }
+  .titles .sep {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--violet);
+    transform: rotate(45deg);
+    margin: 0 2px;
+  }
+
+  .tagline {
+    max-width: 640px;
+    font-family: 'Geist', sans-serif;
+    font-size: clamp(16px, 1.25vw, 18px);
+    line-height: 1.55;
+    color: var(--muted);
+    margin-bottom: 56px;
+    font-weight: 400;
+  }
+  .tagline strong { color: var(--fg); font-weight: 500; }
+
+  .cta-row {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 18px 28px;
+    background: var(--fg);
+    color: #0A0A12;
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.005em;
+    text-decoration: none;
+    border-radius: 4px;
+    border: 0;
+    cursor: pointer;
+    overflow: hidden;
+    transition: transform .2s ease;
+  }
+  .btn-primary::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(92deg, var(--indigo), var(--violet), var(--pink));
+    opacity: 0;
+    transition: opacity .25s ease;
+    z-index: 0;
+  }
+  .btn-primary > * { position: relative; z-index: 1; transition: color .2s; }
+  .btn-primary:hover::before { opacity: 1; }
+  .btn-primary:hover { color: #fff; transform: translateY(-1px); }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
+  .btn-primary .arrow {
+    display: inline-block;
+    transition: transform .25s ease;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  .btn-ghost {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 17px 22px;
+    color: var(--fg);
+    font-family: 'Geist Mono', monospace;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    background: transparent;
+    cursor: pointer;
+    transition: background .2s, border-color .2s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.3); }
+
+  /* ── Orb / Light source ─────────────────────────── */
+  .orb-wrap {
+    position: absolute;
+    z-index: 0;
+    pointer-events: none;
+    transition: transform .6s cubic-bezier(.2,.8,.2,1), top .6s, left .6s, right .6s, bottom .6s;
+  }
+  .orb-wrap[data-pos="tr"]     { top: -220px;  right: -220px;  width: 440px; height: 440px; }
+  .orb-wrap[data-pos="bl"]     { bottom: -240px; left: -220px;  width: 460px; height: 460px; }
+  .orb-wrap[data-pos="center"] { top: 50%; left: 72%; transform: translate(-50%, -50%); width: 420px; height: 420px; }
+
+  .orb {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(circle at 32% 32%, rgba(236,72,153,0.75) 0%, rgba(236,72,153,0) 42%),
+      radial-gradient(circle at 62% 42%, rgba(139,92,246,0.95) 0%, rgba(139,92,246,0) 48%),
+      radial-gradient(circle at 50% 65%, rgba(79,70,229,0.85) 0%, rgba(79,70,229,0) 55%);
+    filter: blur(38px);
+    opacity: 0.7;
+    animation: float 14s ease-in-out infinite;
+  }
+  .orb::after {
+    content: "";
+    position: absolute;
+    inset: 32%;
+    background: radial-gradient(circle, rgba(255,255,255,0.28), transparent 58%);
+    filter: blur(22px);
+  }
+  @keyframes float {
+    0%, 100% { transform: translate(0,0) scale(1); }
+    50%      { transform: translate(-18px, 14px) scale(1.05); }
+  }
+
+  /* ── Side meta column ───────────────────────────── */
+  .side-meta {
+    position: absolute;
+    top: 50%;
+    right: 48px;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    z-index: 4;
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: right;
+  }
+  .side-meta .k { color: var(--muted); }
+  .side-meta .v { color: var(--fg); font-weight: 500; margin-top: 4px; letter-spacing: 0.04em; }
+
+  /* ── Bottom strip ───────────────────────────────── */
+  .strip {
+    position: relative;
+    z-index: 4;
+    border-top: 1px solid var(--line);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  .strip > div {
+    padding: 28px 36px;
+    border-right: 1px solid var(--line);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .strip > div:last-child { border-right: 0; }
+  .strip .lbl { display: block; margin-bottom: 8px; }
+  .strip .val {
+    color: var(--fg);
+    font-family: 'Geist', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+    text-transform: none;
+  }
+
+  /* ── Layout variants ────────────────────────────── */
+  /* centered */
+  .layout-centered .hero { text-align: center; padding-top: 140px; }
+  .layout-centered .eyebrow,
+  .layout-centered .titles,
+  .layout-centered .cta-row { justify-content: center; }
+  .layout-centered .tagline { margin-left: auto; margin-right: auto; }
+  .layout-centered .side-meta { display: none; }
+
+  /* asymmetric - bigger off-center name with mono sidebar inline */
+  .layout-asymmetric .hero {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 64px;
+    align-items: end;
+  }
+  .layout-asymmetric .side-meta {
+    position: relative; right: auto; top: auto; transform: none;
+    text-align: left;
+    padding-bottom: 8px;
+  }
+
+  @media (max-width: 900px) {
+    nav.top { padding: 20px 24px; }
+    nav.top ul { display: none; }
+    .hero { padding: 80px 24px 72px; }
+    .side-meta { display: none; }
+    .strip { grid-template-columns: repeat(2,1fr); }
+    .strip > div:nth-child(2) { border-right: 0; }
+    .strip > div:nth-child(1), .strip > div:nth-child(2) { border-bottom: 1px solid var(--line); }
+    .layout-asymmetric .hero { grid-template-columns: 1fr; }
+  }
+
+  /* ── Tweaks panel ───────────────────────────────── */
+  #tweaks {
+    position: fixed;
+    bottom: 20px; right: 20px;
+    width: 280px;
+    background: rgba(14,14,22,0.92);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    color: var(--fg);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    z-index: 1000;
+    display: none;
+    overflow: hidden;
+  }
+  #tweaks.open { display: block; }
+  #tweaks header {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--line);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #tweaks header strong { color: var(--fg); font-weight: 700; letter-spacing: 0.1em; }
+  #tweaks .group { padding: 14px; border-bottom: 1px solid var(--line); }
+  #tweaks .group:last-child { border-bottom: 0; }
+  #tweaks .lab {
+    font-size: 10px; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-bottom: 8px;
+  }
+  #tweaks .seg {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  #tweaks .seg button {
+    background: transparent;
+    color: var(--muted);
+    border: 0;
+    padding: 8px 6px;
+    font-family: inherit;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-right: 1px solid var(--line-strong);
+  }
+  #tweaks .seg button:last-child { border-right: 0; }
+  #tweaks .seg button.active {
+    background: var(--fg);
+    color: #0A0A12;
+    font-weight: 700;
+  }
+  #tweaks .toggle {
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  #tweaks .toggle .switch {
+    width: 34px; height: 18px; border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    position: relative; cursor: pointer;
+    transition: background .2s;
+  }
+  #tweaks .toggle .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--fg);
+    transition: transform .2s;
+  }
+  #tweaks .toggle.on .switch { background: var(--violet); }
+  #tweaks .toggle.on .switch::after { transform: translateX(16px); }
+</style>
+</head>
+<body>
+
+<div class="shell" id="shell">
+
+  <!-- Orb / Light source -->
+  <div class="orb-wrap" id="orbWrap" data-pos="tr">
+    <div class="orb"></div>
+  </div>
+
+  <!-- Grid overlay -->
+  <div class="grid-overlay"></div>
+
+  <!-- Nav -->
+  <nav class="top">
+    <div class="mark">
+      <span class="dot"></span>
+      <strong>tok</strong>
+      <span style="color: var(--muted); margin-left: 8px;">/ shinnosuke tokuda</span>
+    </div>
+    <ul>
+      <li><a href="#">Work</a></li>
+      <li><a href="#">Music</a></li>
+      <li><a href="#">Podcast</a></li>
+      <li><a href="#">Writing</a></li>
+    </ul>
+    <a class="nav-cta" href="#">Get in touch ↗</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" data-screen-label="01 Hero">
+    <div class="eyebrow">
+      <span class="pulse"></span>
+      Portfolio · 2026 — Currently shipping
+    </div>
+
+    <h1 class="name">
+      <span class="jp">とっく</span>
+      <span class="en">Shinnosuke<br>Tokuda<span class="period">.</span></span>
+    </h1>
+
+    <div class="titles">
+      <span>Engineering Manager</span>
+      <span class="sep"></span>
+      <span>Music Producer</span>
+      <span class="sep"></span>
+      <span>Podcast Host</span>
+    </div>
+
+    <p class="tagline">
+      Building, composing, and talking about the <strong>future of work</strong> — at the intersection of AI systems, sound design, and the people who make them both.
+    </p>
+
+    <div class="cta-row">
+      <a href="#" class="btn-primary">
+        <span>View my work</span>
+        <span class="arrow">→</span>
+      </a>
+      <a href="#" class="btn-ghost">
+        <span>▶</span> Listen to the podcast
+      </a>
+    </div>
+
+    <!-- Side meta -->
+    <div class="side-meta">
+      <div>
+        <div class="k">// Based in</div>
+        <div class="v">Tokyo, JP</div>
+      </div>
+      <div>
+        <div class="k">// Status</div>
+        <div class="v">Open to collabs</div>
+      </div>
+      <div>
+        <div class="k">// Now playing</div>
+        <div class="v">LP/03 — Drafts</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom strip -->
+  <div class="strip">
+    <div>
+      <span class="lbl">Currently</span>
+      <span class="val">EM @ AI implementation</span>
+    </div>
+    <div>
+      <span class="lbl">Discography</span>
+      <span class="val">12 releases · 2019—</span>
+    </div>
+    <div>
+      <span class="lbl">Podcast</span>
+      <span class="val">Season 03 · Weekly</span>
+    </div>
+    <div>
+      <span class="lbl">Latest</span>
+      <span class="val">Ep.47 — Agents at work</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Tweaks -->
+<div id="tweaks">
+  <header>
+    <strong>TWEAKS</strong>
+    <span>twilight_blade.01</span>
+  </header>
+  <div class="group">
+    <div class="lab">Orb position</div>
+    <div class="seg" data-tweak="orb">
+      <button data-val="tr">Top R</button>
+      <button data-val="center">Center</button>
+      <button data-val="bl">Bot L</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="lab">Layout</div>
+    <div class="seg" data-tweak="layout">
+      <button data-val="default">Split</button>
+      <button data-val="centered">Center</button>
+      <button data-val="asymmetric">Asym</button>
+    </div>
+  </div>
+  <div class="group">
+    <div class="toggle" data-tweak="grid">
+      <div class="lab" style="margin: 0;">12-col grid</div>
+      <div class="switch"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const TWEAKS = /*EDITMODE-BEGIN*/{
+    "orb": "center",
+    "layout": "default",
+    "grid": false
+  }/*EDITMODE-END*/;
+
+  const state = { ...TWEAKS };
+  const shell = document.getElementById('shell');
+  const orbWrap = document.getElementById('orbWrap');
+  const panel = document.getElementById('tweaks');
+
+  function applyAll() {
+    orbWrap.dataset.pos = state.orb;
+    shell.classList.remove('layout-default','layout-centered','layout-asymmetric');
+    shell.classList.add('layout-' + state.layout);
+    shell.classList.toggle('grid-on', !!state.grid);
+
+    // update seg active states
+    panel.querySelectorAll('.seg').forEach(seg => {
+      const key = seg.dataset.tweak;
+      seg.querySelectorAll('button').forEach(b => {
+        b.classList.toggle('active', b.dataset.val === state[key]);
+      });
+    });
+    // toggles
+    panel.querySelectorAll('.toggle').forEach(t => {
+      const key = t.dataset.tweak;
+      t.classList.toggle('on', !!state[key]);
+    });
+  }
+
+  function setKey(key, val) {
+    state[key] = val;
+    applyAll();
+    try {
+      window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { [key]: val } }, '*');
+    } catch (e) {}
+  }
+
+  // Wire up
+  panel.querySelectorAll('.seg').forEach(seg => {
+    const key = seg.dataset.tweak;
+    seg.querySelectorAll('button').forEach(b => {
+      b.addEventListener('click', () => setKey(key, b.dataset.val));
+    });
+  });
+  panel.querySelectorAll('.toggle').forEach(t => {
+    const key = t.dataset.tweak;
+    t.addEventListener('click', () => setKey(key, !state[key]));
+  });
+
+  // Edit mode protocol — register listener BEFORE announcing
+  window.addEventListener('message', (e) => {
+    const d = e.data || {};
+    if (d.type === '__activate_edit_mode')   panel.classList.add('open');
+    if (d.type === '__deactivate_edit_mode') panel.classList.remove('open');
+  });
+  try {
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+  } catch(e) {}
+
+  applyAll();
+</script>
+
+</body>
+</html>
