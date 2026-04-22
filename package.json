@@ -19,7 +19,8 @@
     "next": "15.5.15",
     "react": "^18",
     "react-dom": "^18",
-    "tailwind-merge": "^3.5.0"
+    "tailwind-merge": "^3.5.0",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@chakra-ui/icons": "^2.1.1",
