@@ -1,0 +1,19 @@
+/**
+ * Twilight Blade design tokens.
+ * Single source of truth for brand CSS variables. Consumed by Tailwind
+ * theme.extend, component styles, and downloadable copies under
+ * public/brand-assets/. Do not redefine these values elsewhere.
+ */
+:root {
+  --color-brand-bg: #0a0a12;
+  --color-brand-fg: #ffffff;
+  --color-brand-muted: #6b6b7b;
+  --color-brand-border: rgba(255, 255, 255, 0.08);
+  --color-brand-border-strong: rgba(255, 255, 255, 0.14);
+  --color-brand-orb-indigo: #4f46e5;
+  --color-brand-orb-violet: #8b5cf6;
+  --color-brand-orb-pink: #ec4899;
+
+  --font-brand-sans: 'Geist', system-ui, sans-serif;
+  --font-brand-mono: 'Geist Mono', ui-monospace, monospace;
+}

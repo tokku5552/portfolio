@@ -4,20 +4,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Package manager is **yarn 1.x** (see `README.md`). Node version is pinned by `.node-version` (20.20.2).
+Package manager is **pnpm** (pinned via `packageManager` field in `package.json`; currently `pnpm@10.33.0`). Enable with `corepack enable` once per machine. Node version is pinned by `.node-version` (20.20.2).
 
 ```bash
-yarn install          # install dependencies
-yarn dev              # start Next.js dev server
-yarn build            # production build (used by Vercel and CI)
-yarn start            # serve the built app
-yarn lint             # next lint (ESLint + Prettier via eslint-plugin-prettier)
-yarn test             # jest (jsdom environment)
-yarn test path/to/file.spec.ts          # single file
-yarn test -t "name of test"             # by test name
+pnpm install          # install dependencies (use --frozen-lockfile in CI)
+pnpm dev              # start Next.js dev server
+pnpm build            # production build (used by Vercel and CI)
+pnpm start            # serve the built app
+pnpm lint             # next lint (ESLint + Prettier via eslint-plugin-prettier)
+pnpm test             # jest (jsdom environment)
+pnpm test path/to/file.spec.ts          # single file
+pnpm test -t "name of test"             # by test name
 ```
 
-CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on PRs to `main`. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`.
+CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on PRs to `main` using `pnpm/action-setup@v4` + `actions/setup-node` with `cache: 'pnpm'`. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`. Vercel Project Settings use `pnpm install --frozen-lockfile` and `pnpm build` explicitly.
 
 ## Environment variables
 
@@ -45,13 +45,15 @@ Each feature (`article`, `home`, `news`, `service`, `works`) owns its `apis/`, `
 
 Shared building blocks live outside features:
 - `src/components/layouts/` — page chrome (`BaseLayout`, `Header`, `Footer`, `Hero`, `Seo`, section layouts like `Works`, `YouTube`, `Podcast`).
-- `src/components/parts/` — small reusable pieces (`Card`, `DisclosableCard`, `Title`).
+- `src/components/parts/` — small reusable pieces (`Card`, `DisclosableCard`, `Title`). New Tailwind-based primitives (Button, etc.) are written here by hand; there is no shadcn/ui layer — see `openspec/changes/archive/platform-migration-pnpm-tailwind-shadcn/design.md` Decision 5 for why.
 - `src/clients/` — external SDK clients.
 - `src/apis/` — cross-feature API helpers (e.g. `featureFlags.ts`).
-- `src/libs/` — pure utilities (`date.ts`, `gtag.ts`, `text.ts`). Co-located tests like `date.spec.ts` live here.
+- `src/libs/` — pure utilities (`date.ts`, `gtag.ts`, `text.ts`, `cn.ts`). Co-located tests like `date.spec.ts` live here. `cn.ts` exposes the `cn(...)` helper (`twMerge(clsx(inputs))`) used when composing Tailwind classes.
 - `src/config/` — `environment.ts` (env vars) and `constants.ts` (URLs, page titles, social links).
-- `src/theme/theme.ts` — Chakra UI theme.
+- `src/styles/globals.css` — Tailwind directives + `brand/tokens.css` import. Loaded once at the top of `src/pages/_app.tsx`.
+- `src/theme/theme.ts` — Chakra UI theme (kept for existing pages during the Chakra → Tailwind migration window).
 - `src/types/` — cross-feature types (`ListCMS.ts` for microCMS list envelope, `featureFlags.ts`, `global.d.ts`).
+- `brand/tokens.css` (repo root) — single source of truth for Twilight Blade CSS variables (`--color-brand-*`, `--font-brand-*`). Consumed by Tailwind `theme.extend` via `var(--color-brand-*)` references in `tailwind.config.ts`.
 
 Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and relative imports appear in the codebase; match whichever style the surrounding file uses.
 
@@ -69,10 +71,10 @@ Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and 
 
 ## Conventions
 
-- **Styling**: Chakra UI v2 + Emotion. Avoid adding competing styling systems.
+- **Styling**: Tailwind CSS v3 is the primary utility layer for new code; brand tokens come from `brand/tokens.css` via `var(--color-brand-*)`. Chakra UI v2 + Emotion remain in place for existing pages and will be removed progressively per TOK-83. When writing new Tailwind components, compose classes with `cn()` from `src/libs/cn.ts`. Do not add a third styling system.
 - **Framer Motion** is available for animations; check `src/components/layouts/Hero` for existing usage patterns before introducing new motion primitives.
 - **Tests** use Jest + `@testing-library/react` in a jsdom environment. Spec files live next to the code they test (`*.spec.ts`). There is no project-wide test setup file beyond `globalSetup` env stubs.
-- **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `yarn lint` will fail on formatting drift.
+- **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `pnpm lint` will fail on formatting drift.
 - **`eslint.config` disables** `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps`. Don't rely on the hook linter to catch mistakes; review effect dependencies by hand.
 
 ## Git workflow
@@ -82,4 +84,4 @@ Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and 
 - `pre-commit` rejects any commit made while `HEAD` is on `main`.
 - `pre-push` rejects any push whose remote ref is `refs/heads/main` (including force-push and `feat:main` style refspecs).
 
-`yarn install` runs the `prepare` script, which sets `core.hooksPath=.githooks` for your clone — so after cloning and installing, hooks are active automatically. If you skipped install scripts (`--ignore-scripts`), run `git config core.hooksPath .githooks` manually. Client hooks can still be bypassed with `--no-verify`; treat them as the first line of defense and rely on GitHub branch protection on `main` for true enforcement.
+`pnpm install` runs the `prepare` script, which sets `core.hooksPath=.githooks` for your clone — so after cloning and installing, hooks are active automatically. If you skipped install scripts (`--ignore-scripts`), run `git config core.hooksPath .githooks` manually. Client hooks can still be bypassed with `--no-verify`; treat them as the first line of defense and rely on GitHub branch protection on `main` for true enforcement.
