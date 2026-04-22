@@ -42,7 +42,7 @@
 
 - [ ] 5.1 `pnpm dlx shadcn@latest init` を実行し、質問に沿って `components.json` を生成 (Tailwind config 経路、CSS variables モード、`src/components/ui/` の alias を確認)
 - [ ] 5.2 `components.json` の `cssVariables: true` 構成が `--background` / `--foreground` / `--primary` 等を `:root` に書き込むことを確認し、`brand/tokens.css` の `--color-brand-*` と namespace が分離していることを確認
-- [ ] 5.3 `pnpm dlx shadcn@latest add button card` で primitive を 2 個取得し、`src/components/ui/button.tsx` 等が生成されることを確認
+- [ ] 5.3 `pnpm dlx shadcn@latest add button` で primitive を 1 個取得し、`src/components/ui/button.tsx` が生成されることを確認
 - [ ] 5.4 試験用の一時ページ or storybook 相当がないので、`_app.tsx` か `index.tsx` でダミーに 1 行 import → `pnpm build` で型含めて通ることを確認 (確認後 import は revert)
 - [ ] 5.5 `.npmrc` に `node-linker` / `public-hoist-pattern` 調整が必要だったかを記録 (必要なら追記)
 

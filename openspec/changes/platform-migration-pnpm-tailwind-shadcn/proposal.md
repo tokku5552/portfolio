@@ -6,9 +6,9 @@
 
 - yarn 1.22 → **pnpm** に移行 (`pnpm-lock.yaml`、`packageManager` field、`.github/workflows/ci.yml`、Vercel ビルド設定、`.githooks/` 経由の prepare script)
 - **Tailwind CSS** を導入 (`tailwind.config.ts`、PostCSS、`src/styles/globals.css`、dark mode 設定)
-- **shadcn/ui** を初期化 (`components.json`、primitive を 2〜3 個 generate して型含めてビルド通過を確認)
+- **shadcn/ui** を初期化 (`components.json`、primitive を 1 個 (Button) generate して型含めてビルド通過を確認)
 - `brand/tokens.css` を `:root` に配線し、Tailwind theme から CSS variable として参照可能にする
-- **Chakra UI v2 / Emotion は残置** する。既存ページは旧スタックのままビルド通過することを保証する (本 change 単体では **BREAKING ではない**)
+- **Chakra UI v2 / Emotion は残置** する。既存ページは旧スタックのままビルド通過することを保証する (本 change 単体では **ユーザー回遊に対して BREAKING ではない**)
 - ADR を 1 枚残し、Tailwind vs styled / shadcn vs Radix 直接 / pnpm 採用理由 / Chakra との共存方針 の判断根拠を記録
 
 ## Capabilities
@@ -31,5 +31,5 @@
 - **新規設定ファイル**: `tailwind.config.ts`, `postcss.config.js`, `components.json`, `src/styles/globals.css`
 - **`brand/`**: `brand/tokens.css` を新規追加 (本 change ではプラットフォーム配線レベルまで。完成版 SSoT は TOK-84 / 後続 change で完成させる)
 - **既存コード**: `src/pages/_app.tsx` に `globals.css` の import を追加する程度。Chakra UI / Emotion は触らない。
-- **docs**: ADR ノートを 1 枚追加 (配置先は `design.md` で確定)
+- **docs**: ADR ノートを 1 枚追加 (配置先は `design.md` で確定)。`README.md` / `CLAUDE.md` の yarn 前提記述 (Commands, Git workflow の `yarn install` 経由 prepare 等) を pnpm ベースに更新する。
 - **ダウンストリーム change**: TOK-83 (ポートフォリオ刷新) と TOK-84 (/brand 公開) が本 change の完了を前提に進む
