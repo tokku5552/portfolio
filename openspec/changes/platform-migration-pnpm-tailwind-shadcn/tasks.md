@@ -2,7 +2,7 @@
 
 - [x] 1.1 `feat/platform-migration` を `feat/brand-assets` から分岐し、TOK-82 の gitBranchName 相当のローカルブランチで作業開始
 - [x] 1.2 現状の `yarn install` / `yarn build` / `yarn test` が通ることを一度確認し、回帰判定のベースラインにする (2026-04-22: `yarn lint` / `yarn test` / `yarn build` は pass。`yarn install --frozen-lockfile` は yarn.lock と package-lock.json の drift により fail するが、§2.4 で両 lockfile 削除されるため baseline としては build/test/lint pass を採用)
-- [ ] 1.3 Vercel Project Settings の現状 (Install / Build Command, Environment Variables) をスクリーンショットなどで記録して PR description に貼れるようにしておく
+- [x] 1.3 Vercel Project Settings の現状 (Install / Build Command, Environment Variables) をスクリーンショットなどで記録して PR description に貼れるようにしておく (2026-04-23: 変更前: Build Command `yarn build` / Install Command `yarn install` / Ignored Build Step `npx nx-ignore portfolio` / Node 20.x / Env Vars は `NEXT_PUBLIC_*` 5 本。PR #252 description に記録済み)
 
 ## 2. pnpm migration
 
@@ -48,9 +48,9 @@
 ## 6. Vercel
 
 - [x] 6.1 draft PR を push し、Vercel preview が生成されることを確認 (2026-04-23: PR #252 を draft で open、`origin/main` を merge commit で取り込み済。preview URL は checks に出現後に §6.2 へ)
-- [ ] 6.2 preview が green なら、Vercel Project Settings UI で Install Command を `pnpm install --frozen-lockfile`、Build Command を `pnpm build` に明示
-- [ ] 6.3 再度 push 後に preview を build し直し、Production 相当の設定でも壊れないことを確認
-- [ ] 6.4 PR description に手動操作した Vercel 設定の内容を記録
+- [x] 6.2 preview が green なら、Vercel Project Settings UI で Install Command を `pnpm install --frozen-lockfile`、Build Command を `pnpm build` に明示 (2026-04-23: ユーザーが Vercel Dashboard で変更済み。Build Command `pnpm build` / Install Command `pnpm install --frozen-lockfile` / Ignored Build Step は Override off にして default auto 判定に戻す / Node.js Version は UI 側 20.x のまま (`.node-version` 20.20.2 が優先))
+- [x] 6.3 再度 push 後に preview を build し直し、Production 相当の設定でも壊れないことを確認 (2026-04-23: `b02e8a7` / `be5123a` の push 時に Vercel が新設定で再 build、deployment completed pass。`8uGyLF46tZrFUreXksPv2PgEdnyM` の preview が green)
+- [x] 6.4 PR description に手動操作した Vercel 設定の内容を記録 (2026-04-23: PR #252 description に変更前 / 変更後の表を追記済み)
 
 ## 7. Documentation and archive
 
