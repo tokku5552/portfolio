@@ -1,20 +1,20 @@
 ## 1. Preparation
 
-- [ ] 1.1 `feat/platform-migration` を `feat/brand-assets` から分岐し、TOK-82 の gitBranchName 相当のローカルブランチで作業開始
-- [ ] 1.2 現状の `yarn install` / `yarn build` / `yarn test` が通ることを一度確認し、回帰判定のベースラインにする
+- [x] 1.1 `feat/platform-migration` を `feat/brand-assets` から分岐し、TOK-82 の gitBranchName 相当のローカルブランチで作業開始
+- [x] 1.2 現状の `yarn install` / `yarn build` / `yarn test` が通ることを一度確認し、回帰判定のベースラインにする (2026-04-22: `yarn lint` / `yarn test` / `yarn build` は pass。`yarn install --frozen-lockfile` は yarn.lock と package-lock.json の drift により fail するが、§2.4 で両 lockfile 削除されるため baseline としては build/test/lint pass を採用)
 - [ ] 1.3 Vercel Project Settings の現状 (Install / Build Command, Environment Variables) をスクリーンショットなどで記録して PR description に貼れるようにしておく
 
 ## 2. pnpm migration
 
-- [ ] 2.1 最新安定版の pnpm バージョンを確認し、`package.json` に `"packageManager": "pnpm@<version>"` を追加
-- [ ] 2.2 `corepack enable` で pnpm を有効化 (local 環境)
-- [ ] 2.3 `pnpm import` で `yarn.lock` から `pnpm-lock.yaml` を生成
-- [ ] 2.4 `yarn.lock` を削除
-- [ ] 2.5 `pnpm install --frozen-lockfile` で依存が通常通り解決することを確認し、`pnpm dev` / `pnpm build` / `pnpm test` / `pnpm lint` の 4 コマンドが成功することを確認
-- [ ] 2.6 `.github/workflows/ci.yml` の `prepare` ジョブ以降を pnpm ベースに書き換え (`pnpm/action-setup` 追加、`cache: 'pnpm'` の `setup-node`、`pnpm install --frozen-lockfile --ignore-scripts`)
-- [ ] 2.7 CI の cache key を `pnpm-lock.yaml` の hash に差し替える
-- [ ] 2.8 `scripts.prepare` が pnpm install 後にも `core.hooksPath=.githooks` を設定することを確認 (`git config --get core.hooksPath` が `.githooks` を返す)
-- [ ] 2.9 `.githooks/pre-commit` / `.githooks/pre-push` が従来通り発火することを smoke test (main 上で commit が拒否される / main への push が拒否される)
+- [x] 2.1 最新安定版の pnpm バージョンを確認し、`package.json` に `"packageManager": "pnpm@<version>"` を追加 (2026-04-22: `pnpm@10.33.0` を pin)
+- [x] 2.2 `corepack enable` で pnpm を有効化 (local 環境) (2026-04-22: corepack shim 配置済み。`pnpm --version` が `packageManager` の `10.33.0` を返すことを確認。asdf node が `.tool-versions` の 20.20.2 未インストールで 22.22.0 にフォールバックしている pre-existing drift あり、Non-Goals のため本 change では対応しない)
+- [x] 2.3 `pnpm import` で `yarn.lock` から `pnpm-lock.yaml` を生成 (2026-04-22: lockfileVersion 9.0、738 packages resolved)
+- [x] 2.4 `yarn.lock` および `package-lock.json` を削除 (リポジトリに npm / yarn 両 lockfile が tracked されていたため、pnpm 移行に合わせて両方撤去) (2026-04-22: 両 lockfile 削除済み、`pnpm-lock.yaml` のみ残す)
+- [x] 2.5 `pnpm install --frozen-lockfile` で依存が通常通り解決することを確認し、`pnpm dev` / `pnpm build` / `pnpm test` / `pnpm lint` の 4 コマンドが成功することを確認 (2026-04-22: install 9.8s、lint/test/build 全 pass、bundle size は yarn baseline と同等 (一部ページは微減))
+- [x] 2.6 `.github/workflows/ci.yml` の `prepare` ジョブ以降を pnpm ベースに書き換え (`pnpm/action-setup` 追加、`cache: 'pnpm'` の `setup-node`、`pnpm install --frozen-lockfile --ignore-scripts`) (2026-04-22: 4 jobs 全てに `pnpm/action-setup@v4` + `cache: 'pnpm'` を配置。`pnpm/action-setup@v4` は `packageManager` field を自動読込するため version 指定なし。`paths-ignore: .github/**` のため本 PR では CI が発火しない点は PR description で notes として言及する想定)
+- [x] 2.7 CI の cache key を `pnpm-lock.yaml` の hash に差し替える (2026-04-22: §2.6 と同時に更新済み)
+- [x] 2.8 `scripts.prepare` が pnpm install 後にも `core.hooksPath=.githooks` を設定することを確認 (`git config --get core.hooksPath` が `.githooks` を返す) (2026-04-22: `pnpm install` 後に `git config --get core.hooksPath` が `.githooks` を返すことを確認)
+- [x] 2.9 `.githooks/pre-commit` / `.githooks/pre-push` が従来通り発火することを smoke test (main 上で commit が拒否される / main への push が拒否される) (2026-04-22: `git worktree` 上で main HEAD 相当で `git commit --allow-empty` が pre-commit で拒否されること、`refs/heads/main` を remote_ref とする pre-push 入力で hook が exit 1 することを確認)
 
 ## 3. Tailwind setup
 
