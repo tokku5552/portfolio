@@ -18,33 +18,32 @@
 
 ## 3. Tailwind setup
 
-- [ ] 3.1 `pnpm add -D tailwindcss postcss autoprefixer` で依存を追加
-- [ ] 3.2 `pnpm dlx tailwindcss init -p --ts` で `tailwind.config.ts` と `postcss.config.js` を生成
-- [ ] 3.3 `tailwind.config.ts` の `content` に `./src/**/*.{ts,tsx}` と `./brand/**/*.{ts,tsx}` を設定、`darkMode: 'class'` を設定
-- [ ] 3.4 `src/styles/globals.css` を新規作成し `@tailwind base; @tailwind components; @tailwind utilities;` を記述
-- [ ] 3.5 `src/pages/_app.tsx` で `@/styles/globals.css` を import (先頭で 1 度)
-- [ ] 3.6 `pnpm build` が通り、`/`, `/news`, `/news/[id]`, `/articles` に visual regression が出ていないことを手動確認
-- [ ] 3.7 Chakra の global styles と Tailwind `preflight` の衝突がないかを preview (local dev) で確認。衝突があれば `tailwind.config.ts` の `corePlugins.preflight: false` 可否を Decision 3 に追記
+- [x] 3.1 `pnpm add -D tailwindcss postcss autoprefixer` で依存を追加 (2026-04-22: `tailwindcss@3.4.19` + `postcss@8.5.10` + `autoprefixer@10.5.0` を devDependencies に追加)
+- [x] 3.2 `pnpm dlx tailwindcss init -p --ts` で `tailwind.config.ts` と `postcss.config.js` を生成 (2026-04-22: `pnpm dlx tailwindcss@3 init -p --ts`。`postcss.config.js` が ESM 形式 (`export default`) で生成されたが、`package.json` に `"type": "module"` がないため `module.exports` 形式に書き換え)
+- [x] 3.3 `tailwind.config.ts` の `content` に `./src/**/*.{ts,tsx}` と `./brand/**/*.{ts,tsx}` を設定、`darkMode: 'class'` を設定 (2026-04-22: 設定済み)
+- [x] 3.4 `src/styles/globals.css` を新規作成し `@tailwind base; @tailwind components; @tailwind utilities;` を記述 (2026-04-22: `src/styles/globals.css` を新規作成)
+- [x] 3.5 `src/pages/_app.tsx` で `@/styles/globals.css` を import (先頭で 1 度) (2026-04-22: import 文を追加、ChakraProvider import より前に配置)
+- [x] 3.6 `pnpm build` が通り、`/`, `/news`, `/news/[id]`, `/articles` に visual regression が出ていないことを手動確認 (2026-04-22: `pnpm build` pass、bundle size 回帰なし (pre-Tailwind baseline と同等)。Playwright で `/`, `/news`, `/articles` をスクショ比較、baseline と一致)
+- [x] 3.7 Chakra の global styles と Tailwind `preflight` の衝突がないかを preview (local dev) で確認。衝突があれば `tailwind.config.ts` の `corePlugins.preflight: false` 可否を Decision 3 に追記 (2026-04-22: Playwright で baseline (globals.css import off) / Tailwind on + preflight on / Tailwind on + preflight off の 3 パターンを `/` で比較。3 つとも同じ表示 → 衝突なし、preflight はデフォルト on のまま維持。Chakra v2 の CSSReset はコンポーネントレベルで style を確立しているため、Tailwind の要素レベル reset と共存しても実害なし)
 
 ## 4. brand/tokens.css wiring
 
-- [ ] 4.1 `brand/tokens.css` を新規作成し、`:root` に以下の CSS variable を宣言:
+- [x] 4.1 `brand/tokens.css` を新規作成し、`:root` に以下の CSS variable を宣言:
   `--color-brand-bg: #0A0A12;` / `--color-brand-fg: #FFFFFF;` / `--color-brand-muted: #6B6B7B;` /
   `--color-brand-border: rgba(255,255,255,0.08);` / `--color-brand-border-strong: rgba(255,255,255,0.14);` /
   `--color-brand-orb-indigo: #4F46E5;` / `--color-brand-orb-violet: #8B5CF6;` / `--color-brand-orb-pink: #EC4899;` /
-  `--font-brand-sans: 'Geist', system-ui, sans-serif;` / `--font-brand-mono: 'Geist Mono', ui-monospace, monospace;`
-- [ ] 4.2 `src/styles/globals.css` から `@import '../../brand/tokens.css';` (または相対パス相当) で読み込み、`:root` のスコープで variable が引けることを確認
-- [ ] 4.3 `tailwind.config.ts` の `theme.extend.colors.brand` に CSS var を参照するエントリを追加 (例: `brand: { bg: 'var(--color-brand-bg)', fg: 'var(--color-brand-fg)', muted: 'var(--color-brand-muted)', border: 'var(--color-brand-border)', 'border-strong': 'var(--color-brand-border-strong)', 'orb-indigo': 'var(--color-brand-orb-indigo)', 'orb-violet': 'var(--color-brand-orb-violet)', 'orb-pink': 'var(--color-brand-orb-pink)' }`)
-- [ ] 4.4 `theme.extend.fontFamily` にも `brand-sans` / `brand-mono` を追加
-- [ ] 4.5 動作確認用に一時的にどこかの要素で `className="bg-brand-bg text-brand-fg"` を当ててブラウザで brand token が効くことを確認し、確認後その確認用編集を revert
+  `--font-brand-sans: 'Geist', system-ui, sans-serif;` / `--font-brand-mono: 'Geist Mono', ui-monospace, monospace;` (2026-04-22: 作成済み、`:root` に 8 colors + 2 font families を宣言)
+- [x] 4.2 `src/styles/globals.css` から `@import '../../brand/tokens.css';` (または相対パス相当) で読み込み、`:root` のスコープで variable が引けることを確認 (2026-04-22: `@import '../../brand/tokens.css';` を `@tailwind base;` の前に配置、Playwright で `getComputedStyle(document.documentElement).getPropertyValue('--color-brand-bg')` が `#0a0a12` を返すことを確認)
+- [x] 4.3 `tailwind.config.ts` の `theme.extend.colors.brand` に CSS var を参照するエントリを追加 (例: `brand: { bg: 'var(--color-brand-bg)', fg: 'var(--color-brand-fg)', muted: 'var(--color-brand-muted)', border: 'var(--color-brand-border)', 'border-strong': 'var(--color-brand-border-strong)', 'orb-indigo': 'var(--color-brand-orb-indigo)', 'orb-violet': 'var(--color-brand-orb-violet)', 'orb-pink': 'var(--color-brand-orb-pink)' }`) (2026-04-22: 設定済み、8 色全て CSS var 経由)
+- [x] 4.4 `theme.extend.fontFamily` にも `brand-sans` / `brand-mono` を追加 (2026-04-22: `font-brand-sans` / `font-brand-mono` で引ける、CSS var 経由)
+- [x] 4.5 動作確認用に一時的にどこかの要素で `className="bg-brand-bg text-brand-fg"` を当ててブラウザで brand token が効くことを確認し、確認後その確認用編集を revert (2026-04-22: `_app.tsx` の `<main className="app">` に一時的に `bg-brand-bg text-brand-fg` を追加して確認。CSS variable は `:root` に正しく注入され、Tailwind utility class も生成されたが、Chakra v2 の `<Global>` CSS-in-JS が Tailwind utilities layer より後にロードされるため `<main>` の computed value では Chakra の body styles (gray.800) が勝つ cascade 状態を確認。配線自体は正しく動作しており、Chakra 剥離 (TOK-83) 後は Tailwind 中心の specificity で brand token が素直に効くため、本 change では配線完了と判定して revert)
 
-## 5. shadcn/ui initialization
+## 5. Class-merging utility
 
-- [ ] 5.1 `pnpm dlx shadcn@latest init` を実行し、質問に沿って `components.json` を生成 (Tailwind config 経路、CSS variables モード、`src/components/ui/` の alias を確認)
-- [ ] 5.2 `components.json` の `cssVariables: true` 構成が `--background` / `--foreground` / `--primary` 等を `:root` に書き込むことを確認し、`brand/tokens.css` の `--color-brand-*` と namespace が分離していることを確認
-- [ ] 5.3 `pnpm dlx shadcn@latest add button` で primitive を 1 個取得し、`src/components/ui/button.tsx` が生成されることを確認
-- [ ] 5.4 試験用の一時ページ or storybook 相当がないので、`_app.tsx` か `index.tsx` でダミーに 1 行 import → `pnpm build` で型含めて通ることを確認 (確認後 import は revert)
-- [ ] 5.5 `.npmrc` に `node-linker` / `public-hoist-pattern` 調整が必要だったかを記録 (必要なら追記)
+本 change 実装中に shadcn/ui は採用しないことを決定 (design.md Decision 5 参照)。代わりに Tailwind utility class を安全に合成するための `cn()` helper だけを `src/libs/` に置く。Button / Card 等の primitive は将来 TOK-83 で必要になった段階で自前 or Radix 個別 install で対応する。
+
+- [x] 5.1 `clsx` + `tailwind-merge` を dependencies に追加 (2026-04-22: shadcn init で副次的に導入されたもの。shadcn 本体と primitive 群は §5.2 で除去するが、`cn()` helper 用途として両パッケージは残す)
+- [x] 5.2 `src/libs/cn.ts` に `cn(...inputs: ClassValue[])` を実装 (`twMerge(clsx(inputs))`)。shadcn init で副次的に生成された `components.json` / `src/components/ui/button.tsx` / `src/lib/utils.ts`、および不要 deps (`@base-ui/react` / `lucide-react` / `shadcn` / `tw-animate-css` / `class-variance-authority`) は削除。`src/styles/globals.css` も shadcn が書き足した `@import "tw-animate-css"` / `@import "shadcn/tailwind.css"` / `@layer base { ... }` を revert し、brand token + Tailwind directives のみに戻す (2026-04-22: 実装・確認済み、`pnpm build` / `pnpm lint` / `pnpm test` pass、bundle size 回帰なし)
 
 ## 6. Vercel
 
@@ -55,8 +54,8 @@
 
 ## 7. Documentation and archive
 
-- [ ] 7.1 `design.md` の Open Questions を解決内容に置換、または Decisions に昇格 (shadcn CSS var 衝突 / `.npmrc` 設定 / preflight 可否 など)
-- [ ] 7.2 `CLAUDE.md` の Commands / Architecture セクションを pnpm + Tailwind + shadcn 前提に更新
+- [ ] 7.1 `design.md` の Open Questions を解決内容に置換、または Decisions に昇格 (preflight 可否 / `.npmrc` 設定 / shadcn 不採用の判断根拠 など)
+- [ ] 7.2 `CLAUDE.md` の Commands / Architecture セクションを pnpm + Tailwind v3 + `cn()` helper 前提に更新
 - [ ] 7.3 `README.md` の yarn 記載を pnpm に更新
 - [ ] 7.4 PR を open し、`Closes TOK-82` を description に含める
 - [ ] 7.5 merge 後、`openspec archive <change>` で change を archive (本 change の spec は `openspec/specs/package-management/` と `openspec/specs/styling-platform/` に昇格する想定)
