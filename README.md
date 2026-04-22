@@ -16,38 +16,40 @@ This is tokku's portfolio repository.
 
 ## Requirements
 
-| runtime | version             |
-| ------- | ------------------- |
-| node    | see `.node-version` |
-| yarn    | 1.22.22             |
+| runtime | version                                     |
+| ------- | ------------------------------------------- |
+| node    | see `.node-version`                         |
+| pnpm    | pinned via `packageManager` in package.json |
+
+Enable pnpm on your machine with `corepack enable` (run once). Corepack ships with Node, so no separate install is needed.
 
 ## Getting Started
 
 package install
 
-```bash:
-yarn install
+```bash
+pnpm install
 ```
 
 prepare for local
 
-```bash:
+```bash
 cp -pr .env.sample .env
 # please override environment variables
 ```
 
 start local server
 
-```bash:
-yarn dev
+```bash
+pnpm dev
 ```
 
 - testing
 
 ```bash
 # lint
-yarn lint
+pnpm lint
 
 # unit test
-yarn test
+pnpm test
 ```

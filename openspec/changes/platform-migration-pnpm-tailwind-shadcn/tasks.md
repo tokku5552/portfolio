@@ -54,8 +54,8 @@
 
 ## 7. Documentation and archive
 
-- [ ] 7.1 `design.md` の Open Questions を解決内容に置換、または Decisions に昇格 (preflight 可否 / `.npmrc` 設定 / shadcn 不採用の判断根拠 など)
-- [ ] 7.2 `CLAUDE.md` の Commands / Architecture セクションを pnpm + Tailwind v3 + `cn()` helper 前提に更新
-- [ ] 7.3 `README.md` の yarn 記載を pnpm に更新
+- [x] 7.1 `design.md` の Open Questions を解決内容に置換、または Decisions に昇格 (preflight 可否 / `.npmrc` 設定 / shadcn 不採用の判断根拠 など) (2026-04-22: Open Questions 3 件に解決メモを追記 (preflight 衝突なし / `.npmrc` 追加不要 / node 20.20.2 確認済)、`## Outcome` セクションを新設して pnpm 移行 + Tailwind preflight 実測 + brand token cascade + shadcn 不採用の 4 項目を記録)
+- [x] 7.2 `CLAUDE.md` の Commands / Architecture セクションを pnpm + Tailwind v3 + `cn()` helper 前提に更新 (2026-04-22: Commands を `pnpm` に書き換え、`corepack enable` 手順と CI の `pnpm/action-setup@v4` / Vercel の明示 Install/Build Command を追記。Architecture に `brand/tokens.css` / `src/styles/globals.css` / `src/libs/cn.ts` / primitive 自前化方針を追加。Conventions の Styling を Chakra → Tailwind 主体に書き換え、Git workflow を `pnpm install` 前提に)
+- [x] 7.3 `README.md` の yarn 記載を pnpm に更新 (2026-04-22: Requirements 表を pnpm 固定・packageManager field 参照に変更、Getting Started の `yarn install` / `yarn dev` / `yarn lint` / `yarn test` を pnpm 等価コマンドに差し替え、`corepack enable` の案内を追記)
 - [ ] 7.4 PR を open し、`Closes TOK-82` を description に含める
 - [ ] 7.5 merge 後、`openspec archive <change>` で change を archive (本 change の spec は `openspec/specs/package-management/` と `openspec/specs/styling-platform/` に昇格する想定)
