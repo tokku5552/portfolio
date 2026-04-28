@@ -1,31 +1,19 @@
-import { usePathname } from 'next/navigation';
+import { ReactNode } from 'react';
 import Footer from '../Footer';
-import Hero from '../Hero';
-
-const withoutHeroPaths = ['/'];
+import Header from '../Header';
 
 interface BaseLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function BaseLayout({ children }: BaseLayoutProps) {
-  const path = usePathname();
-
-  // Heroを表示しないページ
-  if (withoutHeroPaths.includes(path)) {
-    return (
-      <>
-        <main>{children}</main>
-        <Footer />
-      </>
-    );
-  }
-
   return (
-    <>
-      <Hero />
-      <main>{children}</main>
+    <div className="flex min-h-screen flex-col bg-brand-bg text-brand-fg">
+      <Header />
+      <main className="flex-1">{children}</main>
       <Footer />
-    </>
+    </div>
   );
 }
+
+export default BaseLayout;

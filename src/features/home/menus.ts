@@ -1,31 +1,19 @@
+import { inkdoseUrl } from '../../config/constants';
+
 export interface Menu {
   title: string;
-  id: string;
+  href: string;
+  external?: boolean;
 }
 
+/**
+ * Global Header navigation items, modelled on the Hero.html `nav.top` proposal.
+ * Music links out to the inkdoses.com discography; everything else is a same-page
+ * anchor that the landing page exposes via section ids.
+ */
 export const menus: Menu[] = [
-  {
-    title: 'News',
-    id: 'news',
-  },
-  {
-    title: 'Podcast',
-    id: 'podcast',
-  },
-  {
-    title: 'YouTube',
-    id: 'youtube',
-  },
-  {
-    title: 'Services',
-    id: 'services',
-  },
-  {
-    title: 'Articles',
-    id: 'articles',
-  },
-  {
-    title: 'Contact',
-    id: 'contact',
-  },
+  { title: 'Work', href: '/#services' },
+  { title: 'Music', href: inkdoseUrl, external: true },
+  { title: 'Podcast', href: '/#podcast' },
+  { title: 'Writing', href: '/articles' },
 ];

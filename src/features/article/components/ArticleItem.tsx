@@ -1,16 +1,5 @@
-import {
-  Box,
-  Divider,
-  HStack,
-  Heading,
-  Image,
-  Link,
-  Spacer,
-  Text,
-  VStack,
-  useBreakpointValue,
-  useMediaQuery,
-} from '@chakra-ui/react';
+import Link from '../../../components/parts/Link';
+import { Article } from '../types/article';
 
 interface ArticleItemProps {
   title: string;
@@ -18,7 +7,14 @@ interface ArticleItemProps {
   formatedDate: string;
   contents: string;
   imageUrl: string;
+  source?: Article['source'];
 }
+
+const sourceLabel: Record<NonNullable<Article['source']>, string> = {
+  zenn: 'Zenn',
+  qiita: 'Qiita',
+  blog: 'Blog',
+};
 
 export function ArticleItem({
   title,
@@ -26,50 +22,41 @@ export function ArticleItem({
   formatedDate,
   contents,
   imageUrl,
+  source,
 }: ArticleItemProps) {
-  const textBoxWidth = useBreakpointValue({ base: '100%', md: '800px' });
-  // メディアクエリを使用して、横幅が770px以下かどうかを判定
-  const [isBelow1315] = useMediaQuery('(max-width: 1315px)');
-  const imageBaseSize = 160;
   return (
-    <>
-      <Box w="100%">
-        <HStack spacing={4} align="start">
-          <VStack spacing={1} align={'left'}>
-            <Link href={url} textDecoration="underline">
-              <Heading size="md">{title}</Heading>
-            </Link>
-            <Box>
-              <Text>{`${formatedDate}`}</Text>
-            </Box>
-            <Box width={textBoxWidth}>
-              <Text>{contents}</Text>
-            </Box>
-          </VStack>
-          <Spacer />
-          {!isBelow1315 && (
-            <Box width={1.7 * imageBaseSize} height={0.9 * imageBaseSize}>
-              <Link
-                href={url}
-                textDecoration="underline"
-                _hover={{
-                  color: 'blue.500',
-                  textDecoration: 'underline',
-                }}
-              >
-                <Image
-                  src={imageUrl}
-                  alt={title}
-                  width="100%"
-                  height="100%"
-                  objectFit="cover"
-                />
-              </Link>
-            </Box>
-          )}
-        </HStack>
-        <Divider mt={4} />
-      </Box>
-    </>
+    <Link
+      href={url}
+      external
+      className="group flex w-full flex-col gap-4 border border-brand-border p-6 transition-colors hover:border-brand-border-strong md:flex-row md:gap-6 md:p-7"
+    >
+      {imageUrl ? (
+        <div className="relative aspect-video w-full shrink-0 overflow-hidden border border-brand-border md:h-28 md:w-44 md:aspect-auto">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageUrl}
+            alt={title}
+            className="h-full w-full object-cover"
+          />
+        </div>
+      ) : null}
+      <div className="flex flex-1 flex-col gap-2.5">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 font-brand-mono text-[11px] uppercase tracking-[0.08em] text-brand-muted">
+          {source ? <span>{sourceLabel[source]}</span> : null}
+          <span aria-hidden="true">·</span>
+          <span>{formatedDate}</span>
+        </div>
+        <h3 className="font-brand-sans text-[clamp(18px,1.5vw,22px)] font-bold tracking-[-0.01em] text-brand-fg transition-colors group-hover:text-brand-fg">
+          {title}
+        </h3>
+        {contents ? (
+          <p className="line-clamp-3 font-brand-sans text-[14px] leading-[1.6] text-brand-muted">
+            {contents}
+          </p>
+        ) : null}
+      </div>
+    </Link>
   );
 }
+
+export default ArticleItem;

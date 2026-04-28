@@ -54,19 +54,38 @@ The repository SHALL expose a `cn(...inputs: ClassValue[]) => string` helper bac
 - **WHEN** a reviewer inspects the repository root
 - **THEN** there is no `components.json`, no `src/components/ui/` directory, and the `dependencies` do not list `shadcn`, `@base-ui/react`, `lucide-react`, `tw-animate-css`, or `class-variance-authority`
 
-### Requirement: Chakra UI coexists with Tailwind during the migration window
+### Requirement: ランタイムに Chakra UI / Emotion / Framer Motion / microCMS / react-share が存在しない
 
-Chakra UI v2 and Emotion SHALL remain installed and functional for every page that existed before this change. The migration SHALL NOT modify any existing Chakra-based JSX; all visual behaviour on `/`, `/news`, `/news/[id]`, and `/articles` SHALL remain identical to the pre-migration baseline. Any Tailwind `preflight` / reset conflict with Chakra's own global styles SHALL be resolved by configuration (for example disabling `corePlugins.preflight` if required) rather than by editing existing pages.
+`portfolio-twilight-blade-redesign` change の完了後、`package.json` の `dependencies` および `devDependencies` に `@chakra-ui/react`、`@chakra-ui/icons`、`@emotion/react`、`@emotion/styled`、`framer-motion`、`microcms-js-sdk`、`react-share` が存在してはならない（MUST NOT）。`src/**/*.{ts,tsx}` 配下のいかなるファイルも、これらのパッケージからシンボルを import してはならない（MUST NOT）。`src/theme/theme.ts` および `src/clients/microcms.ts` は存在してはならない（MUST NOT）。`src/pages/_app.tsx` は `ChakraProvider` ラッパーを含んではならない（MUST NOT）。
 
-#### Scenario: Existing Chakra pages render unchanged
+#### Scenario: package.json から不要パッケージが消えている
 
-- **WHEN** the app is built and deployed after the migration
-- **THEN** `/`, `/news`, `/news/[id]`, and `/articles` render with the same visual output as before the migration (no regression in spacing, colors, typography, or layout)
+- **WHEN** レビュアーが `grep -E "@chakra-ui|@emotion|framer-motion|microcms-js-sdk|react-share" package.json` を実行したとき
+- **THEN** 検索結果はゼロ件である
 
-#### Scenario: `ChakraProvider` remains wired
+#### Scenario: src 配下にレガシー import が存在しない
 
-- **WHEN** inspecting `src/pages/_app.tsx`
-- **THEN** `ChakraProvider` wraps the app and the `theme` from `src/theme/theme.ts` is supplied as before
+- **WHEN** レビュアーが `grep -R "@chakra-ui\|@emotion\|framer-motion\|microcms-js-sdk\|react-share" src/` を実行したとき
+- **THEN** 検索結果はゼロ件である
+
+#### Scenario: 削除対象ファイルが存在しない
+
+- **WHEN** レビュアーが `ls src/theme/theme.ts src/clients/microcms.ts` を実行したとき
+- **THEN** いずれも存在しない（exit code 非ゼロ）
+
+#### Scenario: _app.tsx に ChakraProvider が存在しない
+
+- **WHEN** レビュアーが `grep "ChakraProvider" src/pages/_app.tsx` を実行したとき
+- **THEN** 検索結果はゼロ件である
+
+### Requirement: microCMS 関連の環境変数が `environment.ts` から削除される
+
+`src/config/environment.ts` から `NEXT_PUBLIC_SERVICE_DOMAIN` と `NEXT_PUBLIC_API_KEY` の読み込みおよび warn 出力を削除しなければならない（MUST）。`.env.sample` も対応して更新し、これら 2 変数のサンプル行を削除しなければならない（MUST）。
+
+#### Scenario: environment.ts に microCMS 関連の参照が残らない
+
+- **WHEN** レビュアーが `grep "SERVICE_DOMAIN\|API_KEY" src/config/environment.ts` を実行したとき
+- **THEN** 検索結果はゼロ件である
 
 ### Requirement: ADR captures platform decisions
 

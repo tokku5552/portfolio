@@ -3,3 +3,195 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ==========================================================================
+ * Twilight Blade — shared keyframes and brand-scoped classes.
+ * Referenced by primitives under src/components/parts/{Orb,Eyebrow,Button,GridOverlay}.
+ * Brand tokens live in brand/tokens.css; do not redeclare colors here.
+ * ========================================================================== */
+
+@keyframes orb-float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(-18px, 14px) scale(1.05);
+  }
+}
+
+@keyframes eyebrow-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(139, 92, 246, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(139, 92, 246, 0);
+  }
+}
+
+/* Eyebrow pulse dot — composed of color + animation reference. */
+.tb-eyebrow-pulse {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-brand-orb-violet);
+  animation: eyebrow-pulse 2.4s infinite;
+}
+
+/* Orb wrap positions follow Hero.html `.orb-wrap[data-pos]` semantics. */
+.tb-orb-wrap {
+  position: absolute;
+  z-index: 0;
+  pointer-events: none;
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+    top 0.6s,
+    left 0.6s,
+    right 0.6s,
+    bottom 0.6s;
+}
+.tb-orb-wrap[data-pos='tr'] {
+  top: -220px;
+  right: -220px;
+  width: 440px;
+  height: 440px;
+}
+.tb-orb-wrap[data-pos='bl'] {
+  bottom: -240px;
+  left: -220px;
+  width: 460px;
+  height: 460px;
+}
+.tb-orb-wrap[data-pos='center'] {
+  top: 50%;
+  left: 72%;
+  transform: translate(-50%, -50%);
+  width: 420px;
+  height: 420px;
+}
+
+.tb-orb {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(
+      circle at 32% 32%,
+      rgba(236, 72, 153, 0.75) 0%,
+      rgba(236, 72, 153, 0) 42%
+    ),
+    radial-gradient(
+      circle at 62% 42%,
+      rgba(139, 92, 246, 0.95) 0%,
+      rgba(139, 92, 246, 0) 48%
+    ),
+    radial-gradient(
+      circle at 50% 65%,
+      rgba(79, 70, 229, 0.85) 0%,
+      rgba(79, 70, 229, 0) 55%
+    );
+  filter: blur(38px);
+  opacity: 0.7;
+  animation: orb-float 14s ease-in-out infinite;
+}
+.tb-orb::after {
+  content: '';
+  position: absolute;
+  inset: 32%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.28),
+    transparent 58%
+  );
+  filter: blur(22px);
+}
+
+/* 12-column grid overlay (Hero.html `.grid-overlay`). Hidden by default. */
+.tb-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      var(--color-brand-border) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--color-brand-border) 1px,
+      transparent 1px
+    );
+  background-size:
+    calc(100% / 12) 100%,
+    100% 88px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.tb-grid-overlay[data-visible='true'] {
+  opacity: 1;
+}
+
+/* Subtle grain overlay for hero shells. Apply via composition, not globally. */
+.tb-grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 1px
+  );
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Primary button hover gradient (Hero.html `.btn-primary::before`). */
+.tb-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    92deg,
+    var(--color-brand-orb-indigo),
+    var(--color-brand-orb-violet),
+    var(--color-brand-orb-pink)
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  z-index: 0;
+}
+.tb-btn-primary:hover::before {
+  opacity: 1;
+}
+.tb-btn-primary > * {
+  position: relative;
+  z-index: 1;
+  transition: color 0.2s;
+}
+
+/* Gradient-clipped period in Hero h1 name. */
+.tb-period-gradient {
+  display: inline-block;
+  color: transparent;
+  background: linear-gradient(
+    135deg,
+    var(--color-brand-orb-indigo),
+    var(--color-brand-orb-violet) 50%,
+    var(--color-brand-orb-pink)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+/* Diamond separator used between hero titles and elsewhere. */
+.tb-diamond-sep {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  background: var(--color-brand-orb-violet);
+  transform: rotate(45deg);
+  margin: 0 2px;
+}
