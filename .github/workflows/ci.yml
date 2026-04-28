@@ -26,7 +26,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '20.20.2'
+          node-version-file: 'package.json'
           cache: 'pnpm'
       - name: Cache node modules
         id: cache
@@ -44,7 +44,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '20.20.2'
+          node-version-file: 'package.json'
           cache: 'pnpm'
       - name: Cache node modules
         id: cache
@@ -64,7 +64,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '20.20.2'
+          node-version-file: 'package.json'
           cache: 'pnpm'
       - name: Cache node modules
         id: cache
@@ -82,7 +82,7 @@ jobs:
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v3
         with:
-          node-version: '20.20.2'
+          node-version-file: 'package.json'
           cache: 'pnpm'
       - name: Cache node modules
         id: cache
