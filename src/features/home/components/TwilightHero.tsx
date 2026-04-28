@@ -51,11 +51,7 @@ export default function TwilightHero() {
         </p>
 
         <div className="flex flex-wrap items-center gap-4">
-          <Link
-            href={inkdoseUrl}
-            external
-            className={buttonClasses('primary')}
-          >
+          <Link href={inkdoseUrl} external className={buttonClasses('primary')}>
             <span>Listen to my music</span>
             <span aria-hidden="true" className="font-brand-mono">
               ↗
