@@ -24,7 +24,7 @@ export default function TwilightHero() {
           Portfolio · 2026 — Currently shipping
         </Eyebrow>
 
-        <h1 className="mb-7 font-brand-sans text-[clamp(72px,11vw,180px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg">
+        <h1 className="mb-7 font-brand-sans text-[clamp(48px,13.5vw,72px)] sm:text-[clamp(72px,11vw,180px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg break-words [overflow-wrap:anywhere] [hyphens:none]">
           Shinnosuke
           <br />
           Tokuda
