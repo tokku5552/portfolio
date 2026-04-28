@@ -1,106 +1,115 @@
-import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Image,
-  Link,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useColorModeValue,
-  useDisclosure,
-} from '@chakra-ui/react';
-import { ReactNode } from 'react';
+import { useState } from 'react';
+import Button from '../../parts/Button';
+import Container from '../../parts/Container';
+import Link from '../../parts/Link';
+import { contactGoogleFormUrl } from '../../../config/constants';
 import { menus } from '../../../features/home/menus';
+import { cn } from '../../../libs/cn';
 
-interface NavLinkProps {
-  url: string;
-  children: ReactNode;
+function Mark() {
+  return (
+    <Link
+      href="/"
+      className="flex items-center gap-2.5 font-brand-mono text-[13px] tracking-[0.02em]"
+    >
+      <span
+        aria-hidden="true"
+        className="block h-2.5 w-2.5 rotate-45 bg-gradient-to-br from-brand-orb-indigo via-brand-orb-violet to-brand-orb-pink"
+      />
+      <span className="font-brand-sans text-[15px] font-black tracking-[-0.01em] text-brand-fg">
+        tok
+      </span>
+      <span className="ml-2 text-brand-muted">/ shinnosuke tokuda</span>
+    </Link>
+  );
 }
 
-const NavLink = ({ url, children }: NavLinkProps) => (
-  <Link
-    px={2}
-    py={1}
-    rounded={'md'}
-    _hover={{
-      textDecoration: 'none',
-      bg: useColorModeValue('gray.200', 'gray.700'),
-    }}
-    href={`#${url}`}
-  >
-    {children}
-  </Link>
-);
-
 export default function Header() {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [open, setOpen] = useState(false);
 
   return (
-    <>
-      <Box
-        position="fixed" // ヘッダーを画面上部に固定
-        w="full" // フル幅
-        bg={useColorModeValue(
-          'rgba(247, 250, 252, 0.8)',
-          'rgba(26, 32, 44, 0.8)'
-        )} // 背景色を透過
-        px={4}
-        zIndex={1} // 他の要素より前に表示
-      >
-        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
-          <Menu>
-            <MenuButton
-              as={Button}
-              size={'md'}
-              iconSpacing={0}
-              leftIcon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-              aria-label={'Open Menu'}
-              display={{ md: 'none' }}
-              onClick={isOpen ? onClose : onOpen}
-              // ここでボタン自体の背景色を適用
-              bg={useColorModeValue('transparent', 'gray.700')}
-              _hover={{
-                bg: useColorModeValue('gray.200', 'gray.700'),
-              }}
-            />
-            <MenuList>
-              {menus.map((menu) => (
-                <MenuItem key={menu.id} onClick={onClose}>
-                  <Link href={`#${menu.id}`}>{menu.title}</Link>
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
-          <HStack spacing={8} alignItems={'center'}>
-            <Box>
-              <Link href="/">
-                <Image
-                  boxSize="48px"
-                  objectFit="cover"
-                  rounded={'full'}
-                  alt={'cover image'}
-                  src={'/assets/profile_icon.png'}
-                />
+    <header className="sticky top-0 z-50 border-b border-brand-border bg-brand-bg/80 backdrop-blur supports-[backdrop-filter]:bg-brand-bg/60">
+      <Container as="nav" className="flex items-center justify-between py-7">
+        <Mark />
+
+        <button
+          type="button"
+          aria-label={open ? 'Close menu' : 'Open menu'}
+          aria-expanded={open}
+          aria-controls="header-mobile-menu"
+          onClick={() => setOpen((v) => !v)}
+          className={cn(
+            'inline-flex h-9 w-9 items-center justify-center rounded-[4px] md:hidden',
+            'border border-brand-border-strong text-brand-fg',
+            'transition-colors hover:bg-white/[0.04]',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orb-violet focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg'
+          )}
+        >
+          <span aria-hidden="true" className="font-brand-mono text-base">
+            {open ? '×' : '≡'}
+          </span>
+        </button>
+
+        <ul className="hidden items-center gap-8 md:flex">
+          {menus.map((menu) => (
+            <li key={menu.title}>
+              <Link
+                href={menu.href}
+                external={menu.external}
+                className="font-brand-mono text-[13px] tracking-[0.02em] text-brand-muted transition-colors hover:text-brand-fg"
+              >
+                {menu.title}
               </Link>
-            </Box>
-            <HStack
-              as={'nav'}
-              spacing={4}
-              display={{ base: 'none', md: 'flex' }}
-            >
-              {menus.map((menu) => (
-                <NavLink key={menu.id} url={menu.id}>
+            </li>
+          ))}
+        </ul>
+
+        <Link
+          href={contactGoogleFormUrl}
+          external
+          className="hidden md:inline-flex font-brand-mono text-[12px] tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3.5 py-2 transition-colors hover:bg-white/[0.04] hover:border-white/30"
+        >
+          Get in touch ↗
+        </Link>
+      </Container>
+
+      {open ? (
+        <div
+          id="header-mobile-menu"
+          className="md:hidden border-t border-brand-border bg-brand-bg"
+        >
+          <Container as="ul" className="flex flex-col gap-4 py-6">
+            {menus.map((menu) => (
+              <li key={menu.title}>
+                <Link
+                  href={menu.href}
+                  external={menu.external}
+                  onClick={() => setOpen(false)}
+                  className="font-brand-mono text-[14px] tracking-[0.02em] text-brand-fg"
+                >
                   {menu.title}
-                </NavLink>
-              ))}
-            </HStack>
-          </HStack>
-        </Flex>
-      </Box>
-    </>
+                </Link>
+              </li>
+            ))}
+            <li>
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  window.open(
+                    contactGoogleFormUrl,
+                    '_blank',
+                    'noopener,noreferrer'
+                  );
+                  setOpen(false);
+                }}
+                className="w-full justify-center"
+              >
+                Get in touch ↗
+              </Button>
+            </li>
+          </Container>
+        </div>
+      ) : null}
+    </header>
   );
 }

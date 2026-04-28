@@ -1,5 +1,4 @@
 import '@/styles/globals.css';
-import { ChakraProvider } from '@chakra-ui/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -8,7 +7,6 @@ import { useEffect } from 'react';
 import { BaseLayout } from '../components/layouts/BaseLayout';
 import { globalPageTitle } from '../config/constants';
 import { GA_MEASUREMENT_ID, pageview } from '../libs/gtag';
-import { theme } from '../theme/theme';
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -44,13 +42,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <title>{globalPageTitle}</title>
       </Head>
-      <main className="app">
-        <ChakraProvider theme={theme}>
-          <BaseLayout>
-            <Component {...pageProps} />
-          </BaseLayout>
-        </ChakraProvider>
-      </main>
+      <BaseLayout>
+        <Component {...pageProps} />
+      </BaseLayout>
     </>
   );
 }

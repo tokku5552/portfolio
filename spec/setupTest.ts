@@ -1,7 +1,6 @@
 /* eslint-disable import/no-anonymous-default-export */
 export default (): void => {
-  process.env.NEXT_PUBLIC_APP_ENV = 'TEST_NEXT_PUBLIC_APP_ENV';
-  process.env.NEXT_PUBLIC_API_BASE_URL = 'TEST_NEXT_PUBLIC_API_BASE_URL';
-  process.env.NEXT_PUBLIC_BUILD_VERSION = 'TEST_NEXT_PUBLIC_BUILD_VERSION';
-  return;
+  process.env.NEXT_PUBLIC_ENVIRONMENT = 'test';
+  process.env.NEXT_PUBLIC_GA_ID = 'TEST_GA_ID';
+  process.env.NEXT_PUBLIC_QIITA_TOKEN = 'TEST_QIITA_TOKEN';
 };

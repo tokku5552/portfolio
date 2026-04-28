@@ -21,8 +21,10 @@ export default {
         'brand-sans': 'var(--font-brand-sans)',
         'brand-mono': 'var(--font-brand-mono)',
       },
+      maxWidth: {
+        shell: '1440px',
+      },
     },
   },
   plugins: [],
 } satisfies Config;
-

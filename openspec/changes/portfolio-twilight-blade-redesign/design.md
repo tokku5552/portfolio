@@ -114,12 +114,12 @@ Hero.html はデザイン提案として Music Producer / Podcast Host のよう
 | Hero.html 要素 | コンテンツ |
 |---|---|
 | eyebrow | "Portfolio · 2026" + 軽いタグ（"Currently shipping" 相当）。Hero.html 語彙を流用 |
-| 巨大タイポ jp | **"とっく"**（Hero.html ベース、ユーザー確定） |
+| 巨大タイポ jp | **なし**（実装中にユーザー確認の結果、サイズが小さく主張が弱いため省略を確定 2026-04-28） |
 | 巨大タイポ en | "Shinnosuke<br>Tokuda<span class='period'>.</span>"（Hero.html と同一） |
 | titles | "Engineering Manager" を中心に、現行に照らして妥当な肩書き 1〜2 個（例: "Engineering Manager / Music Producer"）。**3 つに膨らませない**。 |
 | tagline | **現職主軸の英文 1 行（ユーザー確定 2026-04-28）。例: "Engineering Manager at Mercari. Building teams and shipping product across TypeScript / Go / Flutter / AWS / GCP."** Hero.html の "Currently shipping" eyebrow と調和。最終文言は実装時に微調整。 |
-| CTA primary | 例: "View my work →" → `/#services` または `/#articles` 等の主導線 |
-| CTA ghost | "▶ Listen to the podcast" → `podcastUrl`（既存）。外部リンク |
+| CTA primary | **"Listen to my music ↗" → `inkdoseUrl`（外部）。ユーザー確定 2026-04-28**。当初は "View my work" → `/#services` だったが、ラベルと遷移先が乖離していた（"View my work" はアーティスト portfolio 文脈で、サイト実態は EM + 副線。導線も TimeTicket 相談だった）ため、音楽軸に揃えて INKDOSE 外部リンクへ |
+| CTA ghost | "▶ Listen to the podcast" → `podcastUrl`（外部）。Music + Podcast の二本柱で並ぶ構成 |
 | side-meta | Based in（Tokyo or 福岡。現行明記なし） / Status（"Open to collabs" 等） / Now working（適当な現状ラベル） |
 
 これらは実装時に `src/features/home/Home.page.tsx` 近辺の固定文字列として配置し、必要なら `src/config/constants.ts` に新規定数を追加する。**ユーザーレビュー時に文言フィードバックを受けて微調整する前提**。
@@ -251,7 +251,7 @@ keyframes は `src/styles/globals.css` にスコープ付きで宣言：`@keyfra
 ## Resolved Questions
 
 - `Music` の外部リンク URL → `https://inkdoses.com/`（ユーザー確定 2026-04-28）
-- Hero 巨大タイポ jp 部分 → "とっく"（ユーザー確定 2026-04-28）
+- Hero 巨大タイポ jp 部分 → 当初 "とっく" で landing したが、実装プレビューでサイズが小さく主張が弱いため**省略**に変更（ユーザー確定 2026-04-28）
 - Hero tagline 方針 → 現職主軸の英文 1 行（ユーザー確定 2026-04-28、最終文言は実装時に微調整）
 - Footer "About" 列の中身 → GitHub / LinkedIn / Wantedly（ユーザー確定 2026-04-28）
 - /news 旧 URL の SEO 処理 → 何もしない、デフォルトの 404 に任せる（ユーザー確定 2026-04-28、本 change スコープ内で対応不要）
