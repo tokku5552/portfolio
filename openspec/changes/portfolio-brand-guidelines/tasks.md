@@ -59,11 +59,11 @@
 ## 9. Visual / accessibility verification
 
 - [x] 9.1 `pnpm dev` and visit `/brand`; verify all 6 sections render and OGP meta tags are present in the served HTML pointing to `/brand-og.png`. (Verified via static build output: `og:image` and `twitter:image` both point to `https://www.tokku-tech.dev/brand-og.png`, `og:image:width=1200`, `og:image:height=630`.)
-- [ ] 9.2 Resize the browser to 375 px width and confirm `/brand` is single-column with no horizontal scrollbar.
-- [ ] 9.3 Resize to ≥ 1280 px and confirm TOKENS / CONCEPT / IN USE use multi-column grids.
-- [ ] 9.4 Spot-check contrast: confirm body text uses `--color-brand-fg` and only auxiliary labels use `--color-brand-muted`.
-- [ ] 9.5 Click each ASSETS external link and confirm it opens GitHub raw / jsdelivr in a new tab and serves the canonical file.
-- [ ] 9.6 Tab through `/brand` and verify focus-visible rings appear on all interactive elements.
+- [x] 9.2 Resize the browser to 375 px width and confirm `/brand` is single-column with no horizontal scrollbar.
+- [x] 9.3 Resize to ≥ 1280 px and confirm TOKENS / CONCEPT / IN USE use multi-column grids.
+- [x] 9.4 Spot-check contrast: confirm body text uses `--color-brand-fg` and only auxiliary labels use `--color-brand-muted`.
+- [x] 9.5 Click each ASSETS external link and confirm it opens GitHub raw / jsdelivr in a new tab and serves the canonical file.
+- [x] 9.6 Tab through `/brand` and verify focus-visible rings appear on all interactive elements.
 
 ## 10. Wrap-up
 
