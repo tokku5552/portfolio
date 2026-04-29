@@ -77,7 +77,7 @@ const toQiitaArticles = (response: QiitaArticleResponse[]): QiitaArticle[] => {
     body: article.body,
     coediting: article.coediting,
     commentsCount: article.comments_count,
-    createdAt: article.created_at,
+    createdAt: new Date(article.created_at),
     group: article.group,
     id: article.id,
     likesCount: article.likes_count,
@@ -86,7 +86,7 @@ const toQiitaArticles = (response: QiitaArticleResponse[]): QiitaArticle[] => {
     stocksCount: article.stocks_count,
     tags: article.tags,
     title: article.title,
-    updatedAt: article.updated_at,
+    updatedAt: new Date(article.updated_at),
     url: article.url,
     user: {
       description: article.user.description,

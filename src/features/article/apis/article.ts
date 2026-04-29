@@ -9,9 +9,9 @@ export const fetchArticles = async (num?: number) => {
 
   const articles = [...zennArticles, ...qiitaArticles, ...staticArticles];
   // publishedAt で降順に並び替え
-  const sortedArticles = articles.sort((a, b) => {
-    return b.publishedAt < a.publishedAt ? -1 : 1;
-  });
+  const sortedArticles = articles.sort(
+    (a, b) => b.publishedAt.getTime() - a.publishedAt.getTime()
+  );
 
   return num ? sortedArticles.slice(0, num) : sortedArticles;
 };
