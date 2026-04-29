@@ -69,4 +69,4 @@
 
 - [x] 10.1 Update Linear with a progress comment summarizing the change once tasks 1–9 are complete (manual step at apply time).
 - [x] 10.2 Open a PR with title referencing `TOK-84` and summarizing the SSoT + `/brand` publication.
-- [ ] 10.3 After merge, run `openspec verify portfolio-brand-guidelines` (or the OPSX equivalent) and archive the change.
+- [x] 10.3 After merge, run `openspec verify portfolio-brand-guidelines` (or the OPSX equivalent) and archive the change.
