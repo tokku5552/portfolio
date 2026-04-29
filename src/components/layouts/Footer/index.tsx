@@ -114,13 +114,20 @@ export default function Footer() {
 
       <div className="border-t border-brand-border">
         <Container className="flex flex-col gap-6 py-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-2.5 font-brand-mono text-[12px] tracking-[0.02em] text-brand-muted">
+          <div className="flex flex-wrap items-center gap-2.5 font-brand-mono text-[12px] tracking-[0.02em] text-brand-muted">
             <span
               aria-hidden="true"
               className="block h-2 w-2 rotate-45 bg-gradient-to-br from-brand-orb-indigo via-brand-orb-violet to-brand-orb-pink"
             />
             <span className="text-brand-fg">tok</span>
             <span>/ shinnosuke tokuda · © {year}</span>
+            <span aria-hidden="true">·</span>
+            <Link
+              href="/brand"
+              className="text-brand-muted transition-colors hover:text-brand-fg"
+            >
+              Brand
+            </Link>
           </div>
 
           <div className="flex items-center gap-3">
