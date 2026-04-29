@@ -1,5 +1,6 @@
 import { JSDOM } from 'jsdom';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
+import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { NoteRssItem } from '../types/note';
 
@@ -8,7 +9,7 @@ const NOTE_RSS_URL = `https://note.com/${NOTE_USERNAME}/rss`;
 
 /**
  * note.com の記事を取得する
- * 公式RSSフィードから取得（認証不要、ビルド時に取得）
+ * 公式RSSフィードから記事一覧を取得し、各記事ページから OGP を抽出する
  * ref: https://note.com/{username}/rss
  */
 export const fetchArticlesFromNote = async (): Promise<Article[]> => {
@@ -26,13 +27,42 @@ export const fetchArticlesFromNote = async (): Promise<Article[]> => {
 
     const xml = await res.text();
     const items = parseNoteRss(xml);
-    return items.map(toArticleFromNote);
+
+    const result = await Promise.all(
+      items.map(async (item) => {
+        const ogp = await fetchOgpDataFromNote(item.link);
+        return { item, ogp };
+      })
+    );
+
+    return result.map(({ item, ogp }) => toArticleFromNote(item, ogp));
   } catch (error) {
     console.warn(
       'Failed to fetch note articles:',
       error instanceof Error ? error.message : error
     );
     return [];
+  }
+};
+
+const fetchOgpDataFromNote = async (url: string): Promise<OgpData> => {
+  try {
+    const encodedUri = encodeURI(url);
+    const res = await fetch(encodedUri, {
+      headers: {
+        'User-Agent': 'bot',
+      },
+    });
+    const html = await res.text();
+    const dom = new JSDOM(html);
+    const meta = dom.window.document.head.querySelectorAll('meta');
+    return extractOgp([...Array.from(meta)]);
+  } catch (error) {
+    console.warn(
+      `Failed to fetch OGP from note article ${url}:`,
+      error instanceof Error ? error.message : error
+    );
+    return {};
   }
 };
 
@@ -72,11 +102,11 @@ const extractFirstImgSrc = (html: string): string | null => {
   return match?.[1] ?? null;
 };
 
-const toArticleFromNote = (item: NoteRssItem): Article => ({
+const toArticleFromNote = (item: NoteRssItem, ogp: OgpData): Article => ({
   title: item.title,
   bodySummary: truncateText(stripHtmlTags(item.description), 100),
   source: 'note',
   url: item.link,
   publishedAt: new Date(item.pubDate).toISOString(),
-  imageUrl: item.thumbnailUrl,
+  imageUrl: ogp['og:image'] ?? item.thumbnailUrl,
 });
