@@ -5,11 +5,12 @@ export const staticArticlesData: Article[] = [
     title:
       'Adsシステムの急成長を支える技術：信頼性と収益性を取り戻した「PJ-MARP」の全貌 | メルカリエンジニアリング',
     bodySummary:
-      'この記事は、Mercari Advent Calendar 2025 の12日目の記事です。こんにちは、メルカリでEngineering Managerをしている@tokkuuです。Adsシステムを「Robust（堅牢）」かつ「Profitable（収益性の高い）」状態へと再構築する社内プロジェクト「PJ-MARP」の全貌を紹介します。',
+      'こんにちは。メルカリでエンジニアリングマネージャーとして働いています@tokkuuです。この記事は、Mercari Advent Calendar 2025 の12日目の記事です。今回は、私たちのAds事業が急成長する過程で直面したシステム',
     source: 'blog',
     url: 'https://engineering.mercari.com/blog/entry/20251212-7fe4c31bf4/',
     publishedAt: new Date('2025-12-12').toISOString(),
-    imageUrl: '',
+    imageUrl:
+      'https://storage.googleapis.com/prd-engineering-asset/2025/12/6bab8ef3-gemini_generated_image_t8mp56t8mp56t8mp.png',
   },
   {
     title:
