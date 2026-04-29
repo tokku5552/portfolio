@@ -6,11 +6,15 @@ jest.mock('./zenn', () => ({
 jest.mock('./qiita', () => ({
   fetchArticlesFromQiita: jest.fn(),
 }));
+jest.mock('./note', () => ({
+  fetchArticlesFromNote: jest.fn(),
+}));
 jest.mock('../data/static-data', () => ({
   staticArticlesData: [] as Article[],
 }));
 
 import { fetchArticles } from './article';
+import { fetchArticlesFromNote } from './note';
 import { fetchArticlesFromQiita } from './qiita';
 import { fetchArticlesFromZenn } from './zenn';
 import { staticArticlesData } from '../data/static-data';
@@ -20,6 +24,9 @@ const mockedZenn = fetchArticlesFromZenn as jest.MockedFunction<
 >;
 const mockedQiita = fetchArticlesFromQiita as jest.MockedFunction<
   typeof fetchArticlesFromQiita
+>;
+const mockedNote = fetchArticlesFromNote as jest.MockedFunction<
+  typeof fetchArticlesFromNote
 >;
 
 const buildArticle = (
@@ -58,6 +65,13 @@ describe('fetchArticles', () => {
         publishedAt: '2024-08-15T00:00:00.000Z',
       }),
     ]);
+    mockedNote.mockResolvedValue([
+      buildArticle({
+        title: 'note-mid',
+        source: 'note',
+        publishedAt: '2025-01-15T00:00:00.000Z',
+      }),
+    ]);
     (staticArticlesData as Article[]).push(
       buildArticle({
         title: 'blog-newest',
@@ -76,6 +90,7 @@ describe('fetchArticles', () => {
     expect(result.map((a) => a.title)).toEqual([
       'blog-newest',
       'zenn-new',
+      'note-mid',
       'qiita-mid',
       'zenn-old',
       'blog-oldest',
@@ -98,6 +113,7 @@ describe('fetchArticles', () => {
       }),
     ]);
     mockedQiita.mockResolvedValue([]);
+    mockedNote.mockResolvedValue([]);
 
     const result = await fetchArticles(2);
 

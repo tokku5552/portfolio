@@ -13,6 +13,7 @@ interface ArticleItemProps {
 const sourceLabel: Record<NonNullable<Article['source']>, string> = {
   zenn: 'Zenn',
   qiita: 'Qiita',
+  note: 'note',
   blog: 'Blog',
 };
 

@@ -14,6 +14,7 @@ const config = {
   testEnvironment: 'jest-environment-jsdom',
   testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
   globalSetup: './spec/setupTest.ts',
+  setupFiles: ['<rootDir>/spec/jestPolyfills.ts'],
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
