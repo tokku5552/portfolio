@@ -1,33 +1,38 @@
 ## Context
 
-TOK-83 で Twilight Blade デザイン語彙が `/`、`/articles`、共通 chrome に全面適用済み。本 change は「実運用済みの設計言語を AI が従える形で公開する」最小実装で、Stripe / Linear 級のブランドシステム公開（npm package、semver、Style Dictionary、Figma Library、独立ドメイン docs サイト等）は **採用しない**。
+TOK-83 で Twilight Blade デザイン語彙が `/`、`/articles`、共通 chrome に全面適用済み。本 change は「実運用済みの設計言語を AI が従える形で公開する」最小実装。Stripe / Linear 級のブランドシステム公開（npm package、semver、Style Dictionary、Figma Library、独立ドメイン docs サイト等）は **採用しない**。
 
 ユースケース棚卸しの結果、本 change の主な消費者は：
 
 - **採用担当 / クライアント**: Footer リンクから `/brand` を訪問して signaling を得る（HTML 描画のみ）
 - **ユーザー本人**: `/brand` で hex を確認 / 他の AI ツール（スライド / 画像生成）に portfolio スタイルを伝える
-- **Claude Code / Cursor / Codex 等の IDE AI**: repo root の `CLAUDE.md` から自動的に Twilight Blade ルールを読む
-- **第三者開発者**: `https://<portfolio>/brand-assets/tokens.css` を `@import` して自分のプロジェクトで使う
+- **Claude Code / Cursor / Codex 等の IDE AI**: repo root の `CLAUDE.md` から `brand/brand.md` を参照して読む
+- **Claude.ai / ChatGPT 等の chat AI**: `brand/brand.md` をペーストする、または GitHub raw / jsdelivr CDN URL で fetch する
+- **第三者開発者 / スライド AI / 画像 AI**: `brand/tokens.css` を GitHub raw / jsdelivr URL で取得、または `@import` で利用
 
-`brand.md` / `brand/CLAUDE.md` / `brand/README.md` / `tokens.json` の必要性をユースケース別に検討した結果、**root `CLAUDE.md` に Visual Conventions 節を追記すれば AI 用途は十分にカバーされる** と結論。重複ファイルを作らない。
+`brand.md` の役割は **「AI に渡すための clean な single-file spec」**。root `CLAUDE.md` には「`brand/brand.md` に従え」と書くだけで内容を二重化しない。`brand/CLAUDE.md` / `brand/README.md` は作らない。
 
-`brand/source/twilight-blade-v1/Hero.html` も再評価の結果、TOK-83 以前の歴史的ハンドオフ資産であり、Claude Design への再投入用途も `/` URL や live site のスクショで代替可能。本 change の deliverable から外す（既存ファイルは `brand/source/` 配下にそのまま残置）。
+`public/brand-assets/` の配布ミラーも作らない。GitHub raw URL（例: `https://raw.githubusercontent.com/<user>/portfolio/main/brand/tokens.css`）と jsdelivr CDN URL（例: `https://cdn.jsdelivr.net/gh/<user>/portfolio/brand/tokens.css`）で配信ニーズは満たせる。同期スクリプト / バイト一致 jest spec / `prebuild` 配線等の運用コストを避ける。
+
+`brand/source/twilight-blade-v1/Hero.html` も再評価の結果、TOK-83 以前の歴史的ハンドオフ資産であり、Claude Design への再投入用途は `/` URL や live site のスクショで代替可能。本 change の deliverable から外す（既存ファイルは `brand/source/` 配下にそのまま残置）。
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - `brand/tokens.ts` が `brand/tokens.css` と同期した typed mirror として存在する
+- `brand/brand.md` が AI に paste / URL fetch される単一ファイル spec として存在する
 - `/brand` ルートが 6 セクション（HERO / CONCEPT / TOKENS / IN USE / ASSETS / COLOPHON）で公開される
-- `public/brand-assets/{tokens.css, brand-og.png}` が配置され、`tokens.css` は `brand/tokens.css` とバイト一致する
-- root `CLAUDE.md` に "Visual Conventions" 節があり、Twilight Blade DO/DON'T と token 参照が記述されている
+- `public/brand-og.png` が配置され、`/brand` ルートが OGP 経由で配信する
+- root `CLAUDE.md` に "Visual Conventions" 節があり、`brand/brand.md` を AI rule SoT として参照する
 - Footer に `/brand` リンクが 1 件存在する
 - `/brand` が WCAG AA を満たすコントラスト比でレンダリングされ、768px 以下で 1 カラムにフォールバックする
 - `pnpm lint` / `pnpm test` / `pnpm build` が通る
 
 **Non-Goals:**
 
-- `brand/brand.md` / `brand/CLAUDE.md` / `brand/README.md` の作成（root `CLAUDE.md` に統合）
+- `brand/CLAUDE.md` / `brand/README.md` の作成（root `CLAUDE.md` に統合）
+- `public/brand-assets/` ディレクトリ作成 + 同期スクリプト + jest sync spec（GitHub raw / jsdelivr で代替）
 - `tokens.json` の配布（実用ユースケースが薄い）
 - npm package 公開、semver、CHANGELOG、LICENSE ファイル
 - Style Dictionary 等のトークン変換ツール導入
@@ -35,16 +40,16 @@ TOK-83 で Twilight Blade デザイン語彙が `/`、`/articles`、共通 chrom
 - `brand/source/twilight-blade-v1/Hero.html` を deliverable に含めること（既存ファイルは放置）
 - 新ロゴ / フォント変更 / ブランド token 値の変更
 - `/brand` 動的レンダリング（MDX / runtime fetch などは導入しない、各セクションは React component で hand-craft）
+- `/brand` ページの CONCEPT 本文と `brand/brand.md` の自動同期（手動メンテで許容）
 
 ## Decisions
 
-### Decision 1 — `brand/` 配下は `tokens.css` + `tokens.ts` + 既存 `source/` のみ
+### Decision 1 — `brand/` 配下は `tokens.css` + `tokens.ts` + `brand.md` + 既存 `source/` のみ
 
-`brand.md` / `CLAUDE.md` / `README.md` を `brand/` 配下に置かない。理由：
+`brand/CLAUDE.md` / `brand/README.md` を `brand/` 配下に置かない。理由：
 
-- `brand.md` の中身（思想 / DO/DON'T / voice & tone）は `/brand` ページの CONCEPT / IN USE セクションと **同じ内容** になる。両方持つと drift する
 - `brand/CLAUDE.md` は repo root の `CLAUDE.md`（Claude Code が自動読み込み）と用途が被る。AI rule file は **1 個に集約** が業界慣行（`.cursorrules` / 単独 `CLAUDE.md` パターン）
-- `brand/README.md` はファイル数が少ない（2 個）フォルダに README を置く一般慣行に合わない
+- `brand/README.md` はファイル数が少ない（4 個）フォルダに README を置く一般慣行に合わない
 
 最終構造：
 
@@ -52,16 +57,11 @@ TOK-83 で Twilight Blade デザイン語彙が `/`、`/articles`、共通 chrom
 brand/
   tokens.css   # SSoT（既存・TOK-82）
   tokens.ts    # 型付き mirror（新規）
+  brand.md     # AI 用 single-file spec（新規）
   source/      # Claude Design ハンドオフ（既存・触らない）
 ```
 
-**代替案:**
-
-- `brand/brand.md` を残す — 却下。root `CLAUDE.md` で同じ役割を果たせる
-- `brand/CLAUDE.md` を残す — 却下。同上
-- `brand/README.md` を残す — 却下。SSoT 原則は root `CLAUDE.md` の Visual Conventions 節で説明できる
-
-**根拠:** 「AI が従える」ためには **rule の所在が一意であること** が重要。同じ内容が複数ファイルにあると AI が混乱・drift する。
+**根拠:** AI rule の所在が一意（`brand/brand.md`）であることが「AI に従わせる」の前提。同じ内容が複数ファイルにあると AI / 人間が混乱・drift する。
 
 ### Decision 2 — `tokens.css` を SSoT 真本にし、`tokens.ts` を typed mirror にする
 
@@ -97,29 +97,58 @@ export const brandTokens = {
 
 **根拠:** Tailwind 配線を変えず、build pipeline を増やさず、drift は jest で検出可能。
 
-### Decision 3 — `public/brand-assets/` は `tokens.css` + `brand-og.png` のみ
+### Decision 3 — 配布は GitHub raw / jsdelivr CDN で行い、`public/brand-assets/` ミラーを作らない
 
-配布物は最小限：
+`brand/` 配下のファイルは public な GitHub repo にあるので、以下の URL でそのまま配信できる：
 
-- `public/brand-assets/tokens.css`: `brand/tokens.css` のバイト一致コピー。第三者が `@import` で使う / AI が fetch で値を引く
-- `public/brand-assets/brand-og.png`: `/brand` 用 OGP 画像（1200×630 PNG）
+- GitHub raw: `https://raw.githubusercontent.com/<user>/portfolio/main/brand/tokens.css`
+- jsdelivr CDN（無料・キャッシュあり）: `https://cdn.jsdelivr.net/gh/<user>/portfolio/brand/tokens.css`
+- GitHub blob view（人間向けレンダリング）: `https://github.com/<user>/portfolio/blob/main/brand/tokens.css`
 
-`tokens.json` / `brand.md` は **配布しない**：
+これにより：
 
-- `tokens.json`: AI が `tokens.css` を直接パースできるので冗長。スライド AI（Gamma 等）も hex 直入力が現実
-- `brand.md`: root `CLAUDE.md` で代替
+- 第三者の `@import` / AI fetch 用途は GitHub raw / jsdelivr で満たせる
+- `/brand` ASSETS セクションのリンクも上記 URL を指す
+- `public/brand-assets/` ディレクトリ、`scripts/sync-brand-assets.mjs`、`prebuild` 配線、jest のバイト一致 spec は **すべて不要**
 
-同期手段は `scripts/sync-brand-assets.mjs` で `brand/tokens.css` を `public/brand-assets/tokens.css` にコピーするだけ。`prebuild` および `prepare` で自動実行し、`pnpm test` でバイト一致を検証する。
+トレードオフ：
+
+- 配信が `<portfolio>` ドメインではなく GitHub / jsdelivr ドメインになる（ブランド URL の美観のみ低下）
+- repo を private にすると配信が止まる（個人 portfolio で発生確率低、許容）
 
 **代替案:**
 
-- symlink で同期 — 却下。Vercel build で挙動が予測しづらい
-- `tokens.json` も配布 — 却下。実利用シーンが薄い
-- `brand.md` も配布 — 却下。root CLAUDE.md と重複
+- `public/brand-assets/` にミラーを作って同期 — 却下。同期コスト > ブランド URL の美観
+- `next/og` を入れて build-time 生成 — 却下。tokens.css のような静的ファイルに動的生成は不要
 
-**根拠:** AI / 第三者の実消費パターン（CSS `@import` か AI fetch）を満たす最小セット。
+**根拠:** 既に public な repo に置いた SSoT を再配信する技術的必要性は低い。GitHub / jsdelivr で 99% のシーンを満たせる。
 
-### Decision 4 — `/brand` ページは 6 セクション縦積みで構成する
+### Decision 4 — OGP 画像は `public/brand-og.png`（top-level）に置く
+
+OGP 画像のみは Next.js の static 配信制約から `public/` 配下に置く必要がある。`public/brand-assets/` サブディレクトリを作らないので、`public/brand-og.png` の top-level 配置とする。`/brand.tsx` から既存 `Seo` component に `ogImage="/brand-og.png"` を渡す。
+
+1200×630 の静的 PNG を hand-craft する（@vercel/og 等の動的生成は導入しない）。
+
+**根拠:** `public/brand-assets/` を不採用（Decision 3）にしたので OGP も自然と top-level。
+
+### Decision 5 — `tokens.css` ↔ `tokens.ts` の drift 検出は jest で文字列比較
+
+`brand/tokens.spec.ts`（または `spec/brand/tokensSync.spec.ts`）で：
+
+1. `brand/tokens.css` を fs で読み込み、`--color-brand-*` と `--font-brand-*` の `<name>: <value>` ペアを正規表現で抽出
+2. `brand/tokens.ts` の `brandTokens` から同等のフラットなペアを生成
+3. key 集合 + value（trim 済み文字列）の完全一致を assert
+
+`brand/brand.md` と `brand/tokens.css` の token 値整合性も spec 化する：`brand.md` 内に列挙される hex 値が `tokens.css` の値と一致するかを正規表現で検証する。
+
+**代替案:**
+
+- ESLint custom rule — 却下。jest の方が低コスト
+- ランタイム比較 — 却下（テストでカバーするのが自然）
+
+**根拠:** SSoT の整合契約を実行可能な test として残す。
+
+### Decision 6 — `/brand` ページは 6 セクション縦積みで構成する
 
 ファイル配置：
 
@@ -143,83 +172,87 @@ src/features/brand/
 | セクション | 内容 |
 |---|---|
 | HERO | `Eyebrow` "Brand · Twilight Blade" + 大型タイポ "Twilight Blade." + 1 行コンセプト + Orb 背景 |
-| CONCEPT | 思想（実運用の事後言語化、1〜2 段落のプローズ）+ DO / DON'T リスト |
+| CONCEPT | 思想（実運用の事後言語化、1〜2 段落のプローズ）+ DO / DON'T リスト。`brand/brand.md` と同じ思想を React 描画用にフォーマット |
 | TOKENS | `brand/tokens.ts` の `brandTokens` から色 swatch + 値（hex / rgba）+ font スタックを表示 |
 | IN USE | gradient period / Orb / eyebrow-pulse / 12-col grid / two-tier CTA の小規模ライブデモ |
-| ASSETS | `tokens.css` への DL リンク（`<a href="/brand-assets/tokens.css" download>`）+ 1 行説明 |
+| ASSETS | `brand/tokens.css` および `brand/brand.md` への外部リンク（GitHub raw / jsdelivr CDN URL）+ 各 1 行説明 + コピペ用 URL の表示 |
 | COLOPHON | 使用フォント（Geist / Geist Mono）クレジット、最終更新日、Linear issue ID（TOK-84）|
 
-DOWNLOADS は ASSETS にリネーム（`tokens.css` のみ配布なので「ダウンロード一覧」より「資産参照」の方が実態に近い）。
+ASSETS セクションは「ダウンロード」ではなく「外部リンクと URL 表示」の形を取る（公式に DL 機能を提供しない）。
 
-**代替案:**
+**根拠:** issue Done 定義の 6 セクションを踏襲しつつ、配布 mirror を持たない構成に合わせて命名・内容を整える。
 
-- セクション数を減らして 4 つに（HERO + TOKENS + IN USE + COLOPHON）— 却下。CONCEPT が無いと「何のブランドか」が伝わらず signaling 価値が下がる
-- ASSETS を独立させずに COLOPHON に統合 — 却下。DL リンクは目立たせたい
+### Decision 7 — root `CLAUDE.md` は "Visual Conventions" 節で `brand/brand.md` を参照するだけ
 
-**根拠:** issue Done 定義の 6 セクションを踏襲しつつ、配布物の実態（`tokens.css` のみ）に合わせて命名を整える。
-
-### Decision 5 — `tokens.css` ↔ `tokens.ts` の drift 検出は jest で文字列比較
-
-`brand/tokens.spec.ts`（または `spec/brand/tokensSync.spec.ts`）で：
-
-1. `brand/tokens.css` を fs で読み込み、`--color-brand-*` と `--font-brand-*` の `<name>: <value>` ペアを正規表現で抽出
-2. `brand/tokens.ts` の `brandTokens` から同等のフラットなペアを生成
-3. key 集合 + value（trim 済み文字列）の完全一致を assert
-
-`public/brand-assets/tokens.css` についても `brand/tokens.css` とのバイト一致を別 spec で検証。
-
-**代替案:**
-
-- ESLint custom rule — 却下。jest の方が低コスト
-- ランタイム比較 — 却下（テストでカバーするのが自然）
-
-**根拠:** SSoT の整合契約を実行可能な test として残す。
-
-### Decision 6 — root `CLAUDE.md` に "Visual Conventions" 節を追記する
-
-`/brand` ページとは別に、AI rule file としての役割を repo root の既存 `CLAUDE.md` で果たす。追記する節の最低構成：
+root `CLAUDE.md` には Twilight Blade ルールを inline で書かず、**`brand/brand.md` を AI rule の SoT として参照する 1 段落** だけを置く。例：
 
 ```markdown
-## Visual Conventions (Twilight Blade)
+## Visual Conventions
 
-This project uses the Twilight Blade design system. Visit `/brand` for the full reference.
-
-### Tokens (use only these)
-- Colors: `var(--color-brand-bg)`, `var(--color-brand-fg)`, `var(--color-brand-muted)`,
-  `var(--color-brand-border)`, `var(--color-brand-border-strong)`,
-  `var(--color-brand-orb-{indigo,violet,pink})`
-- Fonts: `var(--font-brand-sans)`, `var(--font-brand-mono)`
-
-### DO
-- Use `var(--color-brand-*)` for all colors.
-- Reserve the indigo→violet→pink gradient for the single accent moment (e.g., name period, Orb).
-- Compose Tailwind classes with `cn()` from `src/libs/cn.ts`.
-
-### DO NOT
-- Introduce new hex / rgb / rgba color literals in `src/`.
-- Apply `box-shadow` for depth; use border tokens instead.
-- Introduce gradients other than the indigo→violet→pink trio.
-- Use Chakra UI / Emotion / Framer Motion (removed in TOK-83).
-
-See `brand/tokens.css` for the canonical token values, or fetch
-`https://<portfolio>/brand-assets/tokens.css`.
+This project uses the Twilight Blade design system.
+AI agents working in this repo MUST follow `brand/brand.md` for all visual
+decisions: colors, typography, gradients, and DO / DO NOT rules.
+Do not introduce new color hex literals or styling primitives outside
+what is described there. See `/brand` for the rendered reference page.
 ```
+
+これにより：
+
+- AI rule の SoT が 1 個（`brand/brand.md`）に集約される
+- root `CLAUDE.md` は coding workflow 中心の役割を保ち、肥大化しない
+- chat AI へ paste / URL fetch するときは `brand/brand.md` 単体で完結する
 
 **代替案:**
 
+- inline で root `CLAUDE.md` にルールを書く — 却下。chat AI への paste で root CLAUDE.md 全体（commands / env vars / architecture）が混じってノイズになる
 - 別ファイル `brand/CLAUDE.md` に書く — 却下。Decision 1 の通り
 - `.cursorrules` を別途作る — 却下。Claude Code は `CLAUDE.md` を読むので統一
-- `/brand` ページのみで AI に伝える — 却下。Claude Code は repo を開いた瞬間に root `CLAUDE.md` を読むので、ローカル作業中の AI に伝えるには root が必須
 
-**根拠:** AI rule の所在を 1 箇所に集約し、Claude Code / Cursor / Codex 等が repo を開いた瞬間に自動的に従える状態を作る。
+**根拠:** AI rule の所在を `brand/brand.md` 一箇所に集約し、IDE AI / chat AI 双方が同じ SoT を参照する状態を作る。
 
-### Decision 7 — OGP 画像は静的 PNG を hand-craft し `public/brand-assets/brand-og.png` に置く
+### Decision 8 — `brand/brand.md` は AI 用 single-file spec として最小構造で書く
 
-`/brand` 用 OGP は 1200×630 の静的 PNG。Hero.html / `/` の Hero スクリーンショットを基に hand-craft する（@vercel/og 等の動的生成は導入しない）。`/brand.tsx` から既存 `Seo` component に `ogImage="/brand-assets/brand-og.png"` を渡す。
+`brand/brand.md` は **「AI に paste / fetch して従わせるための clean spec」** に役割を限定。次の構造で書く：
 
-**根拠:** 1 枚作って終わる作業に build pipeline は不要。
+```markdown
+# Twilight Blade
 
-### Decision 8 — WCAG AA は brand token の組み合わせで満たす設計とし、利用パターンを規約化する
+[1〜2 段落で思想 / 設計意図を運用実績の事後言語化として記述]
+
+## Tokens
+
+### Colors (use only these)
+- bg: #0a0a12
+- fg: #ffffff
+- muted: #6b6b7b
+- border: rgba(255,255,255,0.08)
+- border-strong: rgba(255,255,255,0.14)
+- orb-indigo: #4f46e5
+- orb-violet: #8b5cf6
+- orb-pink: #ec4899
+
+### Fonts
+- Sans: 'Geist', system-ui, sans-serif
+- Mono: 'Geist Mono', ui-monospace, monospace
+
+## DO
+- [箇条書きで実運用準拠の DO リスト]
+
+## DO NOT
+- [箇条書きで実運用準拠の DO NOT リスト]
+
+## Reference
+
+- Live page: https://<portfolio>/brand
+- Tokens (CSS): https://cdn.jsdelivr.net/gh/<user>/portfolio/brand/tokens.css
+- Source: https://github.com/<user>/portfolio
+```
+
+`tokens.css` と値が一致することを Decision 5 で spec 化。
+
+**根拠:** AI が paste / fetch するときに余計な情報を取らせない。コードベースの構造説明、command の説明、git workflow 等は brand とは無関係なので含めない。
+
+### Decision 9 — WCAG AA は brand token の組み合わせで満たす設計とし、利用パターンを規約化する
 
 `/brand` 内の色組み合わせは `--color-brand-fg` (#ffffff) / `--color-brand-muted` (#6b6b7b) を `--color-brand-bg` (#0a0a12) に乗せる 2 系統に絞る。コントラスト比：
 
@@ -230,7 +263,7 @@ See `brand/tokens.css` for the canonical token values, or fetch
 
 **根拠:** brand token 自体が AA を満たす値で構成済み。新たな計算は不要で、利用パターンを規約化することで a11y を担保。
 
-### Decision 9 — 768px 以下は Tailwind の `md:` ブレイクポイントで 1 カラムにフォールバック
+### Decision 10 — 768px 以下は Tailwind の `md:` ブレイクポイントで 1 カラムにフォールバック
 
 各セクションは `grid grid-cols-1 md:grid-cols-2`（または `md:grid-cols-3`）の方式で実装し、`md:` 未満（< 768px）では 1 カラムに自動的に折り畳まれる。Hero.html の Side-meta 列のような左右分割は `/brand` HERO では持たず、最初から縦積み構成。
 
@@ -238,11 +271,12 @@ See `brand/tokens.css` for the canonical token values, or fetch
 
 ## Risks / Trade-offs
 
-- **`brand/` ↔ `public/brand-assets/` の drift** → prebuild + jest spec の二重防御で検出。CI が `pnpm test` を実行するので merge 前に弾ける
+- **`brand/brand.md` ↔ `brand/tokens.css` の値 drift** → jest spec で hex 値の整合を検証（Decision 5）
+- **`brand/brand.md` ↔ `/brand` CONCEPT セクションのプローズ drift** → 自動検出はしない（手動メンテ）。両者は同じ思想を別フォーマットで表現する関係なので、語彙が一致しない程度の drift は許容
 - **`tokens.css` ↔ `tokens.ts` の drift** → jest spec で完全一致検証
-- **CONCEPT 本文の陳腐化** → 「実運用の事後言語化」として書くため、本質的に長期的に陳腐化しにくい。token 値の追加・変更時には CONCEPT も同 PR で見直す習慣を Visual Conventions 節で要請
-- **root `CLAUDE.md` の肥大化** → 現状 architecture / commands 等で既に長め。Visual Conventions 節は 1 セクション分（< 50 行）に抑える
+- **GitHub raw / jsdelivr URL の脆弱性**: repo を private にしたり branch 名を変えると URL が切れる。発生確率は個人 portfolio では低いが、起きたときは `brand/brand.md` および `/brand` ASSETS セクションのリンクを更新する必要あり
 - **OGP 画像が古くなる** → `/` Hero デザイン変更時に手動更新。本 change のスコープは初期版のみ
 - **`/brand` がアクセスされない** → Footer 導線のみ。signaling 価値があれば訪問数は問題ではない
-- **第三者が `tokens.css` を self-host する** → そもそも MIT ライセンスの portfolio repo なので歓迎。ライセンス明記は本 change のスコープ外（必要なら別 PR で `LICENSE` ファイルを追加）
+- **`brand/brand.md` の文面が陳腐化** → 「実運用の事後言語化」として書くため、本質的に長期的に陳腐化しにくい。token 値の追加・変更時には `brand/brand.md` も同 PR で見直す（Decision 5 の test がそれを強制する）
+- **root `CLAUDE.md` の Visual Conventions 節が長くなる懸念** → Decision 7 通り 1 段落で抑える
 - **`brand/source/` を放置することによる混乱** → README 的説明は無いが、`brand/source/twilight-blade-v1/README.md`（既存）が役割を説明しているので新規ドキュメントは不要
