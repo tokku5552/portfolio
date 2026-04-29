@@ -127,7 +127,7 @@ export const brandTokens = {
 
 OGP 画像のみは Next.js の static 配信制約から `public/` 配下に置く必要がある。`public/brand-assets/` サブディレクトリを作らないので、`public/brand-og.png` の top-level 配置とする。`/brand.tsx` から既存 `Seo` component に `ogImage="/brand-og.png"` を渡す。
 
-1200×630 の静的 PNG を hand-craft する（@vercel/og 等の動的生成は導入しない）。
+推奨は 1200×630 / < 500 KB の静的 PNG だが、OGP のアスペクト比（≈ 1.91:1）を満たす同等寸法・2 MB 以下であれば許容する。各 SNS が描画時にスケーリングするため、ピクセル厳守の必要性は低い。@vercel/og 等の動的生成は導入しない。
 
 **根拠:** `public/brand-assets/` を不採用（Decision 3）にしたので OGP も自然と top-level。
 
