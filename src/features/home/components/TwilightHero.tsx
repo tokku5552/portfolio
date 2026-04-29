@@ -44,7 +44,7 @@ export default function TwilightHero() {
 
         <p className="mb-14 max-w-[640px] font-brand-sans text-[clamp(16px,1.25vw,18px)] font-normal leading-[1.55] text-brand-muted">
           <strong className="font-medium text-brand-fg">
-            Engineering Manager at Mercari.
+            Engineering Manager.
           </strong>{' '}
           Building teams and shipping product across TypeScript / Go / Flutter /
           AWS / GCP.
