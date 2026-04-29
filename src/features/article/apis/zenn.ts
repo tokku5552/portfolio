@@ -104,7 +104,7 @@ const toArticleFromZenn = (
     bodySummary: bodySummary,
     source: 'zenn',
     url: `https://zenn.dev/${zennArticle.user.username}/articles/${zennArticle.slug}`,
-    publishedAt: zennArticle.publishedAt,
+    publishedAt: new Date(zennArticle.publishedAt).toISOString(),
     imageUrl: imageUrl,
   };
 };

@@ -123,7 +123,7 @@ const toArticleFromQiita = (
     bodySummary: truncateText(stripHtmlTags(qiitaArticle.renderedBody), 100),
     source: 'qiita',
     url: qiitaArticle.url,
-    publishedAt: qiitaArticle.createdAt,
+    publishedAt: new Date(qiitaArticle.createdAt).toISOString(),
     imageUrl: imageUrl,
   };
 };
