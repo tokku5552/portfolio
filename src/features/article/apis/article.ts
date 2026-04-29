@@ -8,10 +8,10 @@ export const fetchArticles = async (num?: number) => {
   const staticArticles = staticArticlesData;
 
   const articles = [...zennArticles, ...qiitaArticles, ...staticArticles];
-  // publishedAt で降順に並び替え
-  const sortedArticles = articles.sort((a, b) => {
-    return b.publishedAt < a.publishedAt ? -1 : 1;
-  });
+  const sortedArticles = articles.sort(
+    (a, b) =>
+      new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
+  );
 
   return num ? sortedArticles.slice(0, num) : sortedArticles;
 };

@@ -3,6 +3,6 @@ export interface Article {
   bodySummary: string;
   source: 'zenn' | 'qiita' | 'blog';
   url: string;
-  publishedAt: Date;
+  publishedAt: string;
   imageUrl: string;
 }
