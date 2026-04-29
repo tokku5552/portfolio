@@ -77,6 +77,16 @@ Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and 
 - **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `pnpm lint` will fail on formatting drift.
 - **`eslint.config` disables** `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps`. Don't rely on the hook linter to catch mistakes; review effect dependencies by hand.
 
+## Visual Conventions
+
+This project uses the **Twilight Blade** design system. AI agents working in
+this repo MUST follow [`brand/brand.md`](brand/brand.md) for every visual
+decision: colors, typography, gradients, and DO / DO NOT rules. Token values
+and the full rule set live there as the single source of truth — do not
+duplicate them inline in this file. See [`/brand`](https://www.tokku-tech.dev/brand)
+for the rendered reference page, and `brand/tokens.css` / `brand/tokens.ts`
+for the consumable formats.
+
 ## Git workflow
 
 `main` is PR-only. Tracked hooks in `.githooks/` enforce this locally:
