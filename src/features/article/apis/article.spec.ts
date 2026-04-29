@@ -48,7 +48,9 @@ describe('fetchArticles', () => {
 
     const articles = await fetchArticles();
 
-    const publishedTimes = articles.map((article) => article.publishedAt.getTime());
+    const publishedTimes = articles.map((article) =>
+      article.publishedAt.getTime()
+    );
     const sortedTimes = [...publishedTimes].sort((a, b) => b - a);
 
     expect(publishedTimes).toEqual(sortedTimes);
