@@ -19,7 +19,7 @@ TOK-83 の完了で Twilight Blade デザイン語彙は実サイトに全面適
   - `brand/brand.md`: AI（chat AI / 画像 AI / スライド AI 等）に paste / URL fetch で渡すための clean spec。トークン値、思想、DO / DON'T、`/brand` への参照リンクを単一ファイルにまとめる
 - **新規（公開ページ）**: `/brand` を 6 セクション（HERO / CONCEPT / TOKENS / IN USE / ASSETS / COLOPHON）で公開。ASSETS セクションは `brand/tokens.css` / `brand/brand.md` への外部リンク（GitHub raw URL または jsdelivr CDN URL）を提供
 - **新規（OGP）**: `/brand` 用 OGP 画像を `public/brand-og.png` に配置し、`Seo` 経由で配信
-- **変更（`page-layout`）**: Footer に `/brand` への導線を 1 件追加。`/brand` でも他ルートと同一の共通 chrome がレンダリングされる
+- **変更（`page-layout`）**: Header の nav menu に `Brand` 項目を追加（既存 4 項目 → 5 項目）。Footer にも `/brand` への導線を 1 件追加。`/brand` でも他ルートと同一の共通 chrome がレンダリングされる
 - **変更（root `CLAUDE.md`）**: "Visual Conventions" 節を 1 段落で追記し、`brand/brand.md` を AI rule の単一 SoT として参照する
 - **品質要件**: WCAG AA（コントラスト比 4.5:1 以上）と 768px 以下 1 カラム対応
 
@@ -31,7 +31,7 @@ TOK-83 の完了で Twilight Blade デザイン語彙は実サイトに全面適
 
 ### Modified Capabilities
 
-- `page-layout`: Footer に `/brand` 導線を追加し、`/brand` ルートでも共通 chrome がレンダリングされる要件を加える
+- `page-layout`: Header の nav menu に `Brand` 項目を追加（4 → 5 項目）し、Footer にも `/brand` 導線を加え、`/brand` ルートでも共通 chrome がレンダリングされる要件を加える
 
 ## Impact
 
@@ -41,7 +41,7 @@ TOK-83 の完了で Twilight Blade デザイン語彙は実サイトに全面適
   - `src/features/brand/`（`Brand.page.tsx` + 6 section component + `data/` 任意）
   - `src/pages/brand.tsx`
   - `public/brand-og.png`
-- **変更ファイル**: `src/components/layouts/Footer/`（リンク追加）、`CLAUDE.md`（"Visual Conventions" 節追記）
+- **変更ファイル**: `src/features/home/menus.ts`（Header nav に `Brand` 項目追加）、`src/components/layouts/Footer/`（リンク追加）、`CLAUDE.md`（"Visual Conventions" 節追記）
 - **依存**: 追加なし。既存 Tailwind + brand token + 既存 primitive のみ
 - **配布**: `brand/` 配下の SSoT は **公開 GitHub repo の raw URL / jsdelivr CDN を介して配信**。`public/brand-assets/` 配下のミラーは **作らない**（同期スクリプト / バイト一致テスト不要）
 - **テスト**: `tokens.css` ↔ `tokens.ts` 同期 spec、`/brand` レンダリング spec、Footer に `/brand` リンクが含まれる spec、`brand/brand.md` に必須セクションが揃っているかの構造 spec を追加

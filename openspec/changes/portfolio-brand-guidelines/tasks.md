@@ -27,10 +27,11 @@
 - [x] 4.7 Use `cn()` for class composition and ensure every component uses only `text-brand-fg` / `text-brand-muted` / `bg-brand-bg` / `border-brand-border*` Tailwind utilities (no `text-white` / `text-gray-*` / hardcoded hex).
 - [x] 4.8 Apply `grid grid-cols-1 md:grid-cols-2` (or `md:grid-cols-3` where appropriate) so each section collapses to a single column below 768 px (per spec & design Decision 10).
 
-## 5. Footer link to `/brand`
+## 5. Header nav and Footer link to `/brand`
 
-- [x] 5.1 Edit `src/components/layouts/Footer/` to add a `Link` primitive pointing to `/brand` (label `Brand` or `Brand Guidelines`). Place it inside the existing info column or alongside the copyright row — do NOT modify Header.
-- [x] 5.2 Verify `BaseLayout` continues to wrap `/brand` with the same Header + Footer (no `/brand`-specific chrome introduced).
+- [x] 5.1 Edit `src/components/layouts/Footer/` to add a `Link` primitive pointing to `/brand` (label `Brand` or `Brand Guidelines`). Place it inside the existing info column or alongside the copyright row.
+- [x] 5.2 Add a `Brand` entry pointing to `/brand` to `src/features/home/menus.ts` so the existing global Header surfaces a 5-item nav (Work / Music / Podcast / Writing / Brand).
+- [x] 5.3 Verify `BaseLayout` continues to wrap `/brand` with the same Header + Footer (no `/brand`-specific chrome introduced).
 
 ## 6. Root `CLAUDE.md` augmentation
 
