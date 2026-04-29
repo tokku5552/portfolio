@@ -64,9 +64,8 @@ use mono. There is no third typeface.
   Blade comes from `border` / `border-strong`, never from shadow.
 - Do not introduce gradients other than `indigo → violet → pink`. No
   rainbow, no neon, no warm/cool mixes.
-- Do not use Chakra UI, Emotion, or Framer Motion. These were removed
-  in TOK-83. Animations come from CSS keyframes (see `globals.css`) or
-  Tailwind transition utilities.
+- Do not use Chakra UI, Emotion, or Framer Motion. Animations come from
+  CSS keyframes (see `globals.css`) or Tailwind transition utilities.
 - Do not use neon greens, yellows, oranges, or any saturated hue outside
   the brand tokens.
 - Do not apply background-image patterns (stripes, dots, noise) beyond

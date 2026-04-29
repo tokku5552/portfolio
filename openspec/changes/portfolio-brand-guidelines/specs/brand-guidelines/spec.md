@@ -75,7 +75,7 @@
 3. TOKENS: `brand/tokens.ts` の `brandTokens` から色 swatch + 値（hex / rgba）+ font スタックを表示
 4. IN USE: gradient period / Orb / eyebrow-pulse / 12-col grid / two-tier CTA の小規模なライブデモ
 5. ASSETS: `brand/tokens.css` および `brand/brand.md` への外部リンク（GitHub raw / jsdelivr CDN URL）+ コピペ用 URL の表示
-6. COLOPHON: 使用フォント（Geist / Geist Mono）クレジット、最終更新日、Linear issue ID（TOK-84）
+6. COLOPHON: 使用フォント（Geist / Geist Mono）クレジット、最終更新日、ライセンス（MIT）
 
 各セクションは `src/features/brand/components/Brand{Hero,Concept,Tokens,InUse,Assets,Colophon}/` 配下の独立 component として実装されなければならない（MUST）。
 

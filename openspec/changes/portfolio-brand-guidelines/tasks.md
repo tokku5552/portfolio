@@ -23,7 +23,7 @@
 - [x] 4.3 Implement `src/features/brand/components/BrandTokens/index.tsx`: import `brandTokens` from `brand/tokens.ts`, render color swatches (with hex/rgba labels) and font-stack samples in a responsive grid.
 - [x] 4.4 Implement `src/features/brand/components/BrandInUse/index.tsx`: live demos of gradient period, Orb, eyebrow-pulse, 12-col grid overlay, and the two-tier (primary + ghost) CTA pattern — all reusing existing primitives.
 - [x] 4.5 Implement `src/features/brand/components/BrandAssets/index.tsx`: render external links (GitHub raw or jsdelivr CDN) for `tokens.css` and `brand.md`, with each URL displayed in a copyable `<code>` block. `target="_blank"` + `rel="noopener noreferrer"`. No links to `/brand-assets/`.
-- [x] 4.6 Implement `src/features/brand/components/BrandColophon/index.tsx`: list Geist / Geist Mono, last-updated date, Linear issue ID `TOK-84`, and a brief credit line.
+- [x] 4.6 Implement `src/features/brand/components/BrandColophon/index.tsx`: list Geist / Geist Mono, last-updated date, license (MIT), and a brief credit line.
 - [x] 4.7 Use `cn()` for class composition and ensure every component uses only `text-brand-fg` / `text-brand-muted` / `bg-brand-bg` / `border-brand-border*` Tailwind utilities (no `text-white` / `text-gray-*` / hardcoded hex).
 - [x] 4.8 Apply `grid grid-cols-1 md:grid-cols-2` (or `md:grid-cols-3` where appropriate) so each section collapses to a single column below 768 px (per spec & design Decision 10).
 

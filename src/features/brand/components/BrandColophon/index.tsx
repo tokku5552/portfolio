@@ -3,7 +3,6 @@ import Eyebrow from '../../../../components/parts/Eyebrow';
 import Link from '../../../../components/parts/Link';
 
 const lastUpdated = '2026-04-29';
-const linearIssue = 'TOK-84';
 
 export default function BrandColophon() {
   return (
@@ -50,10 +49,10 @@ export default function BrandColophon() {
 
           <div className="flex flex-col gap-2 border-t border-brand-border pt-5">
             <dt className="font-brand-mono text-[11px] uppercase tracking-[0.12em] text-brand-muted">
-              Tracked in
+              License
             </dt>
             <dd className="font-brand-mono text-[14px] tracking-[0.02em] text-brand-fg">
-              Linear · {linearIssue}
+              MIT
             </dd>
           </div>
         </dl>

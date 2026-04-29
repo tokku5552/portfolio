@@ -176,7 +176,7 @@ src/features/brand/
 | TOKENS | `brand/tokens.ts` の `brandTokens` から色 swatch + 値（hex / rgba）+ font スタックを表示 |
 | IN USE | gradient period / Orb / eyebrow-pulse / 12-col grid / two-tier CTA の小規模ライブデモ |
 | ASSETS | `brand/tokens.css` および `brand/brand.md` への外部リンク（GitHub raw / jsdelivr CDN URL）+ 各 1 行説明 + コピペ用 URL の表示 |
-| COLOPHON | 使用フォント（Geist / Geist Mono）クレジット、最終更新日、Linear issue ID（TOK-84）|
+| COLOPHON | 使用フォント（Geist / Geist Mono）クレジット、最終更新日、ライセンス（MIT）|
 
 ASSETS セクションは「ダウンロード」ではなく「外部リンクと URL 表示」の形を取る（公式に DL 機能を提供しない）。
 
