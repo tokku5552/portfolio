@@ -6,7 +6,7 @@ interface StripCell {
 }
 
 const cells: StripCell[] = [
-  { label: 'Currently', value: 'EM @ Mercari' },
+  { label: 'Currently', value: 'Engineering Manager' },
   { label: 'Discography', value: 'INKDOSE · 2026—' },
   { label: 'Podcast', value: 'エンジニアがもがくラジオ' },
   { label: 'Stack', value: 'TypeScript · Go · Flutter' },
