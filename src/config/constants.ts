@@ -16,6 +16,12 @@ export const linkdinUrl =
 export const githubUrl = 'https://github.com/tokku5552';
 export const wantedlyUrl = 'https://www.wantedly.com/id/shinnosuke_tokuda';
 export const noteUrl = 'https://note.com/tokku5552';
+export const youtubeChannelUrl = 'https://www.youtube.com/@tokku-tech';
+export const youtubeChannelHandle = '@tokku-tech';
+export const youtubeChannelEmbedUrl =
+  'https://www.youtube.com/embed/videoseries?si=oPIn8AwmbFJPldk5&list=PLH58nXzfT1i1IxDF6hld-ZZvr6Vgg51hR';
+export const youtubePlaylistEmbedUrl =
+  'https://www.youtube.com/embed/videoseries?si=VxIbydvyHzjo6ijO&list=PLH58nXzfT1i0ELx0qvc6W4u8ssez7LcD8';
 export const podcastUrl = 'https://podcasters.spotify.com/pod/show/5rh9uag8ah';
 export const podcastEmbedUrl =
   'https://podcasters.spotify.com/pod/show/5rh9uag8ah/embed';
