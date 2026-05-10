@@ -1,8 +1,8 @@
-import { JSDOM } from 'jsdom';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { ZennArticle, ZennArticleResponse } from '../types/zenn';
+import { createDom } from './createDom';
 
 export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
   try {
@@ -51,7 +51,7 @@ const fetchOgpDataFromZenn = async (
     },
   });
   const html = await res.text();
-  const dom = new JSDOM(html);
+  const dom = createDom(html);
 
   // metaデータを取得し、ogpの各データを抽出
   const meta = dom.window.document.head.querySelectorAll('meta');
