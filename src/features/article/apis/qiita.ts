@@ -1,9 +1,9 @@
-import { JSDOM } from 'jsdom';
 import { config } from '../../../config/environment';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { QiitaArticle, QiitaArticleResponse } from '../types/qiita';
+import { createDom } from './createDom';
 
 /**
  * Qiitaの記事を取得する
@@ -61,7 +61,7 @@ const fetchOgpDataFromQiita = async (url: string): Promise<OgpData> => {
     },
   });
   const html = await res.text();
-  const dom = new JSDOM(html);
+  const dom = createDom(html);
 
   // metaデータを取得し、ogpの各データを抽出
   const meta = dom.window.document.head.querySelectorAll('meta');

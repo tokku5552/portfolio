@@ -1,8 +1,8 @@
-import { JSDOM } from 'jsdom';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { NoteRssItem } from '../types/note';
+import { createDom } from './createDom';
 
 const NOTE_USERNAME = 'tokku5552';
 const NOTE_RSS_URL = `https://note.com/${NOTE_USERNAME}/rss`;
@@ -54,7 +54,7 @@ const fetchOgpDataFromNote = async (url: string): Promise<OgpData> => {
       },
     });
     const html = await res.text();
-    const dom = new JSDOM(html);
+    const dom = createDom(html);
     const meta = dom.window.document.head.querySelectorAll('meta');
     return extractOgp([...Array.from(meta)]);
   } catch (error) {
@@ -69,7 +69,7 @@ const fetchOgpDataFromNote = async (url: string): Promise<OgpData> => {
 const MEDIA_NS = 'http://search.yahoo.com/mrss/';
 
 export const parseNoteRss = (xml: string): NoteRssItem[] => {
-  const dom = new JSDOM(xml, { contentType: 'text/xml' });
+  const dom = createDom(xml, { contentType: 'text/xml' });
   const items = Array.from(dom.window.document.getElementsByTagName('item'));
 
   return items.map((item) => {
