@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Package manager is **pnpm** (pinned via `packageManager` in `package.json`; currently `pnpm@10.33.0`). Enable with `corepack enable` once per machine. Node version is pinned by `.node-version` (20.20.2).
+Package manager is **pnpm** (pinned via `packageManager` in `package.json`; currently `pnpm@10.33.2`). Enable with `corepack enable` once per machine. Node version is pinned by `.node-version` and `engines.node` in `package.json` (22.22.2).
 
 ```bash
 pnpm install          # install dependencies (use --frozen-lockfile in CI)
