@@ -27,10 +27,21 @@ export const podcastEmbedUrl =
   'https://podcasters.spotify.com/pod/show/5rh9uag8ah/embed';
 export const podcastSpotifyUrl =
   'https://open.spotify.com/show/6h7WBgX1XlTuypPKhyL3qI';
+export const podcastSpotifyEmbedUrl =
+  'https://open.spotify.com/embed/show/6h7WBgX1XlTuypPKhyL3qI';
 export const podcastApplePodcastsUrl =
   'https://podcasts.apple.com/us/podcast/%E3%82%A8%E3%83%B3%E3%82%B8%E3%83%8B%E3%82%A2%E3%81%8C%E3%82%82%E3%81%8C%E3%81%8F%E3%83%A9%E3%82%B8%E3%82%AA/id1682202380';
 export const podcastAmazonMusicUrl =
   'https://music.amazon.co.jp/podcasts/3cc76d7c-f8e0-4a88-9344-1645b7a7aaa0';
+// とっくの夜ノート — a short-form night-time audio program distributed via stand.fm
+export const nightNoteSpotifyUrl =
+  'https://open.spotify.com/show/033nwrEqIVEbLwQ01uzRKJ';
+export const nightNoteSpotifyEmbedUrl =
+  'https://open.spotify.com/embed/show/033nwrEqIVEbLwQ01uzRKJ';
+export const nightNoteApplePodcastUrl =
+  'https://podcasts.apple.com/jp/podcast/%E3%81%A8%E3%81%A3%E3%81%8F%E3%81%AE%E5%A4%9C%E3%83%8E%E3%83%BC%E3%83%88/id1896878866';
+export const nightNoteStandFmUrl =
+  'https://stand.fm/channels/6a15aaac5a8c4d39c49a0dca';
 export const contactGoogleFormUrl = 'https://forms.gle/fvHkjYuSExq6EvUr9';
 export const timeTicketUrl = 'https://www.timeticket.jp/items/192937/';
 export const inkdoseUrl = 'https://inkdoses.com/';
