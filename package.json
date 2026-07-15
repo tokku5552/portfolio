@@ -48,5 +48,13 @@
     "ts-jest": "^29.2.0",
     "ts-node": "^10.9.2",
     "typescript": "5.9.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "form-data@4": "^4.0.6",
+      "ws@8": "^8.21.0",
+      "glob@10": "^10.5.0",
+      "picomatch@2": "^2.3.2"
+    }
   }
 }
