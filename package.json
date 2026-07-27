@@ -54,7 +54,12 @@
       "form-data@4": "^4.0.6",
       "ws@8": "^8.21.0",
       "glob@10": "^10.5.0",
-      "picomatch@2": "^2.3.2"
+      "picomatch@2": "^2.3.2",
+      "brace-expansion@1": "^1.1.16",
+      "brace-expansion@2": "^2.1.2",
+      "js-yaml@3": "^3.15.0",
+      "js-yaml@4": "^4.3.0",
+      "sharp": "^0.35.0"
     }
   }
 }
