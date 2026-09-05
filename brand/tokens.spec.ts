@@ -12,10 +12,7 @@ interface CssVarPair {
 }
 
 function extractCssVars(css: string, prefix: string): CssVarPair[] {
-  const regex = new RegExp(
-    `--${prefix}-([a-z0-9-]+)\\s*:\\s*([^;]+);`,
-    'gi'
-  );
+  const regex = new RegExp(`--${prefix}-([a-z0-9-]+)\\s*:\\s*([^;]+);`, 'gi');
   const result: CssVarPair[] = [];
   let match;
   while ((match = regex.exec(css)) !== null) {
