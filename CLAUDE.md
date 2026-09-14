@@ -39,7 +39,7 @@ Routing lives in `src/pages/` (classic Pages Router, not App Router). `_app.tsx`
 
 ### Feature-based layout under `src/features/<feature>/`
 
-Each feature (`article`, `brand`, `home`, `service`, `works`) owns its `apis/`, `components/`, `types/`, and optionally `data/`, `hooks/`, `functions/`. The top-level `*.page.tsx` inside a feature folder is the page-level component rendered by the matching file in `src/pages/`.
+Each feature (`article`, `brand`, `home`, `service`) owns its `apis/`, `components/`, `types/`, and optionally `data/`, `hooks/`, `functions/`. The top-level `*.page.tsx` inside a feature folder is the page-level component rendered by the matching file in `src/pages/`.
 
 Shared building blocks live outside features:
 
