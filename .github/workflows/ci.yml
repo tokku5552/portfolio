@@ -16,7 +16,6 @@ concurrency:
 env:
   NEXT_PUBLIC_ENVIRONMENT: production
   NEXT_PUBLIC_GA_ID: ${{ secrets.NEXT_PUBLIC_GA_ID }}
-  NEXT_PUBLIC_QIITA_TOKEN: ${{ secrets.NEXT_PUBLIC_QIITA_TOKEN }}
 
 jobs:
   lint:
@@ -37,6 +36,9 @@ jobs:
         run: pnpm test
   build:
     runs-on: ubuntu-latest
+    # Server-only secret; only the build (getStaticProps) needs it.
+    env:
+      QIITA_TOKEN: ${{ secrets.QIITA_TOKEN }}
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup

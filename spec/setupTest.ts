@@ -2,5 +2,5 @@
 export default (): void => {
   process.env.NEXT_PUBLIC_ENVIRONMENT = 'test';
   process.env.NEXT_PUBLIC_GA_ID = 'TEST_GA_ID';
-  process.env.NEXT_PUBLIC_QIITA_TOKEN = 'TEST_QIITA_TOKEN';
+  process.env.QIITA_TOKEN = 'TEST_QIITA_TOKEN';
 };
