@@ -1,4 +1,4 @@
-## 関連Issus
+## 関連Issue
 
 <!-- close #1-->
 

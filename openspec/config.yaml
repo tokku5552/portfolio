@@ -1,20 +1,26 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context, injected into every artifact's instructions.
+# Keep it short and free of version numbers (Renovate bumps them);
+# CLAUDE.md holds the detailed conventions.
+context: |
+  Personal portfolio site (https://www.tokku-tech.dev), deployed on Vercel.
+  Tech stack: Next.js Pages Router (not App Router), TypeScript, Tailwind CSS v3,
+  pnpm, Jest + @testing-library/react (jsdom).
+  Code is organized by feature under src/features/<feature>/; route files in
+  src/pages/ stay thin and delegate to *.page.tsx components.
+  Visual decisions follow the Twilight Blade design system; brand/brand.md is the
+  single source of truth, with tokens in brand/tokens.css and brand/tokens.ts.
+  Do not add a second styling system or a JS animation library.
+  Language: write OpenSpec artifacts (proposal.md, design.md, tasks.md, spec.md)
+  in Japanese. Keep the OpenSpec structural keywords in English (## Requirements,
+  ### Requirement:, #### Scenario:, **WHEN** / **THEN**, MUST / SHALL).
+  Write code, code comments, and other repository files in English.
+  See CLAUDE.md for commands, conventions, and the git workflow.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
+# Per-artifact rules (optional). None defined yet; add them here when a
+# recurring review comment should become a standing rule.
 # Example:
 #   rules:
 #     proposal:
-#       - Keep proposals under 500 words
 #       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
