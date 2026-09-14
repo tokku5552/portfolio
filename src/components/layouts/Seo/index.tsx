@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-page-custom-font */
 import Head from 'next/head';
 import {
   baseURL,
@@ -59,12 +58,6 @@ const Seo = ({
       <meta name="twitter:site" content={twitterSite} />
       <meta name="twitter:image" content={imgUrl} />
 
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;700;900&family=Geist+Mono:wght@400;500&display=swap"
-        rel="stylesheet"
-      />
       <link rel="canonical" href={url} />
     </Head>
   );
