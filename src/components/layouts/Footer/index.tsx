@@ -10,10 +10,9 @@ import {
   inkdoseUrl,
   instagramUrl,
   linkdinUrl,
+  nightNoteStandFmUrl,
   noteUrl,
-  podcastApplePodcastsUrl,
   podcastSpotifyUrl,
-  podcastUrl,
   wantedlyUrl,
   xUrl,
 } from '../../../config/constants';
@@ -45,13 +44,12 @@ const columns: Column[] = [
   {
     label: 'Podcast',
     links: [
-      { label: 'Spotify for Podcasters', href: podcastUrl, external: true },
-      { label: 'Spotify', href: podcastSpotifyUrl, external: true },
       {
-        label: 'Apple Podcasts',
-        href: podcastApplePodcastsUrl,
+        label: 'エンジニアがもがくラジオ',
+        href: podcastSpotifyUrl,
         external: true,
       },
+      { label: 'とっくの夜ノート', href: nightNoteStandFmUrl, external: true },
     ],
   },
   {

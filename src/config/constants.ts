@@ -6,7 +6,7 @@ export const globalDescription = `
 好きな技術はTypeScript/Go/Flutter/AWS/GCP。現在娘の子育てに奮闘中。
 `;
 
-export const globalCoverUrl = `${baseURL}/assets/hero_skills_2023.png`;
+export const globalCoverUrl = `${baseURL}/og.png`;
 export const linedcUrl =
   'https://developers.line.biz/ja/community/api-experts/jp-shinnosuke-tokuda/';
 export const xUrl = 'https://twitter.com/tokkuu';

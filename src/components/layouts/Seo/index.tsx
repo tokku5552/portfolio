@@ -35,8 +35,8 @@ const Seo = ({
     : stripHtmlTags(defaultDescription);
   const url = pagePath ? pagePath : baseURL;
   const imgUrl = pageImg ? pageImg : globalCoverUrl;
-  const imgWidth = pageImgWidth ? pageImgWidth : 1280;
-  const imgHeight = pageImgHeight ? pageImgHeight : 640;
+  const imgWidth = pageImgWidth ? pageImgWidth : 1200;
+  const imgHeight = pageImgHeight ? pageImgHeight : 630;
 
   const twitterCard = 'summary_large_image';
   const twitterSite = '@tokkuu';

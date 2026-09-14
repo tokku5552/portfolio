@@ -1,8 +1,9 @@
 /**
  * Twilight Blade design tokens.
  * Single source of truth for brand CSS variables. Consumed by Tailwind
- * theme.extend, component styles, and downloadable copies under
- * public/brand-assets/. Do not redefine these values elsewhere.
+ * theme.extend and component styles, and distributed to third parties
+ * directly from this file via GitHub raw / jsDelivr. Do not redefine these
+ * values elsewhere.
  */
 :root {
   --color-brand-bg: #0a0a12;
