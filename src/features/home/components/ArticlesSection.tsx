@@ -13,7 +13,7 @@ export default function ArticlesSection({ articles }: ArticlesSectionProps) {
       id="articles"
       eyebrow="// Writing"
       heading="Articles"
-      description="Zenn / Qiita / 自前ブログから集約した最近の記事。"
+      description="Zenn / Qiita / note / 企業テックブログから集約した最近の記事。"
     >
       <AdjustableArticleList articles={articles} displayNumber={3} />
       <div className="mt-8">

@@ -1,4 +1,8 @@
 import { render } from '@testing-library/react';
+import {
+  nightNoteStandFmUrl,
+  podcastSpotifyUrl,
+} from '../../../config/constants';
 import Footer from './index';
 
 describe('Footer', () => {
@@ -8,6 +12,16 @@ describe('Footer', () => {
       (a) => a.getAttribute('href') === '/brand'
     );
     expect(brandLinks.length).toBeGreaterThan(0);
+  });
+
+  it('lists both podcast programs in the Podcast column', () => {
+    const { container } = render(<Footer />);
+    expect(
+      container.querySelector(`a[href="${podcastSpotifyUrl}"]`)
+    ).not.toBeNull();
+    expect(
+      container.querySelector(`a[href="${nightNoteStandFmUrl}"]`)
+    ).not.toBeNull();
   });
 
   it('does NOT add Brand to the Header-style nav (only in Footer chrome)', () => {
