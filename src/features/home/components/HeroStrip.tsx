@@ -1,4 +1,5 @@
 import Container from '../../../components/parts/Container';
+import { cn } from '../../../libs/cn';
 
 interface StripCell {
   label: string;
@@ -19,13 +20,11 @@ export default function HeroStrip() {
         {cells.map((cell, index) => (
           <li
             key={cell.label}
-            className={
-              'px-9 py-7 ' +
-              (index < cells.length - 1
-                ? 'border-r border-brand-border md:border-r '
-                : '') +
-              (index < 2 ? 'border-b border-brand-border md:border-b-0 ' : '')
-            }
+            className={cn(
+              'px-9 py-7',
+              index < cells.length - 1 && 'border-r border-brand-border',
+              index < 2 && 'border-b border-brand-border md:border-b-0'
+            )}
           >
             <div className="mb-2 font-brand-mono text-[11px] uppercase tracking-[0.08em] text-brand-muted">
               {cell.label}
