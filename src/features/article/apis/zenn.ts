@@ -1,19 +1,24 @@
+import { mapWithConcurrency } from '../../../libs/mapWithConcurrency';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { ZennArticle, ZennArticleResponse } from '../types/zenn';
 import { createDom } from './createDom';
+import { FETCH_TIMEOUT_MS, OGP_FETCH_CONCURRENCY } from './fetchConfig';
 
 export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
   try {
     const res = await fetch(
-      'https://zenn.dev/api/articles?username=tokku5552&order=latest'
+      'https://zenn.dev/api/articles?username=tokku5552&order=latest',
+      { signal: AbortSignal.timeout(FETCH_TIMEOUT_MS) }
     );
     const response: ZennArticleResponse = await res.json();
 
     const zennArticles = toZennArticles(response);
-    const result = await Promise.all(
-      zennArticles.map(async (zennArticle) => {
+    const result = await mapWithConcurrency(
+      zennArticles,
+      OGP_FETCH_CONCURRENCY,
+      async (zennArticle) => {
         const [ogp, description] = await fetchOgpDataFromZenn(
           `https://zenn.dev/${zennArticle.user.username}/articles/${zennArticle.slug}`
         );
@@ -22,14 +27,14 @@ export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
           ogp,
           description,
         };
-      })
+      }
     );
 
     return result.map((item) =>
       toArticleFromZenn(
         item.zennArticle,
         item.description,
-        item.ogp['og:image']
+        item.ogp['og:image'] ?? ''
       )
     );
   } catch (error) {
@@ -44,27 +49,39 @@ export const fetchArticlesFromZenn = async (): Promise<Article[]> => {
 const fetchOgpDataFromZenn = async (
   url: string
 ): Promise<[OgpData, string]> => {
-  const encodedUri = encodeURI(url);
-  const res = await fetch(encodedUri, {
-    headers: {
-      'User-Agent': 'bot',
-    },
-  });
-  const html = await res.text();
-  const dom = createDom(html);
+  try {
+    const encodedUri = encodeURI(url);
+    const res = await fetch(encodedUri, {
+      headers: {
+        'User-Agent': 'bot',
+      },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    const html = await res.text();
+    const dom = createDom(html);
 
-  // metaデータを取得し、ogpの各データを抽出
-  const meta = dom.window.document.head.querySelectorAll('meta');
-  const metaElements = Array.from(meta);
-  const ogp = extractOgp([...metaElements]);
+    // metaデータを取得し、ogpの各データを抽出
+    const meta = dom.window.document.head.querySelectorAll('meta');
+    const metaElements = Array.from(meta);
+    const ogp = extractOgp([...metaElements]);
 
-  // bodyからdescriptionを生成
-  const body = dom.window.document.body.querySelectorAll('p');
-  const bodyElements = Array.from(body);
-  const textContents = bodyElements.map((element) => element.textContent);
-  const description = truncateText(stripHtmlTags(textContents.join()), 100);
+    // bodyからdescriptionを生成
+    const body = dom.window.document.body.querySelectorAll('p');
+    const bodyElements = Array.from(body);
+    const textContents = bodyElements.map((element) => element.textContent);
+    const description = truncateText(
+      stripHtmlTags(textContents.join(' ')),
+      100
+    );
 
-  return [ogp, description];
+    return [ogp, description];
+  } catch (error) {
+    console.warn(
+      `Failed to fetch OGP from Zenn article ${url}:`,
+      error instanceof Error ? error.message : error
+    );
+    return [{}, ''];
+  }
 };
 
 const toZennArticles = (response: ZennArticleResponse): ZennArticle[] => {

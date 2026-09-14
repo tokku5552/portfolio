@@ -1,9 +1,11 @@
 import { config } from '../../../config/environment';
+import { mapWithConcurrency } from '../../../libs/mapWithConcurrency';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { QiitaArticle, QiitaArticleResponse } from '../types/qiita';
 import { createDom } from './createDom';
+import { FETCH_TIMEOUT_MS, OGP_FETCH_CONCURRENCY } from './fetchConfig';
 
 /**
  * Qiitaの記事を取得する
@@ -23,6 +25,7 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
         headers: {
           Authorization: `Bearer ${config.qiitaToken}`,
         },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       }
     ).then((response) => response.json());
 
@@ -32,17 +35,19 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
     }
 
     const qiitaArticles = toQiitaArticles(res);
-    const result = await Promise.all(
-      qiitaArticles.map(async (qiitaArticle) => {
+    const result = await mapWithConcurrency(
+      qiitaArticles,
+      OGP_FETCH_CONCURRENCY,
+      async (qiitaArticle) => {
         const ogp = await fetchOgpDataFromQiita(qiitaArticle.url);
         return {
           qiitaArticle,
           ogp,
         };
-      })
+      }
     );
     return result.map((item) =>
-      toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'])
+      toArticleFromQiita(item.qiitaArticle, item.ogp['og:image'] ?? '')
     );
   } catch (error) {
     console.warn(
@@ -54,21 +59,28 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
 };
 
 const fetchOgpDataFromQiita = async (url: string): Promise<OgpData> => {
-  const encodedUri = encodeURI(url);
-  const res = await fetch(encodedUri, {
-    headers: {
-      'User-Agent': 'bot',
-    },
-  });
-  const html = await res.text();
-  const dom = createDom(html);
+  try {
+    const encodedUri = encodeURI(url);
+    const res = await fetch(encodedUri, {
+      headers: {
+        'User-Agent': 'bot',
+      },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+    });
+    const html = await res.text();
+    const dom = createDom(html);
 
-  // metaデータを取得し、ogpの各データを抽出
-  const meta = dom.window.document.head.querySelectorAll('meta');
-  const metaElements = Array.from(meta);
-  const ogp = extractOgp([...metaElements]);
-
-  return ogp;
+    // metaデータを取得し、ogpの各データを抽出
+    const meta = dom.window.document.head.querySelectorAll('meta');
+    const metaElements = Array.from(meta);
+    return extractOgp([...metaElements]);
+  } catch (error) {
+    console.warn(
+      `Failed to fetch OGP from Qiita article ${url}:`,
+      error instanceof Error ? error.message : error
+    );
+    return {};
+  }
 };
 
 const toQiitaArticles = (response: QiitaArticleResponse[]): QiitaArticle[] => {
