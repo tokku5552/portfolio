@@ -17,7 +17,7 @@ pnpm test path/to/file.spec.ts          # single file
 pnpm test -t "name of test"             # by test name
 ```
 
-CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on PRs to `main`. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`. Vercel uses `pnpm install --frozen-lockfile` and `pnpm build` explicitly.
+CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on PRs to `main`. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`. Vercel uses `pnpm install --frozen-lockfile` and `pnpm build` explicitly. Because `/` and `/articles` are pure SSG, `.github/workflows/scheduled-deploy.yml` POSTs a Vercel Deploy Hook (secret `VERCEL_DEPLOY_HOOK_URL`, hook bound to `main`) daily at 06:00 JST so new external articles get picked up; it fails loudly if the secret is missing.
 
 ## Environment variables
 
