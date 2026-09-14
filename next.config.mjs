@@ -1,8 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    largePageDataBytes: 30000000, // デフォルトの2MBから3MBに増加
-  },
+  reactStrictMode: true,
+  poweredByHeader: false,
 };
 
 export default nextConfig;

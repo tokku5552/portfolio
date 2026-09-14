@@ -1,10 +1,12 @@
 import { TextDecoder, TextEncoder } from 'util';
 
 if (typeof globalThis.TextEncoder === 'undefined') {
-  globalThis.TextEncoder = TextEncoder as unknown as typeof globalThis.TextEncoder;
+  globalThis.TextEncoder =
+    TextEncoder as unknown as typeof globalThis.TextEncoder;
 }
 if (typeof globalThis.TextDecoder === 'undefined') {
-  globalThis.TextDecoder = TextDecoder as unknown as typeof globalThis.TextDecoder;
+  globalThis.TextDecoder =
+    TextDecoder as unknown as typeof globalThis.TextDecoder;
 }
 // jsdom's AbortSignal lacks the static `timeout` helper that Node 22 provides.
 if (typeof AbortSignal.timeout !== 'function') {

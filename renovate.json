@@ -30,6 +30,13 @@
       "groupName": "react",
       "matchPackageNames": ["react", "react-dom"],
       "matchPackagePrefixes": ["react-"]
+    },
+    {
+      "description": "Allow major updates for ESLint core and Next's ESLint config so lint does not fall behind Next.js. Not automerged because majors usually need config changes.",
+      "matchPackageNames": ["eslint", "eslint-config-next"],
+      "matchUpdateTypes": ["major"],
+      "enabled": true,
+      "automerge": false
     }
   ]
 }

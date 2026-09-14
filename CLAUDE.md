@@ -11,7 +11,7 @@ pnpm install          # install dependencies (use --frozen-lockfile in CI)
 pnpm dev              # start Next.js dev server
 pnpm build            # production build (used by Vercel and CI)
 pnpm start            # serve the built app
-pnpm lint             # next lint (ESLint + Prettier via eslint-plugin-prettier)
+pnpm lint             # eslint . (ESLint 9 flat config + Prettier via eslint-plugin-prettier)
 pnpm test             # jest (jsdom environment)
 pnpm test path/to/file.spec.ts          # single file
 pnpm test -t "name of test"             # by test name
@@ -73,7 +73,8 @@ There is no `public/brand-assets/` mirror. The `/brand` page's ASSETS section li
 - **Animation**: CSS `@keyframes` declared in `src/styles/globals.css` (`orb-float`, `eyebrow-pulse`) plus Tailwind's `transition-*` / `animate-*` utilities. There is no JS animation library.
 - **Tests**: Jest + `@testing-library/react` in a jsdom environment. Spec files live next to the code they test (`*.spec.ts` / `*.spec.tsx`). `spec/setupTest.ts` provides env stubs as `globalSetup`; `spec/jestPolyfills.ts` provides `setupFiles` polyfills (e.g. for `note.ts` parsing). No project-wide RTL setup file — match neighbor specs (e.g. `Eyebrow.spec.tsx`) when writing new ones; `toBeInTheDocument` from `@testing-library/jest-dom` is **not** wired up, so prefer `expect(el).not.toBeNull()` / DOM querying over jest-dom matchers.
 - **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `pnpm lint` will fail on formatting drift.
-- **`eslint.config` disables** `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps`. Don't rely on the hook linter to catch mistakes; review effect dependencies by hand.
+- **Lint config** is the flat config `eslint.config.mjs` (`next lint` is not used). It lints the whole repo (`src/`, `spec/`, `brand/`, root config files) and ignores `.claude/`, `.next/`, and build outputs. `eslint-config-next` 15.x is bridged via `FlatCompat`; switch to its native flat exports when upgrading to 16+.
+- **`eslint.config.mjs` disables** `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps`. Don't rely on the hook linter to catch mistakes; review effect dependencies by hand.
 
 ## Visual Conventions
 
