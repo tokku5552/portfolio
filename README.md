@@ -2,7 +2,7 @@
 
 Source code for tokku's portfolio site: **https://www.tokku-tech.dev/**
 
-The site introduces tokku, lists works and services, aggregates articles from Zenn, Qiita, and note.com, and publishes the Twilight Blade brand guidelines at [`/brand`](https://www.tokku-tech.dev/brand).
+The top page introduces tokku and features podcasts, YouTube, services, recent articles (aggregated from Zenn, Qiita, and note.com), and contact links. The site also has a full article list at `/articles` and publishes the Twilight Blade brand guidelines at [`/brand`](https://www.tokku-tech.dev/brand).
 
 ![image](./docs/screenshot.png)
 

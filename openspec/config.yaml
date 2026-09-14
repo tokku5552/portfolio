@@ -12,7 +12,10 @@ context: |
   Visual decisions follow the Twilight Blade design system; brand/brand.md is the
   single source of truth, with tokens in brand/tokens.css and brand/tokens.ts.
   Do not add a second styling system or a JS animation library.
-  Write file contents (code, comments, specs) in English.
+  Language: write OpenSpec artifacts (proposal.md, design.md, tasks.md, spec.md)
+  in Japanese. Keep the OpenSpec structural keywords in English (## Requirements,
+  ### Requirement:, #### Scenario:, **WHEN** / **THEN**, MUST / SHALL).
+  Write code, code comments, and other repository files in English.
   See CLAUDE.md for commands, conventions, and the git workflow.
 
 # Per-artifact rules (optional). None defined yet; add them here when a
