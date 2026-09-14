@@ -22,6 +22,7 @@ export default function YouTubeSection() {
                 src={youtubeChannelEmbedUrl}
                 title="YouTube channel playlist"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                loading="lazy"
                 allowFullScreen
                 className="h-full w-full"
               />
@@ -36,6 +37,7 @@ export default function YouTubeSection() {
                 src={youtubePlaylistEmbedUrl}
                 title="YouTube playlist"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                loading="lazy"
                 allowFullScreen
                 className="h-full w-full"
               />

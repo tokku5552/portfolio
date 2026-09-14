@@ -85,44 +85,10 @@ const fetchOgpDataFromQiita = async (url: string): Promise<OgpData> => {
 
 const toQiitaArticles = (response: QiitaArticleResponse[]): QiitaArticle[] => {
   return response.map((article) => ({
-    renderedBody: article.rendered_body,
-    body: article.body,
-    coediting: article.coediting,
-    commentsCount: article.comments_count,
-    createdAt: article.created_at,
-    group: article.group,
-    id: article.id,
-    likesCount: article.likes_count,
-    private: article.private,
-    reactionsCount: article.reactions_count,
-    stocksCount: article.stocks_count,
-    tags: article.tags,
     title: article.title,
-    updatedAt: article.updated_at,
+    renderedBody: article.rendered_body,
     url: article.url,
-    user: {
-      description: article.user.description,
-      facebookId: article.user.facebook_id,
-      followeesCount: article.user.followees_count,
-      followersCount: article.user.followers_count,
-      githubLoginName: article.user.github_login_name,
-      id: article.user.id,
-      itemsCount: article.user.items_count,
-      linkedinId: article.user.linkedin_id,
-      location: article.user.location,
-      name: article.user.name,
-      organization: article.user.organization,
-      permanentId: article.user.permanent_id,
-      profileImageUrl: article.user.profile_image_url,
-      teamOnly: article.user.team_only,
-      twitterScreenName: article.user.twitter_screen_name,
-      websiteUrl: article.user.website_url,
-    },
-
-    pageViewsCount: article.page_views_count,
-    teamMembership: article.team_membership,
-    organizationUrlName: article.organization_url_name,
-    slide: article.slide,
+    createdAt: article.created_at,
   }));
 };
 

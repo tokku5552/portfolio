@@ -10,8 +10,8 @@ export interface ZennArticleResponse {
     article_type: 'tech';
     emoji: string;
     is_suspending_private: boolean;
-    published_at: Date;
-    body_updated_at: Date;
+    published_at: string;
+    body_updated_at: string;
     source_repo_updated_at: null;
     pinned: boolean;
     path: string;
@@ -39,8 +39,8 @@ export interface ZennArticle {
   articleType: 'tech';
   emoji: string;
   isSuspendingPrivate: boolean;
-  publishedAt: Date;
-  bodyUpdatedAt: Date;
+  publishedAt: string;
+  bodyUpdatedAt: string;
   sourceRepoUpdatedAt: null;
   pinned: boolean;
   path: string;

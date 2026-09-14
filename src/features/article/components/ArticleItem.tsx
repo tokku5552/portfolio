@@ -37,6 +37,10 @@ export function ArticleItem({
           <img
             src={imageUrl}
             alt={title}
+            width={320}
+            height={180}
+            loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover"
           />
         </div>

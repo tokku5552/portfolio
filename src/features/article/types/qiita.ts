@@ -3,7 +3,7 @@ export interface QiitaArticleResponse {
   body: string;
   coediting: boolean;
   comments_count: number;
-  created_at: Date;
+  created_at: string;
   group: null;
   id: string;
   likes_count: number;
@@ -15,7 +15,7 @@ export interface QiitaArticleResponse {
     versions: string[];
   }[];
   title: string;
-  updated_at: Date;
+  updated_at: string;
   url: string;
   user: {
     description: string;
@@ -41,45 +41,10 @@ export interface QiitaArticleResponse {
   slide: boolean;
 }
 
+/** Camel-cased subset of `QiitaArticleResponse` actually consumed by `qiita.ts`. */
 export interface QiitaArticle {
-  renderedBody: string;
-  body: string;
-  coediting: boolean;
-  commentsCount: number;
-  createdAt: Date;
-  group: null;
-  id: string;
-  likesCount: number;
-  private: boolean;
-  reactionsCount: number;
-  stocksCount: number;
-  tags: {
-    name: string;
-    versions: string[];
-  }[];
   title: string;
-  updatedAt: Date;
+  renderedBody: string;
   url: string;
-  user: {
-    description: string;
-    facebookId: string;
-    followeesCount: number;
-    followersCount: number;
-    githubLoginName: string;
-    id: string;
-    itemsCount: number;
-    linkedinId: string;
-    location: string;
-    name: string;
-    organization: string;
-    permanentId: number;
-    profileImageUrl: string;
-    teamOnly: boolean;
-    twitterScreenName: string;
-    websiteUrl: string;
-  };
-  pageViewsCount: number;
-  teamMembership: null;
-  organizationUrlName: string;
-  slide: boolean;
+  createdAt: string;
 }

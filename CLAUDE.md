@@ -48,7 +48,7 @@ Shared building blocks live outside features:
 - `src/libs/` — pure utilities (`date.ts`, `gtag.ts`, `text.ts`, `cn.ts`). Co-located tests like `date.spec.ts` live here. `cn.ts` exposes the `cn(...)` helper (`twMerge(clsx(inputs))`) used when composing Tailwind classes.
 - `src/config/` — `environment.ts` (env vars) and `constants.ts` (URLs, page titles, social links).
 - `src/styles/globals.css` — Tailwind directives + `brand/tokens.css` import + Twilight Blade-specific keyframes and `tb-*` utility classes (used by `Orb`, `Eyebrow`, `GridOverlay`, gradient period). Loaded once at the top of `src/pages/_app.tsx`.
-- `src/types/global.d.ts` — cross-feature type augmentations.
+- Global typings come from `@types/*` packages listed in `tsconfig.json` `types` (e.g. `gtag.js` for `window.gtag`); there is no hand-written `src/types/` declaration file. Since `types` is an explicit allowlist, add any new ambient `@types/*` package there.
 
 Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and relative imports appear in the codebase; match whichever style the surrounding file uses.
 
