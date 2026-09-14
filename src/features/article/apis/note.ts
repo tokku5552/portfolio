@@ -1,8 +1,10 @@
+import { mapWithConcurrency } from '../../../libs/mapWithConcurrency';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
 import { Article } from '../types/article';
 import { NoteRssItem } from '../types/note';
 import { createDom } from './createDom';
+import { FETCH_TIMEOUT_MS, OGP_FETCH_CONCURRENCY } from './fetchConfig';
 
 const NOTE_USERNAME = 'tokku5552';
 const NOTE_RSS_URL = `https://note.com/${NOTE_USERNAME}/rss`;
@@ -18,6 +20,7 @@ export const fetchArticlesFromNote = async (): Promise<Article[]> => {
       headers: {
         'User-Agent': 'bot',
       },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
 
     if (!res.ok) {
@@ -28,11 +31,13 @@ export const fetchArticlesFromNote = async (): Promise<Article[]> => {
     const xml = await res.text();
     const items = parseNoteRss(xml);
 
-    const result = await Promise.all(
-      items.map(async (item) => {
+    const result = await mapWithConcurrency(
+      items,
+      OGP_FETCH_CONCURRENCY,
+      async (item) => {
         const ogp = await fetchOgpDataFromNote(item.link);
         return { item, ogp };
-      })
+      }
     );
 
     return result.map(({ item, ogp }) => toArticleFromNote(item, ogp));
@@ -52,6 +57,7 @@ const fetchOgpDataFromNote = async (url: string): Promise<OgpData> => {
       headers: {
         'User-Agent': 'bot',
       },
+      signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
     });
     const html = await res.text();
     const dom = createDom(html);

@@ -3,15 +3,14 @@ export type OgpData = {
 };
 
 export const extractOgp = (metaElements: HTMLMetaElement[]): OgpData => {
-  const ogp = metaElements
-    .filter((element: Element) => element.hasAttribute('property'))
-    .reduce((previous: any, current: Element) => {
+  return metaElements
+    .filter((element) => element.hasAttribute('property'))
+    .reduce<OgpData>((previous, current) => {
       const property = current.getAttribute('property')?.trim();
-      if (!property) return;
       const content = current.getAttribute('content');
+      // Skip entries without content so callers' `??` fallbacks still apply.
+      if (!property || content === null) return previous;
       previous[property] = content;
       return previous;
     }, {});
-
-  return ogp;
 };
