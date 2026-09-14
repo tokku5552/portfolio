@@ -9,27 +9,23 @@
   "major": {
     "enabled": false
   },
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 9am on monday"]
+  },
   "packageRules": [
-    {
-      "groupName": "terraform",
-      "managers": ["terraform"],
-      "enabled": false
-    },
     {
       "groupName": "linters",
       "extends": ["packages:linters"],
-      "packageNames": ["prettier"],
-      "packagePatterns": ["^@typescript-eslint/"]
+      "matchPackageNames": ["prettier", "@typescript-eslint/**"]
     },
     {
       "groupName": "jest",
-      "matchPackageNames": ["jest", "ts-jest"],
-      "matchPackagePrefixes": ["jest-"]
+      "matchPackageNames": ["jest", "jest-**"]
     },
     {
       "groupName": "react",
-      "matchPackageNames": ["react", "react-dom"],
-      "matchPackagePrefixes": ["react-"]
+      "matchPackageNames": ["react", "react-dom", "react-**"]
     },
     {
       "description": "Allow major updates for ESLint core and Next's ESLint config so lint does not fall behind Next.js. Not automerged because majors usually need config changes.",

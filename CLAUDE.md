@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
-Package manager is **pnpm**, pinned via `packageManager` in `package.json`. Enable with `corepack enable` once per machine. Node version is pinned by `.node-version` and `engines.node` in `package.json`. Read those files for the current versions — they are bumped by Renovate, so do not copy version numbers into docs.
+Package manager is **pnpm**, pinned via `packageManager` in `package.json`. Enable with `corepack enable` once per machine. Node version is pinned exactly by `.node-version`; `engines.node` in `package.json` only constrains the major version, so older local patches do not warn. Read those files for the current versions — they are bumped by Renovate, so do not copy version numbers into docs.
 
 ```bash
 pnpm install          # install dependencies (use --frozen-lockfile in CI)
