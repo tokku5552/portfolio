@@ -1,11 +1,9 @@
 import '@/styles/globals.css';
 import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useEffect } from 'react';
 import { BaseLayout } from '../components/layouts/BaseLayout';
-import { globalPageTitle } from '../config/constants';
 import { GA_MEASUREMENT_ID, pageview } from '../libs/gtag';
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -39,9 +37,6 @@ export default function App({ Component, pageProps }: AppProps) {
         `,
         }}
       />
-      <Head>
-        <title>{globalPageTitle}</title>
-      </Head>
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>

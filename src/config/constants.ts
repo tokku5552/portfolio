@@ -1,5 +1,6 @@
 export const baseURL = 'https://www.tokku-tech.dev';
-export const globalPageTitle = "tokku's portfolio";
+export const siteName = "tokku's portfolio";
+export const globalPageTitle = siteName;
 export const globalDescription = `
 1991年1月生まれ福岡出身。九州大学理学部物理学科卒業後、都内SIerにてインフラエンジニアとして働いた後、ミロゴス株式会社、株式会社サイバーエージェントを経て株式会社メルカリに所属しEngineering Managerとして従事中。
 好きな技術はTypeScript/Go/Flutter/AWS/GCP。現在娘の子育てに奮闘中。

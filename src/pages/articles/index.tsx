@@ -12,7 +12,7 @@ interface ArticlePageProps {
 export default function ArticlesPage({ articles }: ArticlePageProps) {
   const metaData: MetaData = {
     pageTitle: '記事一覧',
-    pagePath: `${baseURL}/news`,
+    pagePath: `${baseURL}/articles`,
   };
 
   return (
