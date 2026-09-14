@@ -28,11 +28,9 @@
       "matchPackageNames": ["react", "react-dom", "react-**"]
     },
     {
-      "description": "Allow major updates for ESLint core and Next's ESLint config so lint does not fall behind Next.js. Not automerged because majors usually need config changes.",
-      "matchPackageNames": ["eslint", "eslint-config-next"],
-      "matchUpdateTypes": ["major"],
-      "enabled": true,
-      "automerge": false
+      "description": "Keep eslint-config-next in lockstep with next. Majors stay disabled for both (and for eslint); bump them together by hand when upgrading Next.js, since eslint-config-next 16 and ESLint 10 require Next 16.",
+      "groupName": "next",
+      "matchPackageNames": ["next", "eslint-config-next", "@next/**"]
     }
   ]
 }
