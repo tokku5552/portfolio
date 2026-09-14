@@ -21,13 +21,13 @@ CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on 
 
 ## Environment variables
 
-All are `NEXT_PUBLIC_*` because this is a client-heavy Pages Router app. `src/config/environment.ts` reads them and `warnIfMissing` logs a warning at import time for each.
+Client-safe values are `NEXT_PUBLIC_*`; `src/config/environment.ts` reads them and `warnIfMissing` logs a warning at import time for each. Secrets are server-only: they never get the `NEXT_PUBLIC_` prefix (which lets Next.js inline them into client bundles) and are read only in the module that uses them, not in the shared `config`.
 
-| Variable | Used for |
-| --- | --- |
-| `NEXT_PUBLIC_ENVIRONMENT` | `local` / `test` / `production` |
-| `NEXT_PUBLIC_GA_ID` | Google Analytics measurement ID |
-| `NEXT_PUBLIC_QIITA_TOKEN` | Qiita API token for article aggregation |
+| Variable | Scope | Used for |
+| --- | --- | --- |
+| `NEXT_PUBLIC_ENVIRONMENT` | client | `local` / `test` / `production` |
+| `NEXT_PUBLIC_GA_ID` | client | Google Analytics measurement ID |
+| `QIITA_TOKEN` | server-only | Qiita API token for article aggregation; read only by `src/features/article/apis/qiita.ts` at build time. In CI it is passed to the `build` job only |
 
 Copy `.env.sample` to `.env` for local work. Tests inject dummy values via `spec/setupTest.ts` (registered as `globalSetup` in `jest.config.mjs`).
 
@@ -65,7 +65,7 @@ There is no `public/brand-assets/` mirror. The `/brand` page's ASSETS section li
 
 ### Article aggregation
 
-`src/features/article/apis/article.ts` merges four sources — Zenn (`zenn.ts`), Qiita (`qiita.ts`, uses `NEXT_PUBLIC_QIITA_TOKEN`), note.com (`note.ts`, RSS-based with on-page OGP scraping), and hand-curated entries in `data/static-data.ts` — then sorts by `publishedAt` desc. Add permanent items to `static-data.ts`; the external sources populate automatically.
+`src/features/article/apis/article.ts` merges four sources — Zenn (`zenn.ts`), Qiita (`qiita.ts`, uses server-only `QIITA_TOKEN`), note.com (`note.ts`, RSS-based with on-page OGP scraping), and hand-curated entries in `data/static-data.ts` — then sorts by `publishedAt` desc. Add permanent items to `static-data.ts`; the external sources populate automatically.
 
 ## Conventions
 

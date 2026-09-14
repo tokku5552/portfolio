@@ -31,7 +31,7 @@ cp .env.sample .env    # then fill in the values
 pnpm dev               # http://localhost:3000
 ```
 
-Environment variables (`NEXT_PUBLIC_ENVIRONMENT`, `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_QIITA_TOKEN`) are listed in `.env.sample` and explained in [CLAUDE.md](./CLAUDE.md#environment-variables).
+Environment variables (`NEXT_PUBLIC_ENVIRONMENT`, `NEXT_PUBLIC_GA_ID`, and the server-only `QIITA_TOKEN`) are listed in `.env.sample` and explained in [CLAUDE.md](./CLAUDE.md#environment-variables).
 
 ## Commands
 

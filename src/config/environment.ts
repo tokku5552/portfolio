@@ -6,10 +6,10 @@ const warnIfMissing = (key: string) => {
 
 warnIfMissing('NEXT_PUBLIC_ENVIRONMENT');
 warnIfMissing('NEXT_PUBLIC_GA_ID');
-warnIfMissing('NEXT_PUBLIC_QIITA_TOKEN');
 
+// Client-safe values only. Server-only secrets (e.g. QIITA_TOKEN) must be
+// read in the module that uses them, never added here.
 export const config = {
   environment: process.env.NEXT_PUBLIC_ENVIRONMENT ?? 'local',
   gaID: process.env.NEXT_PUBLIC_GA_ID ?? '',
-  qiitaToken: process.env.NEXT_PUBLIC_QIITA_TOKEN ?? '',
 };

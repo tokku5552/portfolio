@@ -1,4 +1,3 @@
-import { config } from '../../../config/environment';
 import { mapWithConcurrency } from '../../../libs/mapWithConcurrency';
 import { stripHtmlTags, truncateText } from '../../../libs/text';
 import { extractOgp, OgpData } from '../functions/extractOgp';
@@ -13,8 +12,11 @@ import { FETCH_TIMEOUT_MS, OGP_FETCH_CONCURRENCY } from './fetchConfig';
  * @returns
  */
 export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
-  if (!config.qiitaToken) {
-    console.warn('NEXT_PUBLIC_QIITA_TOKEN is not set; skipping Qiita fetch.');
+  // Server-only secret: read directly here (build time / getStaticProps).
+  // Do not move it to a NEXT_PUBLIC_* variable or the shared config.
+  const qiitaToken = process.env.QIITA_TOKEN;
+  if (!qiitaToken) {
+    console.warn('QIITA_TOKEN is not set; skipping Qiita fetch.');
     return [];
   }
 
@@ -23,7 +25,7 @@ export const fetchArticlesFromQiita = async (): Promise<Article[]> => {
       'https://qiita.com/api/v2/authenticated_user/items?per_page=100&page=1',
       {
         headers: {
-          Authorization: `Bearer ${config.qiitaToken}`,
+          Authorization: `Bearer ${qiitaToken}`,
         },
         signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
       }
