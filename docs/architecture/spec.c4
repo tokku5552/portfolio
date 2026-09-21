@@ -1,0 +1,58 @@
+// Vocabulary for the portfolio architecture model.
+specification {
+  element person {
+    notation "Person"
+    style {
+      shape person
+    }
+  }
+  element system {
+    notation "Software system"
+  }
+  element webapp {
+    notation "Web application"
+    style {
+      shape browser
+    }
+  }
+  element component {
+    notation "Code module"
+    style {
+      shape component
+    }
+  }
+  element datastore {
+    notation "Source files / data"
+    style {
+      shape storage
+    }
+  }
+  element external {
+    notation "External service"
+    style {
+      color gray
+    }
+  }
+  element pipeline {
+    notation "CI / CD"
+    style {
+      color secondary
+    }
+  }
+
+  // Fetched only while `next build` runs getStaticProps; never from the browser.
+  relationship buildtime {
+    color amber
+    line dashed
+  }
+  // Loaded or called by the visitor's browser.
+  relationship runtime {
+    color primary
+    line solid
+  }
+  // Source flow: push, CI, deploy.
+  relationship delivery {
+    color green
+    line dotted
+  }
+}
