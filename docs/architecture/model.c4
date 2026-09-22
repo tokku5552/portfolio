@@ -1,0 +1,156 @@
+// Architecture model of https://www.tokku-tech.dev (this repository).
+model {
+
+  visitor = person "Visitor" {
+    description "Reads the portfolio, article list and /brand page in a browser"
+  }
+  author = person "Author" {
+    description "Site owner. Writes code, articles, podcasts and videos"
+  }
+  aiAgent = person "AI agent" {
+    description "Fetches brand.md to follow the Twilight Blade rules"
+  }
+
+  portfolio = system "Portfolio" {
+    description "Static Next.js site deployed on Vercel"
+
+    site = webapp "Next.js site" {
+      technology "Next.js Pages Router, React, Tailwind CSS"
+      description "Pages are pre-rendered at build time with getStaticProps (no revalidate)"
+
+      pages = component "src/pages" {
+        technology "Next.js routes"
+        description "Thin route files: /, /articles, /brand, /404. _app loads globals.css, BaseLayout and GA pageview tracking"
+      }
+      home = component "features/home" {
+        description "Landing page: hero, articles, podcast, YouTube, services, contact"
+      }
+      article = component "features/article" {
+        description "Aggregates Zenn, Qiita, note.com and static-data.ts, sorted by publishedAt desc"
+      }
+      brand = component "features/brand" {
+        description "/brand reference page: tokens, rules, assets"
+      }
+      error = component "features/error" {
+        description "404 page"
+      }
+      service = component "features/service" {
+        description "Service cards shown on the landing page"
+      }
+      layouts = component "components/layouts" {
+        description "BaseLayout, Header, Footer, Seo"
+      }
+      parts = component "components/parts" {
+        description "Hand-written Tailwind primitives: Button, Container, Eyebrow, GridOverlay, Link, Orb"
+      }
+      libs = component "libs + config" {
+        description "Pure utilities (cn, date, gtag, text, mapWithConcurrency), constants and environment"
+      }
+      styles = component "styles/globals.css" {
+        technology "Tailwind CSS"
+        description "Tailwind directives, tb-* utilities and keyframes"
+      }
+    }
+
+    brandTokens = datastore "brand/" {
+      technology "CSS variables, TypeScript, Markdown"
+      description "Twilight Blade SSoT: tokens.css, tokens.ts, brand.md. tokens.spec.ts keeps the three in sync"
+    }
+  }
+
+  // Article sources, called only during `next build`.
+  zenn = external "Zenn" {
+    technology "REST API + article HTML"
+    description "zenn.dev/api/articles and OGP from each article page"
+  }
+  qiita = external "Qiita" {
+    technology "REST API v2 + article HTML"
+    description "authenticated_user/items with the server-only QIITA_TOKEN, and OGP from each article page"
+  }
+  note = external "note.com" {
+    technology "RSS + article HTML"
+    description "RSS feed and OGP scraped from each article page"
+  }
+
+  // Loaded by the visitor's browser.
+  ga = external "Google Analytics" {
+    technology "gtag.js"
+    description "Pageview tracking on routeChangeComplete"
+  }
+  googleFonts = external "Google Fonts" {
+    description "Geist / Geist Mono"
+  }
+  youtube = external "YouTube" {
+    description "Embedded playlists"
+  }
+  spotify = external "Spotify" {
+    description "Embedded podcast players"
+  }
+
+  // Source hosting and delivery.
+  github = external "GitHub" {
+    technology "git"
+    description "tokku5552/portfolio. main is PR-only"
+  }
+  renovate = external "Renovate" {
+    description "Dependency update PRs, automerge for non-major"
+  }
+  jsdelivr = external "jsDelivr CDN" {
+    description "Serves brand/ files straight from the GitHub repo"
+  }
+  ci = pipeline "GitHub Actions CI" {
+    technology "ci.yml, likec4.yml"
+    description "lint, test and build on PRs to main; likec4 validate when docs/architecture changes"
+  }
+  vercel = pipeline "Vercel" {
+    description "Runs pnpm build; preview on PRs, production on merge to main"
+  }
+
+  // --- Runtime ---
+  visitor -[runtime]-> portfolio.site "Browses" "HTTPS"
+  aiAgent -[runtime]-> jsdelivr "Fetches brand.md"
+
+  // --- Build time ---
+  portfolio.site.article -[buildtime]-> zenn "Fetches articles + OGP"
+  portfolio.site.article -[buildtime]-> qiita "Fetches articles + OGP"
+  portfolio.site.article -[buildtime]-> note "Fetches RSS + OGP"
+
+  // --- Inside the site ---
+  portfolio.site.pages -> portfolio.site.home "Renders"
+  portfolio.site.pages -> portfolio.site.brand "Renders"
+  portfolio.site.pages -> portfolio.site.error "Renders"
+  portfolio.site.pages -> portfolio.site.article "Calls fetchArticles in getStaticProps"
+  portfolio.site.pages -> portfolio.site.layouts "Wraps in BaseLayout / Seo"
+  portfolio.site.pages -> portfolio.site.styles "Imports globals.css"
+  portfolio.site.pages -> portfolio.site.libs "Uses gtag"
+  portfolio.site.pages -[runtime]-> ga "Sends pageviews"
+  portfolio.site.home -> portfolio.site.article "Shows latest 3 articles"
+  portfolio.site.home -> portfolio.site.service "Shows services"
+  portfolio.site.home -> portfolio.site.parts "Uses"
+  portfolio.site.home -> portfolio.site.libs "Uses"
+  portfolio.site.home -[runtime]-> youtube "Embeds videos"
+  portfolio.site.home -[runtime]-> spotify "Embeds podcasts"
+  portfolio.site.brand -> portfolio.site.parts "Uses"
+  portfolio.site.brand -[hyperlink]-> jsdelivr "Links brand asset URLs"
+  portfolio.site.brand -[hyperlink]-> github "Links source repo"
+  portfolio.site.error -> portfolio.site.parts "Uses"
+  portfolio.site.service -> portfolio.site.parts "Uses"
+  portfolio.site.service -> portfolio.site.libs "Uses"
+  portfolio.site.layouts -> portfolio.site.parts "Uses"
+  portfolio.site.layouts -> portfolio.site.libs "Uses"
+  portfolio.site.layouts -> portfolio.site.home "Reads menus from features/home"
+  portfolio.site.pages -[runtime]-> googleFonts "Loads fonts in _document"
+  portfolio.site.article -> portfolio.site.parts "Uses"
+  portfolio.site.article -> portfolio.site.libs "Uses"
+  portfolio.site.parts -> portfolio.site.libs "Uses cn()"
+  portfolio.site.styles -> portfolio.brandTokens "Imports tokens.css"
+  portfolio.site.brand -> portfolio.brandTokens "Renders tokens.ts"
+
+  // --- Delivery ---
+  author -[delivery]-> github "Opens PRs"
+  renovate -[delivery]-> github "Opens dependency PRs"
+  github -[delivery]-> ci "Triggers on PR"
+  github -[delivery]-> vercel "Triggers deploy"
+  vercel -[delivery]-> portfolio.site "Builds and hosts"
+  github -[delivery]-> jsdelivr "Serves brand/ files via gh/"
+}

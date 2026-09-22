@@ -1,0 +1,59 @@
+views {
+
+  view index {
+    title "System context"
+    description "Who uses the site and which external services it depends on"
+    include
+      visitor,
+      author,
+      aiAgent,
+      portfolio,
+      zenn, qiita, note,
+      ga, googleFonts, youtube, spotify,
+      github, renovate, jsdelivr, ci, vercel
+    autoLayout TopBottom
+  }
+
+  view site of portfolio.site {
+    title "Next.js site modules"
+    description "Code modules under src/ and how they use each other and outside services"
+    include *
+    exclude visitor, vercel
+    autoLayout LeftRight
+  }
+
+  view articles {
+    title "Article aggregation (build time)"
+    description "Articles are fetched only while next build runs getStaticProps"
+    include
+      portfolio.site.pages,
+      portfolio.site.home,
+      portfolio.site.article,
+      portfolio.site.libs,
+      zenn, qiita, note
+    autoLayout LeftRight
+  }
+
+  view delivery {
+    title "Build and delivery"
+    description "From a pull request to the deployed site"
+    include
+      author, renovate,
+      github, ci, vercel, jsdelivr,
+      portfolio.site,
+      visitor
+    autoLayout LeftRight
+  }
+
+  view brand {
+    title "Brand SSoT (Twilight Blade)"
+    description "Where brand/ tokens are consumed"
+    include
+      portfolio.brandTokens,
+      portfolio.site.styles,
+      portfolio.site.brand,
+      portfolio.site.pages,
+      github, jsdelivr, aiAgent
+    autoLayout LeftRight
+  }
+}

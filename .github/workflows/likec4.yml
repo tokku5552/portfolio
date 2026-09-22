@@ -1,0 +1,33 @@
+name: likec4
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - docs/architecture/**
+      - .github/workflows/likec4.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Run through `pnpm dlx` rather than a devDependency: likec4 requires React 19
+  # while the site is on React 18. Keep in sync with docs/architecture/README.md.
+  LIKEC4_VERSION: 1.59.3
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: '.node-version'
+      - name: likec4 validate
+        run: pnpm dlx likec4@${LIKEC4_VERSION} validate docs/architecture
