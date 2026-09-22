@@ -40,7 +40,7 @@ specification {
     }
   }
 
-  // Fetched only while `next build` runs getStaticProps; never from the browser.
+  // API / RSS / HTML fetched only while `next build` runs getStaticProps.
   relationship buildtime {
     color amber
     line dashed
@@ -53,6 +53,11 @@ specification {
   // Source flow: push, CI, deploy.
   relationship delivery {
     color green
+    line dotted
+  }
+  // Plain hyperlink rendered on a page; nothing is loaded until the visitor clicks it.
+  relationship hyperlink {
+    color muted
     line dotted
   }
 }

@@ -18,8 +18,6 @@ views {
     title "Next.js site modules"
     description "Code modules under src/ and how they use each other and outside services"
     include *
-    include portfolio.brandTokens
-    include zenn, qiita, note, ga, googleFonts, youtube, spotify, jsdelivr
     exclude visitor, vercel
     autoLayout LeftRight
   }
@@ -42,7 +40,7 @@ views {
     include
       author, renovate,
       github, ci, vercel, jsdelivr,
-      portfolio.site, portfolio.brandTokens,
+      portfolio.site,
       visitor
     autoLayout LeftRight
   }
@@ -55,7 +53,7 @@ views {
       portfolio.site.styles,
       portfolio.site.brand,
       portfolio.site.pages,
-      jsdelivr, aiAgent
+      github, jsdelivr, aiAgent
     autoLayout LeftRight
   }
 }

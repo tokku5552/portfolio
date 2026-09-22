@@ -12,12 +12,15 @@ Architecture diagrams of this repository, written in [LikeC4](https://likec4.dev
 
 ## Reading the arrows
 
-| Arrow          | Kind        | Meaning                                                                                      |
-| -------------- | ----------- | -------------------------------------------------------------------------------------------- |
-| Orange, dashed | `buildtime` | Called only while `next build` runs `getStaticProps`. The browser never calls these services |
-| Blue, solid    | `runtime`   | Loaded or called by the visitor's browser                                                    |
-| Green, dotted  | `delivery`  | Pull requests, CI and deploys                                                                |
-| Gray           | (none)      | Imports between code modules                                                                 |
+| Arrow         | Kind        | Meaning                                                                         |
+| ------------- | ----------- | ------------------------------------------------------------------------------- |
+| Amber, dashed | `buildtime` | API, RSS and article HTML fetched only while `next build` runs `getStaticProps` |
+| Blue, solid   | `runtime`   | Loaded or called by the visitor's browser                                       |
+| Green, dotted | `delivery`  | Pull requests, CI and deploys                                                   |
+| Muted, dotted | `hyperlink` | A link on a page; nothing is loaded until the visitor clicks it                 |
+| Gray, dashed  | (none)      | Imports between code modules                                                    |
+
+Article thumbnails are the exception to build-time only: the article list renders each article's `og:image` URL in an `<img>`, so the visitor's browser loads those images from the external hosts.
 
 ## Diagrams
 
@@ -35,7 +38,7 @@ Code modules under `src/` and how they use each other and outside services.
 
 ### Article aggregation (build time)
 
-Zenn, Qiita and note.com are fetched only at build time. `QIITA_TOKEN` is needed only there.
+Article lists and OGP data from Zenn, Qiita and note.com are fetched only at build time. `QIITA_TOKEN` is needed only there.
 
 ![Article aggregation](images/articles.png)
 
@@ -63,7 +66,9 @@ pnpm dlx likec4@1.59.3 start docs/architecture
 pnpm dlx likec4@1.59.3 validate docs/architecture
 
 # Re-export the PNGs after changing the model or views
-pnpm dlx likec4@1.59.3 export png -o docs/architecture/images docs/architecture
+pnpm dlx likec4@1.59.3 export png --theme light -o docs/architecture/images docs/architecture
 ```
+
+The first `export png` downloads a headless Chromium through Playwright. likec4 expects Node.js 22.22.3 or newer; older patch versions print an engine warning.
 
 CI only validates the source. It does not check that the PNGs match it, so re-export them in the same PR when you change the model or views.
