@@ -5,13 +5,15 @@ import HeroStrip from './components/HeroStrip';
 import PodcastSection from './components/PodcastSection';
 import ServicesSection from './components/ServicesSection';
 import TwilightHero from './components/TwilightHero';
+import WorksSection from './components/WorksSection';
 import YouTubeSection from './components/YouTubeSection';
 
 interface HomeProps {
   articles: Article[];
+  worksOgpImages: Record<string, string>;
 }
 
-export default function Home({ articles }: HomeProps) {
+export default function Home({ articles, worksOgpImages }: HomeProps) {
   return (
     <>
       <TwilightHero />
@@ -19,6 +21,7 @@ export default function Home({ articles }: HomeProps) {
       <PodcastSection />
       <YouTubeSection />
       <ServicesSection />
+      <WorksSection ogImages={worksOgpImages} />
       <ArticlesSection articles={articles} />
       <ContactSection />
     </>
