@@ -2,7 +2,7 @@ import { buttonClasses } from '../../../components/parts/Button';
 import Container from '../../../components/parts/Container';
 import Eyebrow from '../../../components/parts/Eyebrow';
 import Link from '../../../components/parts/Link';
-import Orb from '../../../components/parts/Orb';
+import ParticleOrb from '../../../components/parts/ParticleOrb';
 import { inkdoseUrl, podcastUrl } from '../../../config/constants';
 
 const titles = ['Engineering Manager', 'Music Producer'];
@@ -16,7 +16,7 @@ const sideMeta: { label: string; value: string }[] = [
 export default function TwilightHero() {
   return (
     <section className="relative isolate overflow-hidden">
-      <Orb position="tr" />
+      <ParticleOrb />
       <span aria-hidden="true" className="tb-grain" />
 
       <Container className="relative z-[2] py-24 md:py-32">

@@ -1,0 +1,137 @@
+import { brandTokens } from '../../../../brand/tokens';
+import { fragmentShader, vertexShader } from './shaders';
+
+type Rgb = [number, number, number];
+
+function hexToRgb(hex: string): Rgb {
+  return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255) as Rgb;
+}
+
+const colors = {
+  bg: hexToRgb(brandTokens.color.bg),
+  indigo: hexToRgb(brandTokens.color.orbIndigo),
+  violet: hexToRgb(brandTokens.color.orbViolet),
+  pink: hexToRgb(brandTokens.color.orbPink),
+};
+
+export interface ParticleRendererOptions {
+  count: number;
+  maxDpr: number;
+}
+
+export interface ParticleRenderer {
+  /** Match the drawing buffer to the canvas' CSS size. */
+  resize: () => void;
+  /** Draw one frame. `scatter` is 0 (intact sphere) to 1 (fully dispersed). */
+  draw: (time: number, scatter: number) => void;
+  dispose: () => void;
+}
+
+function compile(
+  gl: WebGLRenderingContext,
+  type: number,
+  source: string
+): WebGLShader | null {
+  const shader = gl.createShader(type);
+  if (!shader) return null;
+  gl.shaderSource(shader, source);
+  gl.compileShader(shader);
+  if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+    console.warn(
+      '[ParticleOrb] shader compile failed',
+      gl.getShaderInfoLog(shader)
+    );
+    gl.deleteShader(shader);
+    return null;
+  }
+  return shader;
+}
+
+/**
+ * Sets up the WebGL program for the particle sphere. Returns null when WebGL
+ * is unavailable or the program fails to build, so callers can fall back to
+ * the CSS Orb.
+ */
+export function createParticleRenderer(
+  canvas: HTMLCanvasElement,
+  { count, maxDpr }: ParticleRendererOptions
+): ParticleRenderer | null {
+  const gl = canvas.getContext('webgl', {
+    alpha: false,
+    antialias: false,
+    powerPreference: 'low-power',
+  });
+  if (!gl) return null;
+
+  const vs = compile(gl, gl.VERTEX_SHADER, vertexShader);
+  const fs = compile(gl, gl.FRAGMENT_SHADER, fragmentShader);
+  if (!vs || !fs) return null;
+
+  const program = gl.createProgram();
+  if (!program) return null;
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.warn(
+      '[ParticleOrb] program link failed',
+      gl.getProgramInfoLog(program)
+    );
+    return null;
+  }
+
+  const seeds = new Float32Array(count * 3);
+  for (let i = 0; i < seeds.length; i++) seeds[i] = Math.random();
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, seeds, gl.STATIC_DRAW);
+
+  gl.useProgram(program);
+  const seedLoc = gl.getAttribLocation(program, 'a_seed');
+  gl.enableVertexAttribArray(seedLoc);
+  gl.vertexAttribPointer(seedLoc, 3, gl.FLOAT, false, 0, 0);
+
+  const u = (name: string) => gl.getUniformLocation(program, name);
+  const uRes = u('u_res');
+  const uTime = u('u_time');
+  const uScatter = u('u_scatter');
+  const uDpr = u('u_dpr');
+  gl.uniform3fv(u('u_indigo'), colors.indigo);
+  gl.uniform3fv(u('u_violet'), colors.violet);
+  gl.uniform3fv(u('u_pink'), colors.pink);
+
+  gl.enable(gl.BLEND);
+  gl.blendFunc(gl.SRC_ALPHA, gl.ONE);
+  gl.clearColor(colors.bg[0], colors.bg[1], colors.bg[2], 1);
+
+  const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
+
+  const resize = () => {
+    const width = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+    const height = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+    if (canvas.width !== width || canvas.height !== height) {
+      canvas.width = width;
+      canvas.height = height;
+    }
+    gl.viewport(0, 0, width, height);
+    gl.uniform2f(uRes, width, height);
+  };
+
+  const draw = (time: number, scatter: number) => {
+    gl.uniform1f(uTime, time);
+    gl.uniform1f(uScatter, scatter);
+    gl.uniform1f(uDpr, dpr);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.drawArrays(gl.POINTS, 0, count);
+  };
+
+  const dispose = () => {
+    gl.deleteBuffer(buffer);
+    gl.deleteProgram(program);
+    gl.deleteShader(vs);
+    gl.deleteShader(fs);
+  };
+
+  resize();
+  return { resize, draw, dispose };
+}
