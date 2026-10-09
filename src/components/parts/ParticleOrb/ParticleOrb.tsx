@@ -11,14 +11,18 @@ const NARROW_BREAKPOINT = 700;
 
 /**
  * WebGL particle sphere for the hero background. It fills its positioned
- * parent and unravels as the parent scrolls out of view. Falls back to the
- * CSS `Orb` when WebGL is unavailable, and draws a single still frame when the
- * user prefers reduced motion.
+ * parent and unravels as the parent scrolls out of view.
+ *
+ * Progressive enhancement: the CSS `Orb` is part of the server-rendered HTML
+ * and stays as the fallback when WebGL is unavailable. Once the first WebGL
+ * frame is drawn the Orb cross-fades out and unmounts. Users who prefer
+ * reduced motion get a single still frame.
  */
 export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [mode, setMode] = useState<Mode>('pending');
+  const [orbMounted, setOrbMounted] = useState(true);
 
   useEffect(() => {
     const wrap = wrapRef.current;
@@ -48,11 +52,13 @@ export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
 
     const start = performance.now();
     let frame = 0;
+    let time = 0;
     let scatter = reduceMotion ? 0 : scrollProgress();
 
     const tick = (now: number) => {
+      time = (now - start) / 1000;
       scatter += (scrollProgress() - scatter) * 0.12;
-      renderer.draw((now - start) / 1000, scatter);
+      renderer.draw(time, scatter);
       frame = requestAnimationFrame(tick);
     };
     const startLoop = () => {
@@ -63,9 +69,11 @@ export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
       frame = 0;
     };
 
+    // Resizing clears the drawing buffer, so redraw right away instead of
+    // leaving a blank frame until the next tick.
     const onResize = () => {
       renderer.resize();
-      if (reduceMotion) renderer.draw(0, 0);
+      renderer.draw(time, scatter);
     };
     const resizeObserver =
       typeof ResizeObserver !== 'undefined'
@@ -88,6 +96,7 @@ export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
       event.preventDefault();
       stopLoop();
       setMode('fallback');
+      setOrbMounted(true);
     };
     canvas.addEventListener('webglcontextlost', onContextLost);
 
@@ -110,9 +119,7 @@ export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
       className={cn('pointer-events-none absolute inset-0 z-0', className)}
       {...rest}
     >
-      {mode === 'fallback' ? (
-        <Orb position="tr" />
-      ) : (
+      {mode !== 'fallback' ? (
         <canvas
           ref={canvasRef}
           className={cn(
@@ -120,7 +127,22 @@ export function ParticleOrb({ className, ...rest }: ParticleOrbProps) {
             mode === 'webgl' ? 'opacity-100' : 'opacity-0'
           )}
         />
-      )}
+      ) : null}
+      {orbMounted ? (
+        <div
+          className={cn(
+            'absolute inset-0 transition-opacity duration-1000',
+            mode === 'webgl' && 'opacity-0'
+          )}
+          onTransitionEnd={(event) => {
+            if (event.target === event.currentTarget && mode === 'webgl') {
+              setOrbMounted(false);
+            }
+          }}
+        >
+          <Orb position="tr" />
+        </div>
+      ) : null}
     </div>
   );
 }

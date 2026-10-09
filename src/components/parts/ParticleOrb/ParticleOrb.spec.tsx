@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { renderToString } from 'react-dom/server';
 import ParticleOrb from './ParticleOrb';
 
 describe('ParticleOrb', () => {
@@ -23,6 +24,10 @@ describe('ParticleOrb', () => {
     expect(orb).not.toBeNull();
     expect(orb?.getAttribute('data-pos')).toBe('tr');
     expect(el.querySelector('canvas')).toBeNull();
+  });
+
+  it('includes the CSS Orb in server-rendered HTML before WebGL starts', () => {
+    expect(renderToString(<ParticleOrb />)).toMatch(/tb-orb-wrap/);
   });
 
   it('is aria-hidden so screen readers ignore the decorative layer', () => {
