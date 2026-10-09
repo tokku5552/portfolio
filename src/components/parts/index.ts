@@ -16,5 +16,5 @@ export type { OrbProps, OrbPosition } from './Orb';
 export { default as GridOverlay } from './GridOverlay';
 export type { GridOverlayProps } from './GridOverlay';
 
-export { default as ParticleOrb } from './ParticleOrb';
-export type { ParticleOrbProps } from './ParticleOrb';
+export { default as ParticleField } from './ParticleField';
+export type { ParticleFieldProps, ParticleStage } from './ParticleField';

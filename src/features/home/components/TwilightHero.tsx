@@ -2,8 +2,9 @@ import { buttonClasses } from '../../../components/parts/Button';
 import Container from '../../../components/parts/Container';
 import Eyebrow from '../../../components/parts/Eyebrow';
 import Link from '../../../components/parts/Link';
-import ParticleOrb from '../../../components/parts/ParticleOrb';
+import Orb from '../../../components/parts/Orb';
 import { inkdoseUrl, podcastUrl } from '../../../config/constants';
+import { cn } from '../../../libs/cn';
 
 const titles = ['Engineering Manager', 'Music Producer'];
 
@@ -13,10 +14,23 @@ const sideMeta: { label: string; value: string }[] = [
   { label: '// Now working', value: 'AI implementation' },
 ];
 
-export default function TwilightHero() {
+interface TwilightHeroProps {
+  /** Hide the CSS orb once the page-wide particle field has taken over. */
+  hideOrb?: boolean;
+}
+
+export default function TwilightHero({ hideOrb = false }: TwilightHeroProps) {
   return (
-    <section className="relative isolate overflow-hidden">
-      <ParticleOrb />
+    <section id="hero" className="relative isolate overflow-hidden">
+      <div
+        aria-hidden="true"
+        className={cn(
+          'absolute inset-0 transition-[opacity,visibility] duration-1000',
+          hideOrb && 'invisible opacity-0'
+        )}
+      >
+        <Orb position="tr" />
+      </div>
       <span aria-hidden="true" className="tb-grain" />
 
       <Container className="relative z-[2] py-24 md:py-32">

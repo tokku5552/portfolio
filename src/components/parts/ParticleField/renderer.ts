@@ -22,8 +22,8 @@ export interface ParticleRendererOptions {
 export interface ParticleRenderer {
   /** Match the drawing buffer to the canvas' CSS size. */
   resize: () => void;
-  /** Draw one frame. `scatter` is 0 (intact sphere) to 1 (fully dispersed). */
-  draw: (time: number, scatter: number) => void;
+  /** Draw one frame. `stage` blends between formations (see shaders.ts). */
+  draw: (time: number, stage: number) => void;
   dispose: () => void;
 }
 
@@ -38,7 +38,7 @@ function compile(
   gl.compileShader(shader);
   if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
     console.warn(
-      '[ParticleOrb] shader compile failed',
+      '[ParticleField] shader compile failed',
       gl.getShaderInfoLog(shader)
     );
     gl.deleteShader(shader);
@@ -48,9 +48,9 @@ function compile(
 }
 
 /**
- * Sets up the WebGL program for the particle sphere. Returns null when WebGL
+ * Sets up the WebGL program for the particle field. Returns null when WebGL
  * is unavailable or the program fails to build, so callers can fall back to
- * the CSS Orb.
+ * a static background.
  */
 export function createParticleRenderer(
   canvas: HTMLCanvasElement,
@@ -74,7 +74,7 @@ export function createParticleRenderer(
   gl.linkProgram(program);
   if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
     console.warn(
-      '[ParticleOrb] program link failed',
+      '[ParticleField] program link failed',
       gl.getProgramInfoLog(program)
     );
     return null;
@@ -94,7 +94,7 @@ export function createParticleRenderer(
   const u = (name: string) => gl.getUniformLocation(program, name);
   const uRes = u('u_res');
   const uTime = u('u_time');
-  const uScatter = u('u_scatter');
+  const uStage = u('u_stage');
   const uDpr = u('u_dpr');
   gl.uniform3fv(u('u_indigo'), colors.indigo);
   gl.uniform3fv(u('u_violet'), colors.violet);
@@ -117,9 +117,9 @@ export function createParticleRenderer(
     gl.uniform2f(uRes, width, height);
   };
 
-  const draw = (time: number, scatter: number) => {
+  const draw = (time: number, stage: number) => {
     gl.uniform1f(uTime, time);
-    gl.uniform1f(uScatter, scatter);
+    gl.uniform1f(uStage, stage);
     gl.uniform1f(uDpr, dpr);
     gl.clear(gl.COLOR_BUFFER_BIT);
     gl.drawArrays(gl.POINTS, 0, count);

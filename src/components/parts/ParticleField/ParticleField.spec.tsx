@@ -1,0 +1,40 @@
+import { render, screen } from '@testing-library/react';
+import ParticleField from './ParticleField';
+
+describe('ParticleField', () => {
+  let getContext: jest.SpyInstance;
+
+  beforeEach(() => {
+    // jsdom has no WebGL; make that explicit instead of hitting its
+    // "not implemented" console error.
+    getContext = jest
+      .spyOn(HTMLCanvasElement.prototype, 'getContext')
+      .mockReturnValue(null);
+  });
+
+  afterEach(() => {
+    getContext.mockRestore();
+  });
+
+  it('renders no canvas and never reports active when WebGL is unavailable', () => {
+    const onActiveChange = jest.fn();
+    render(
+      <ParticleField
+        data-testid="field"
+        stages={[{ id: 'hero', stage: 0 }]}
+        onActiveChange={onActiveChange}
+      />
+    );
+    expect(screen.getByTestId('field').querySelector('canvas')).toBeNull();
+    expect(onActiveChange).not.toHaveBeenCalledWith(true);
+  });
+
+  it('is an aria-hidden, non-interactive layer with a sticky viewport', () => {
+    render(<ParticleField data-testid="field" stages={[]} />);
+    const el = screen.getByTestId('field');
+    expect(el.getAttribute('aria-hidden')).toBe('true');
+    expect(el.className).toMatch(/pointer-events-none/);
+    expect(el.className).toMatch(/absolute/);
+    expect(el.firstElementChild?.className).toMatch(/sticky/);
+  });
+});
