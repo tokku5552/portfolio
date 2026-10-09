@@ -56,10 +56,14 @@ export function createParticleRenderer(
   canvas: HTMLCanvasElement,
   { count, maxDpr }: ParticleRendererOptions
 ): ParticleRenderer | null {
+  // failIfMajorPerformanceCaveat: on software rendering (blocklisted GPU,
+  // VMs, remote desktops) drawing every frame on the CPU is worse than the
+  // static fallback, so decline the context.
   const gl = canvas.getContext('webgl', {
     alpha: false,
     antialias: false,
     powerPreference: 'low-power',
+    failIfMajorPerformanceCaveat: true,
   });
   if (!gl) return null;
 
@@ -125,6 +129,10 @@ export function createParticleRenderer(
     gl.drawArrays(gl.POINTS, 0, count);
   };
 
+  // Deletes our objects but keeps the context alive on purpose: React
+  // StrictMode re-runs the effect on the same canvas in development, and
+  // getContext must hand back a usable context the second time. Calling
+  // loseContext() here would push that second run into the fallback.
   const dispose = () => {
     gl.deleteBuffer(buffer);
     gl.deleteProgram(program);

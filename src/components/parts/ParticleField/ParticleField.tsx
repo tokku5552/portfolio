@@ -2,6 +2,7 @@ import { HTMLAttributes, useEffect, useRef, useState } from 'react';
 import { cn } from '@/libs/cn';
 import { createParticleRenderer } from './renderer';
 import { STAGE_COUNT } from './shaders';
+import { StageAnchor, clamp, computeStage } from './stage';
 
 type Mode = 'pending' | 'webgl' | 'fallback';
 
@@ -18,10 +19,9 @@ export interface ParticleFieldProps extends HTMLAttributes<HTMLDivElement> {
   onActiveChange?: (active: boolean) => void;
 }
 
+// Particle count and DPR are fixed at mount; the shader re-evaluates the
+// narrow layout on resize from the canvas size (see isNarrow in shaders.ts).
 const NARROW_BREAKPOINT = 700;
-
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
 
 /**
  * Full-viewport WebGL particle background. Place it as the first child of a
@@ -74,37 +74,23 @@ export function ParticleField({
 
     // Document offsets of each stage's section, refreshed on layout changes so
     // the per-frame work is arithmetic only.
-    let anchors: { top: number; stage: number }[] = [];
+    let anchors: StageAnchor[] = [];
     const measure = () => {
-      anchors = stagesRef.current
-        .flatMap(({ id, stage }) => {
-          const el = document.getElementById(id);
-          if (!el) return [];
-          const top = el.getBoundingClientRect().top + window.scrollY;
-          return [{ top, stage: clamp(stage, 0, STAGE_COUNT - 1) }];
-        })
-        .sort((a, b) => a.top - b.top);
+      anchors = stagesRef.current.flatMap(({ id, stage }) => {
+        const el = document.getElementById(id);
+        if (!el) return [];
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        return [{ top, stage: clamp(stage, 0, STAGE_COUNT - 1) }];
+      });
     };
-
-    // Chain-blend toward each section as its top crosses the upper half of the
-    // viewport (short sections like Works would otherwise always sit mid-
-    // transition), so unlisted blocks and neighbours sharing a stage hold.
-    const targetStage = () => {
-      if (anchors.length === 0) return 0;
-      const vh = window.innerHeight;
-      let value = anchors[0].stage;
-      for (let i = 1; i < anchors.length; i++) {
-        const top = anchors[i].top - window.scrollY;
-        const t = clamp((vh * 0.55 - top) / (vh * 0.3), 0, 1);
-        value += (anchors[i].stage - value) * t;
-      }
-      return value;
-    };
+    const targetStage = () =>
+      computeStage(anchors, window.scrollY, window.innerHeight);
 
     measure();
     const start = performance.now();
     let frame = 0;
     let time = 0;
+    let lost = false;
     let stage = reduceMotion ? Math.round(targetStage()) : targetStage();
 
     const tick = (now: number) => {
@@ -118,7 +104,9 @@ export function ParticleField({
       frame = requestAnimationFrame(tick);
     };
     const startLoop = () => {
-      if (!frame && !reduceMotion) frame = requestAnimationFrame(tick);
+      if (!frame && !reduceMotion && !lost) {
+        frame = requestAnimationFrame(tick);
+      }
     };
     const stopLoop = () => {
       cancelAnimationFrame(frame);
@@ -127,6 +115,7 @@ export function ParticleField({
 
     // Reduced motion: no clock, and the formation switches without a tween.
     const onScroll = () => {
+      if (lost) return;
       const next = Math.round(targetStage());
       if (next !== stage) {
         stage = next;
@@ -140,6 +129,7 @@ export function ParticleField({
     // Resizing clears the drawing buffer, so redraw right away instead of
     // leaving a blank frame until the next tick.
     const onResize = () => {
+      if (lost) return;
       renderer.resize();
       measure();
       renderer.draw(time, stage);
@@ -150,20 +140,19 @@ export function ParticleField({
         : null;
     resizeObserver?.observe(sticky);
     resizeObserver?.observe(content);
+    // Content above us (e.g. the mobile header menu) can shift every section
+    // without changing the content's own size; the body grows when it does.
+    resizeObserver?.observe(document.body);
 
-    // Pause rendering while none of the content is on screen.
-    const intersectionObserver =
-      typeof IntersectionObserver !== 'undefined'
-        ? new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) startLoop();
-            else stopLoop();
-          })
-        : null;
-    if (intersectionObserver) intersectionObserver.observe(content);
-    else startLoop();
+    // No off-screen pause: the content spans the whole page above a short
+    // footer, so it never fully leaves the viewport. The browser already
+    // pauses requestAnimationFrame in background tabs.
+    startLoop();
 
-    const onContextLost = (event: Event) => {
-      event.preventDefault();
+    // A lost context is not restored (no preventDefault, no
+    // webglcontextrestored handler): we drop to the static fallback instead.
+    const onContextLost = () => {
+      lost = true;
       stopLoop();
       setMode('fallback');
       onActiveChangeRef.current?.(false);
@@ -178,7 +167,6 @@ export function ParticleField({
       stopLoop();
       window.removeEventListener('scroll', onScroll);
       resizeObserver?.disconnect();
-      intersectionObserver?.disconnect();
       canvas.removeEventListener('webglcontextlost', onContextLost);
       renderer.dispose();
     };
@@ -192,8 +180,9 @@ export function ParticleField({
       {...rest}
     >
       {/* lvh, not dvh: the mobile URL bar would otherwise resize the canvas
-          (and clear it) on every scroll. */}
-      <div ref={stickyRef} className="sticky top-0 h-lvh">
+          (and clear it) on every scroll. h-screen is the fallback for
+          browsers without lvh. */}
+      <div ref={stickyRef} className="sticky top-0 h-screen h-lvh">
         {mode !== 'fallback' ? (
           <canvas
             ref={canvasRef}

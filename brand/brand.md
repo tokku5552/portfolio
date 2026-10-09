@@ -3,7 +3,8 @@
 Twilight Blade is the visual system of `tokku-tech.dev`. It is a quiet,
 mono-typed dark surface that earns one accent — the
 indigo→violet→pink gradient — and uses it sparingly to mark identity
-moments (the period in the wordmark, the orb that sits behind the hero).
+moments (the period in the wordmark, the orb or particle sphere that sits
+behind the hero).
 Everything else is held back. Borders are nearly invisible. Type does
 the heavy lifting in two voices: `Geist` for body, `Geist Mono` for
 labels and structural marks. The outcome is a page that reads as
@@ -43,8 +44,13 @@ use mono. There is no third typeface.
   `var(--color-brand-*)` in CSS or via `brandTokens.color.*` in
   TypeScript (see `brand/tokens.ts`).
 - Reserve the indigo→violet→pink gradient for a single accent moment per
-  view: a wordmark period, an orb behind a hero, the primary button
-  hover state. One accent per surface.
+  view: a wordmark period, an orb or particle sphere behind a hero, the
+  primary button hover state. One accent per surface.
+- The one sanctioned exception is the home page `ParticleField`: the same
+  particles follow the reader through every section and regroup into a
+  formation per section. Only the hero formation is an accent. Formations
+  behind other sections are dimmed background texture: keep them well below
+  the hero's intensity and never let them compete with cards or body text.
 - Keep backgrounds dark (`bg`), foreground crisp (`fg`), supporting text
   muted (`muted`).
 - Use `Geist` for body and headings, `Geist Mono` for eyebrows, side
@@ -52,8 +58,8 @@ use mono. There is no third typeface.
 - Compose `Geist Mono` labels in uppercase with letter-spacing (Hero.html
   pattern: `font-brand-mono text-[12px] tracking-[0.12em] uppercase`).
 - Use the existing primitives (`Button`, `Container`, `Eyebrow`, `Orb`,
-  `GridOverlay`, `Link`) from `src/components/parts/` when working in
-  this codebase.
+  `GridOverlay`, `Link`, `ParticleField`) from `src/components/parts/` when
+  working in this codebase.
 
 ## DO NOT
 
@@ -64,12 +70,14 @@ use mono. There is no third typeface.
   Blade comes from `border` / `border-strong`, never from shadow.
 - Do not introduce gradients other than `indigo → violet → pink`. No
   rainbow, no neon, no warm/cool mixes.
-- Do not use Chakra UI, Emotion, or Framer Motion. Animations come from
-  CSS keyframes (see `globals.css`) or Tailwind transition utilities.
+- Do not use Chakra UI, Emotion, Framer Motion, or any other JS animation
+  library. Animations come from CSS keyframes (see `globals.css`), Tailwind
+  transition utilities, or the raw-WebGL `ParticleField` primitive.
 - Do not use neon greens, yellows, oranges, or any saturated hue outside
   the brand tokens.
 - Do not apply background-image patterns (stripes, dots, noise) beyond
-  the existing `tb-grain` and `tb-grid-overlay` utilities.
+  the existing `tb-grain` and `tb-grid-overlay` utilities and the dimmed
+  `ParticleField` formations.
 
 ## Reference
 

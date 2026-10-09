@@ -26,7 +26,7 @@ describe('ParticleField', () => {
       />
     );
     expect(screen.getByTestId('field').querySelector('canvas')).toBeNull();
-    expect(onActiveChange).not.toHaveBeenCalledWith(true);
+    expect(onActiveChange).not.toHaveBeenCalled();
   });
 
   it('is an aria-hidden, non-interactive layer with a sticky viewport', () => {

@@ -55,8 +55,9 @@ vec3 brandGrad(float t) {
   return t < 0.5 ? mix(u_indigo, u_violet, t * 2.0) : mix(u_violet, u_pink, (t - 0.5) * 2.0);
 }
 
+// u_res is in device pixels; compare in CSS pixels to match the JS breakpoint.
 bool isNarrow() {
-  return u_res.x < 700.0;
+  return u_res.x / u_dpr < 700.0;
 }
 
 // Stage 0 (hero): noisy sphere slowly turning, upper right.
@@ -154,7 +155,7 @@ float intensity(float index) {
 float edgeFade(float index, vec2 px) {
   if (index < 2.5 || index > 3.5) return 1.0;
   float y = px.y / u_res.y;
-  return smoothstep(0.0, 0.08, y) * smoothstep(1.0, 0.92, y);
+  return smoothstep(0.0, 0.08, y) * (1.0 - smoothstep(0.92, 1.0, y));
 }
 
 void main() {
@@ -170,7 +171,8 @@ void main() {
 
   // Mid-transition the particles burst outwards, so a shape unravels before
   // the next one forms instead of sliding across as a plain tween.
-  float burst = pow(sin(PI * f), 2.0);
+  float s = sin(PI * f);
+  float burst = s * s;
   vec2 jitter = vec2(fract(a_seed.z * 3.7), fract(a_seed.x * 5.3)) - 0.5;
   vec2 px = mix(pxA, pxB, e) + jitter * burst * min(u_res.x, u_res.y) * (0.6 + 0.8 * fract(a_seed.y * 7.13));
   float depth = mix(depthA, depthB, e);
@@ -194,7 +196,7 @@ varying vec3 v_color;
 varying float v_alpha;
 
 void main() {
-  float m = smoothstep(0.5, 0.0, length(gl_PointCoord - 0.5));
+  float m = 1.0 - smoothstep(0.0, 0.5, length(gl_PointCoord - 0.5));
   gl_FragColor = vec4(v_color, m * v_alpha);
 }
 `;

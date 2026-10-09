@@ -13,7 +13,7 @@ import WorksSection from './components/WorksSection';
 import YouTubeSection from './components/YouTubeSection';
 
 // Which particle formation each section brings in (see ParticleField shaders).
-const particleStages: ParticleStage[] = [
+export const particleStages: ParticleStage[] = [
   { id: 'hero', stage: 0 },
   { id: 'podcast', stage: 1 },
   { id: 'youtube', stage: 1 },
