@@ -37,4 +37,19 @@ describe('ParticleField', () => {
     expect(el.className).toMatch(/absolute/);
     expect(el.firstElementChild?.className).toMatch(/sticky/);
   });
+
+  it('falls back to 100vh where lvh is unsupported', () => {
+    render(<ParticleField data-testid="field" stages={[]} />);
+    const sticky = screen.getByTestId('field').firstElementChild;
+    expect(sticky?.className).toMatch(/\bh-screen\b/);
+    expect(sticky?.className).toMatch(/\bh-lvh\b/);
+  });
+
+  it('declines software-rendered WebGL', () => {
+    render(<ParticleField stages={[]} />);
+    expect(getContext).toHaveBeenCalledWith(
+      'webgl',
+      expect.objectContaining({ failIfMajorPerformanceCaveat: true })
+    );
+  });
 });

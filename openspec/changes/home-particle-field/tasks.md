@@ -39,3 +39,10 @@
 - [x] 6.4 reduced-motion を Playwright で有効にして、形が補間なしで切り替わることを確認する
 - [x] 6.5 Fable のレビューで挙がった指摘（GLSL の未定義動作、狭い画面の判定の単位、測り直しの漏れ、動いていなかった IntersectionObserver、復帰処理のない preventDefault）を直す
 - [x] 6.6 `openspec validate home-particle-field` が通ることを確認する
+
+## 7. archive 時の手作業
+
+`openspec archive` は Requirements だけを本体 spec に反映し、`## Purpose` は更新しない。archive のときに次を手で直す。
+
+- [ ] 7.1 `openspec/specs/landing-page/spec.md` の Purpose にある「Hero セクションのコンテンツは現行プロフィール（`globalDescription`）由来とし」を、「サイト所有者の現在の活動に基づくものとし」に直す（Hero の肩書きの要件の書き直しに合わせる）。あわせて、トップページ背面のパーティクル背景に触れる
+- [ ] 7.2 `openspec/specs/ui-primitives/spec.md` の Purpose にある primitive の一覧（Button / Link / Container / Eyebrow / Orb / GridOverlay）に `ParticleField` を加える

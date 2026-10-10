@@ -14,6 +14,15 @@ Twilight Blade primitive コンポーネント（Button / Link / Container / Eye
 - **WHEN** レビュアーが `grep -R "@chakra-ui\|@emotion\|framer-motion\|class-variance-authority\|shadcn" src/components/parts/{Button,Link,Container,Eyebrow,Orb,GridOverlay,ParticleField}/` を実行したとき
 - **THEN** 検索結果はゼロ件である
 
+### Requirement: primitive はすべて `cn()` + brand token utility でスタイリングする
+
+Button / Link / Container / Eyebrow / Orb / GridOverlay / ParticleField は、すべてのスタイリングを `src/libs/cn.ts` の `cn(...)` で合成された Tailwind utility クラス、もしくは `src/styles/globals.css` に宣言された brand 用クラス（Orb / GridOverlay の keyframes 参照など）で表現しなければならない（MUST）。色・タイポグラフィは brand token（`var(--color-brand-*)` / `var(--font-brand-*)` に解決される Tailwind utility）を参照しなければならない（MUST）。ハードコード hex リテラルや生の `style={{}}` を使用してはならない（MUST NOT）。ただし Orb の radial gradient のように複数 token を複合する必要がある場合に限り、`src/styles/globals.css` 内のクラスでまとめて宣言することは許容される。ParticleField のように WebGL のシェーダで色を使う場合は、`brand/tokens.ts` の `brandTokens.color` から変換した値を uniform として渡さなければならない（MUST）。
+
+#### Scenario: primitive がブランドトークン utility を使う
+
+- **WHEN** レビュアーが primitive 内のスタイリング箇所を `#[0-9a-fA-F]{3,8}\b` でハードコード hex 検索したとき
+- **THEN** 検索結果はゼロ件である（Orb 等の複合グラデーションを `globals.css` に集約する場合もハードコードを許容しない。brand token を参照する。ParticleField のシェーダに渡す色も `brandTokens.color` から変換する）
+
 ## ADDED Requirements
 
 ### Requirement: ParticleField primitive は素の WebGL でパーティクル背景を描画する

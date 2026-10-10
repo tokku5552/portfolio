@@ -19,7 +19,7 @@ export const dontRules: string[] = [
   'Do not introduce new color literals (#xxx, rgb, rgba) outside brand tokens.',
   'Do not apply box-shadow to indicate elevation — depth comes from borders.',
   'Do not introduce gradients other than indigo→violet→pink.',
-  'Do not use Chakra UI, Emotion, Framer Motion, or any other JS animation library.',
+  'Do not use Chakra UI, Emotion, Framer Motion, or any other JS animation library; motion comes from CSS keyframes, Tailwind transitions, or the raw-WebGL ParticleField.',
   'Do not use neon greens, yellows, oranges, or any saturated hue outside the brand tokens.',
   'Do not apply background-image patterns beyond tb-grain, tb-grid-overlay, and the dimmed ParticleField formations.',
 ];
