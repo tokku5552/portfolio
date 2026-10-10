@@ -44,5 +44,5 @@
 
 `openspec archive` は Requirements だけを本体 spec に反映し、`## Purpose` は更新しない。archive のときに次を手で直す。
 
-- [ ] 7.1 `openspec/specs/landing-page/spec.md` の Purpose にある「Hero セクションのコンテンツは現行プロフィール（`globalDescription`）由来とし」を、「サイト所有者の現在の活動に基づくものとし」に直す（Hero の肩書きの要件の書き直しに合わせる）。あわせて、トップページ背面のパーティクル背景に触れる
-- [ ] 7.2 `openspec/specs/ui-primitives/spec.md` の Purpose にある primitive の一覧（Button / Link / Container / Eyebrow / Orb / GridOverlay）に `ParticleField` を加える
+- [x] 7.1 `openspec/specs/landing-page/spec.md` の Purpose にある「Hero セクションのコンテンツは現行プロフィール（`globalDescription`）由来とし」を、「サイト所有者の現在の活動に基づくものとし」に直す（Hero の肩書きの要件の書き直しに合わせる）。あわせて、トップページ背面のパーティクル背景に触れる
+- [x] 7.2 `openspec/specs/ui-primitives/spec.md` の Purpose にある primitive の一覧（Button / Link / Container / Eyebrow / Orb / GridOverlay）に `ParticleField` を加える
