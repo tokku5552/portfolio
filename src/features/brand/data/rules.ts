@@ -8,6 +8,7 @@
 export const doRules: string[] = [
   'Use brand tokens for every color decision (var(--color-brand-*) or brandTokens.color.*).',
   'Reserve the indigo→violet→pink gradient for a single accent moment per surface.',
+  'Exception: the home ParticleField spans every section, but only the hero formation is an accent; the rest stay dimmed behind content.',
   'Keep backgrounds dark, foreground crisp, supporting text muted.',
   'Use Geist for body and headings, Geist Mono for eyebrows and structural marks.',
   'Compose mono labels in uppercase with letter-spacing.',
@@ -18,9 +19,9 @@ export const dontRules: string[] = [
   'Do not introduce new color literals (#xxx, rgb, rgba) outside brand tokens.',
   'Do not apply box-shadow to indicate elevation — depth comes from borders.',
   'Do not introduce gradients other than indigo→violet→pink.',
-  'Do not use Chakra UI, Emotion, or Framer Motion.',
+  'Do not use Chakra UI, Emotion, Framer Motion, or any other JS animation library; motion comes from CSS keyframes, Tailwind transitions, or the raw-WebGL ParticleField.',
   'Do not use neon greens, yellows, oranges, or any saturated hue outside the brand tokens.',
-  'Do not apply background-image patterns beyond the existing tb-grain and tb-grid-overlay utilities.',
+  'Do not apply background-image patterns beyond tb-grain, tb-grid-overlay, and the dimmed ParticleField formations.',
 ];
 
 export interface AssetLink {
