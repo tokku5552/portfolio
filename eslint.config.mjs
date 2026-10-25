@@ -1,27 +1,5 @@
-import { createRequire } from 'node:module';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { FlatCompat } from '@eslint/eslintrc';
+import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
 import prettierRecommended from 'eslint-plugin-prettier/recommended';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-// eslint-config-next 15.x still ships legacy (eslintrc) configs, so bridge them
-// through FlatCompat. Once eslint-config-next is on 16+, replace this with its
-// native flat config exports.
-//
-// pnpm does not hoist eslint-config-next's plugins (@next/next, react,
-// react-hooks, import, jsx-a11y) to the project root, so resolve them from the
-// package itself. Without this, Node's lookup walks up into parent directories
-// and can pick up an unrelated copy (e.g. from the main checkout when running
-// inside a git worktree).
-const require = createRequire(import.meta.url);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  resolvePluginsRelativeTo: dirname(
-    require.resolve('eslint-config-next/package.json')
-  ),
-});
 
 const eslintConfig = [
   {
@@ -37,7 +15,7 @@ const eslintConfig = [
       'next-env.d.ts',
     ],
   },
-  ...compat.extends('next/core-web-vitals'),
+  ...nextCoreWebVitals,
   prettierRecommended,
   {
     rules: {
@@ -45,6 +23,10 @@ const eslintConfig = [
       'react/react-in-jsx-scope': 'off',
       'react-hooks/rules-of-hooks': 'off',
       'react-hooks/exhaustive-deps': 'off',
+      // Added by eslint-config-next 16 (react-hooks v7). It flags the
+      // latest-value ref pattern (`ref.current = prop` during render) that
+      // ParticleField relies on.
+      'react-hooks/refs': 'off',
     },
   },
 ];
