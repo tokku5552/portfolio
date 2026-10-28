@@ -1,10 +1,10 @@
 name: ci
 on:
+  # No path filters: lint, test and build are required checks on main, so they
+  # must report on every PR (a docs-only PR would otherwise never be mergeable).
   pull_request:
     branches:
       - main
-    paths-ignore:
-      - docs/**
   workflow_dispatch:
 
 permissions:
@@ -36,6 +36,8 @@ jobs:
         run: pnpm test
   build:
     runs-on: ubuntu-latest
+    # Also the type-check gate: `next build` runs TypeScript over the tsconfig
+    # include (specs too). Keep `typescript.ignoreBuildErrors` off.
     # Server-only secret; only the build (getStaticProps) needs it.
     env:
       QIITA_TOKEN: ${{ secrets.QIITA_TOKEN }}
