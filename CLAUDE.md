@@ -15,9 +15,10 @@ pnpm lint             # eslint . (ESLint 9 flat config + Prettier via eslint-plu
 pnpm test             # jest (jsdom environment)
 pnpm test path/to/file.spec.ts          # single file
 pnpm test -t "name of test"             # by test name
+pnpm test:build       # check .next output (pages, <head>, CSS) after `pnpm build`
 ```
 
-CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` in parallel on PRs to `main`. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`. Vercel uses `pnpm install --frozen-lockfile` and `pnpm build` explicitly.
+CI (`.github/workflows/ci.yml`) runs `lint`, `test`, and `build` (followed by `test:build`) in parallel on every PR to `main`; all three are required checks. Deploys are handled by Vercel (`vercel.json`) — previews on PRs, production on merge to `main`. Vercel uses `pnpm install --frozen-lockfile` and `pnpm build` explicitly.
 
 ## Environment variables
 
@@ -71,7 +72,7 @@ There is no `public/brand-assets/` mirror. The `/brand` page's ASSETS section li
 
 - **Styling**: Tailwind CSS v3 is the only utility layer. Brand tokens come from `brand/tokens.css` via `var(--color-brand-*)`. Compose Tailwind classes with `cn()` from `src/libs/cn.ts`. Do not introduce a second styling system (Chakra UI, Emotion, Framer Motion, styled-components, vanilla-extract, etc.); they were all removed in TOK-83 and the dependency surface should stay minimal.
 - **Animation**: CSS `@keyframes` declared in `src/styles/globals.css` (`orb-float`, `eyebrow-pulse`) plus Tailwind's `transition-*` / `animate-*` utilities. The one exception is `ParticleField`, written in raw WebGL with its own shaders (no three.js or similar). There is no JS animation library.
-- **Tests**: Jest + `@testing-library/react` in a jsdom environment. Spec files live next to the code they test (`*.spec.ts` / `*.spec.tsx`). `spec/setupTest.ts` provides env stubs as `globalSetup`; `spec/jestPolyfills.ts` provides `setupFiles` polyfills (e.g. for `note.ts` parsing). No project-wide RTL setup file — match neighbor specs (e.g. `Eyebrow.spec.tsx`) when writing new ones; `toBeInTheDocument` from `@testing-library/jest-dom` is **not** wired up, so prefer `expect(el).not.toBeNull()` / DOM querying over jest-dom matchers.
+- **Tests**: Jest + `@testing-library/react` in a jsdom environment. Spec files live next to the code they test (`*.spec.ts` / `*.spec.tsx`), except for `src/pages/`, where any file becomes a route: page specs live in `spec/pages/`. `spec/setupTest.ts` provides env stubs as `globalSetup`; `spec/jestPolyfills.ts` provides `setupFiles` polyfills (e.g. for `note.ts` parsing). No project-wide RTL setup file — match neighbor specs (e.g. `Eyebrow.spec.tsx`) when writing new ones; `toBeInTheDocument` from `@testing-library/jest-dom` is **not** wired up, so prefer `expect(el).not.toBeNull()` / DOM querying over jest-dom matchers.
 - **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `pnpm lint` will fail on formatting drift.
 - **Lint config** is the flat config `eslint.config.mjs` (`next lint` is not used). It lints the whole repo (`src/`, `spec/`, `brand/`, root config files) and ignores `.claude/`, `.next/`, and build outputs. `eslint-config-next` 15.x is bridged via `FlatCompat`; switch to its native flat exports when upgrading to 16+.
 - **`eslint.config.mjs` disables** `react-hooks/rules-of-hooks` and `react-hooks/exhaustive-deps`. Don't rely on the hook linter to catch mistakes; review effect dependencies by hand.

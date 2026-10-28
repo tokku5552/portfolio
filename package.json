@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest",
+    "test:build": "node scripts/verify-build.mjs",
     "prepare": "git config core.hooksPath .githooks || true"
   },
   "dependencies": {

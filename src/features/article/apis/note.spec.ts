@@ -1,4 +1,4 @@
-import { parseNoteRss } from './note';
+import { fetchArticlesFromNote, parseNoteRss } from './note';
 
 const sampleRss = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
@@ -58,5 +58,74 @@ describe('parseNoteRss', () => {
 </rss>`;
     const [item] = parseNoteRss(xml);
     expect(item.thumbnailUrl).toBe('https://example.com/fallback.jpg');
+  });
+});
+
+describe('fetchArticlesFromNote', () => {
+  const NOTE_RSS_URL = 'https://note.com/tokku5552/rss';
+  const fetchMock = jest.fn();
+
+  const articleHtml = (ogImage: string) => `<!doctype html>
+<html>
+  <head><meta property="og:image" content="${ogImage}" /></head>
+  <body></body>
+</html>`;
+
+  beforeEach(() => {
+    fetchMock.mockReset();
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+    jest.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    delete (globalThis as { fetch?: typeof fetch }).fetch;
+    jest.restoreAllMocks();
+  });
+
+  test('RSS の各記事を Article にし、記事ページの og:image を優先する', async () => {
+    fetchMock.mockImplementation(async (url: string) => {
+      if (url === NOTE_RSS_URL) {
+        return { ok: true, text: async () => sampleRss };
+      }
+      if (url.endsWith('n1234567890ab')) {
+        return {
+          ok: true,
+          text: async () => articleHtml('https://example.com/og.png'),
+        };
+      }
+      throw new Error('network error');
+    });
+
+    const articles = await fetchArticlesFromNote();
+
+    expect(articles).toEqual([
+      {
+        title: 'はじめての記事',
+        bodySummary: 'これは note.com の記事の本文サマリです。',
+        source: 'note',
+        url: 'https://note.com/tokku5552/n/n1234567890ab',
+        publishedAt: '2025-04-14T12:00:00.000Z',
+        imageUrl: 'https://example.com/og.png',
+      },
+      {
+        title: 'サムネイル無しの記事',
+        bodySummary: 'サムネイル無し。',
+        source: 'note',
+        url: 'https://note.com/tokku5552/n/nffffffffffff',
+        publishedAt: '2025-04-13T03:30:00.000Z',
+        imageUrl: '',
+      },
+    ]);
+  });
+
+  test('RSS が取れなければ空配列を返す', async () => {
+    fetchMock.mockResolvedValue({
+      ok: false,
+      status: 503,
+      statusText: 'Service Unavailable',
+    });
+
+    await expect(fetchArticlesFromNote()).resolves.toEqual([]);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });
