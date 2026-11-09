@@ -30,9 +30,20 @@
   --container-shell: 1440px;
 }
 
+/* Tailwind v3's default font stacks; v4 ships different ones. */
+@theme {
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+
 /*
  * Tailwind v3 defaults that v4 dropped: borders without a color utility were
- * gray-200 (now currentcolor), and buttons had a pointer cursor (now default).
+ * gray-200 #e5e7eb (now currentcolor), and buttons had a pointer cursor (now
+ * default).
  */
 @layer base {
   *,
@@ -40,7 +51,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentcolor);
+    border-color: #e5e7eb;
   }
 
   button:not(:disabled),
