@@ -1,4 +1,5 @@
 import { TextDecoder, TextEncoder } from 'util';
+import { MessageChannel } from 'worker_threads';
 
 if (typeof globalThis.TextEncoder === 'undefined') {
   globalThis.TextEncoder =
@@ -18,4 +19,10 @@ if (typeof AbortSignal.timeout !== 'function') {
     );
     return controller.signal;
   };
+}
+// react-dom/server (browser build, React 19) schedules work through
+// MessageChannel, which jsdom does not provide.
+if (typeof globalThis.MessageChannel === 'undefined') {
+  globalThis.MessageChannel =
+    MessageChannel as unknown as typeof globalThis.MessageChannel;
 }
