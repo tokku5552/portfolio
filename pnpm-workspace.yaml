@@ -13,3 +13,10 @@ overrides:
   js-yaml@4: ^4.3.1
   postcss: ^8.5.23
   sharp: ^0.35.0
+
+# pnpm 12 fails the install when a dependency's build script is neither
+# allowed nor denied. @parcel/watcher (pulled in by jest-haste-map from Jest
+# 30) only compiles from source when npm_config_build_from_source is set and
+# otherwise uses its prebuilt optional packages, so its script is denied.
+allowBuilds:
+  '@parcel/watcher': false
