@@ -10,6 +10,12 @@
       "description": "Keep eslint-config-next in lockstep with next. Majors (also for eslint) need Dependency Dashboard approval; approve them together when upgrading Next.js, since eslint-config-next 16 and ESLint 10 require Next 16.",
       "groupName": "next",
       "matchPackageNames": ["next", "eslint-config-next", "@next/**"]
+    },
+    {
+      "description": "Each pnpm override key pins one major line (e.g. brace-expansion@1 for minimatch@3) to a patched floor. Bumping its target to another major swaps in an incompatible API under the old consumers, so only allow updates within the same major.",
+      "matchDepTypes": ["pnpm.overrides"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
     }
   ]
 }
