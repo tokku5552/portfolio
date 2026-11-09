@@ -30,7 +30,7 @@ const pages = [
   },
 ];
 
-// Produced by tailwind.config.ts, globals.css and brand/tokens.css.
+// Produced by globals.css (Tailwind + @theme mapping) and brand/tokens.css.
 const cssMarkers = [
   '--color-brand-bg',
   '.bg-brand-bg',

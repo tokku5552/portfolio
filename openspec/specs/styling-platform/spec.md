@@ -5,7 +5,7 @@ TBD - created by archiving change platform-migration-pnpm-tailwind-shadcn. Updat
 ## Requirements
 ### Requirement: Tailwind CSS is the primary utility styling layer
 
-The repository SHALL include a working Tailwind CSS v3 setup. A `tailwind.config.ts` and a `postcss.config.js` (or `.cjs`) SHALL exist at the repository root. The content globs SHALL cover all JSX/TSX source files under `src/**`. Dark mode SHALL be configured as `class`-based so that `/brand` (a dark-only page) and any future light-mode pages can both be served from the same build.
+The repository SHALL include a working Tailwind CSS v4 setup. A `postcss.config.js` (or `.cjs`) using `@tailwindcss/postcss` SHALL exist at the repository root; theme configuration SHALL live in `src/styles/globals.css` rather than a `tailwind.config.ts`. The `@source` scan targets SHALL cover all JSX/TSX source files under `src/**`. Dark mode SHALL be configured as `class`-based (via `@custom-variant dark`) so that `/brand` (a dark-only page) and any future light-mode pages can both be served from the same build.
 
 #### Scenario: A Tailwind utility class styles a DOM node
 
@@ -19,7 +19,7 @@ The repository SHALL include a working Tailwind CSS v3 setup. A `tailwind.config
 
 ### Requirement: Global stylesheet imports Tailwind and brand tokens
 
-A `src/styles/globals.css` SHALL exist, SHALL declare the `@tailwind base; @tailwind components; @tailwind utilities;` directives, and SHALL import `brand/tokens.css` so that CSS variables are attached to `:root`. `src/pages/_app.tsx` SHALL import `src/styles/globals.css` exactly once at the top level so that every route receives the stylesheet.
+A `src/styles/globals.css` SHALL exist, SHALL import Tailwind with `@import 'tailwindcss'`, and SHALL import `brand/tokens.css` so that CSS variables are attached to `:root`. `src/pages/_app.tsx` SHALL import `src/styles/globals.css` exactly once at the top level so that every route receives the stylesheet.
 
 #### Scenario: Every page receives the global stylesheet
 
@@ -28,7 +28,7 @@ A `src/styles/globals.css` SHALL exist, SHALL declare the `@tailwind base; @tail
 
 ### Requirement: `brand/tokens.css` is the single source of brand CSS variables
 
-`brand/tokens.css` SHALL declare the Twilight Blade tokens (background, foreground, muted text, subtle border, orb indigo/violet/pink, font families) as CSS Custom Properties on `:root`. Variable names SHALL use the `--color-brand-*` / `--font-brand-*` prefix so the namespace is explicit and future additions do not collide with unprefixed variables introduced by any third-party library. Other layers (Tailwind `theme.extend`, component styles, downloadable copies under `public/brand-assets/`) MUST consume these variables; they MUST NOT redefine token values independently.
+`brand/tokens.css` SHALL declare the Twilight Blade tokens (background, foreground, muted text, subtle border, orb indigo/violet/pink, font families) as CSS Custom Properties on `:root`. Variable names SHALL use the `--color-brand-*` / `--font-brand-*` prefix so the namespace is explicit and future additions do not collide with unprefixed variables introduced by any third-party library. Other layers (the Tailwind `@theme` mapping in `globals.css`, component styles, downloadable copies under `public/brand-assets/`) MUST consume these variables; they MUST NOT redefine token values independently.
 
 #### Scenario: Tailwind theme references brand variables
 

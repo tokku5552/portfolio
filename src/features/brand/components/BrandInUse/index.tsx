@@ -72,9 +72,9 @@ export default function BrandInUse() {
       id="in-use"
       className="relative isolate overflow-hidden border-b border-brand-border"
     >
-      <Container className="relative z-[2] py-20 md:py-28">
+      <Container className="relative z-2 py-20 md:py-28">
         <Eyebrow className="mb-6">{'// In use'}</Eyebrow>
-        <h2 className="mb-10 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-[-0.025em] text-brand-fg">
+        <h2 className="mb-10 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-tight text-brand-fg">
           Live signature elements.
         </h2>
 
@@ -96,7 +96,7 @@ export default function BrandInUse() {
             <Eyebrow>12-col grid + Orb</Eyebrow>
             <GridOverlay visible className="opacity-100" />
             <Orb position="center" />
-            <p className="relative z-[2] mt-auto font-brand-sans text-[14px] leading-[1.55] text-brand-muted">
+            <p className="relative z-2 mt-auto font-brand-sans text-[14px] leading-[1.55] text-brand-muted">
               The 12-column grid overlay (toggled on for this demo) and the
               radial Orb backdrop establish the underlying structure used by
               hero sections.

@@ -11,7 +11,7 @@ The top page introduces tokku and features podcasts, YouTube, services, recent a
 ![Tailwind CSS](https://img.shields.io/badge/-Tailwind_CSS-06B6D4.svg?logo=tailwindcss&style=flat)
 ![Vercel](https://img.shields.io/badge/-Vercel-181717.svg?logo=vercel&style=flat)
 
-Tech stack: Next.js (Pages Router), TypeScript, Tailwind CSS v3, Jest, pnpm. Deployed on Vercel (preview on PRs, production on merge to `main`).
+Tech stack: Next.js (Pages Router), TypeScript, Tailwind CSS v4, Jest, pnpm. Deployed on Vercel (preview on PRs, production on merge to `main`).
 
 ## Requirements
 

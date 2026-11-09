@@ -1,8 +1,53 @@
 @import '../../brand/tokens.css';
+@import 'tailwindcss' source(none);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Same scan targets as the v3 `content` globs. */
+@source '../**/*.{ts,tsx}';
+@source '../../brand/**/*.{ts,tsx}';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Map Tailwind utilities (bg-brand-bg, font-brand-mono, max-w-shell, ...) onto
+ * the brand tokens. `inline` makes utilities use these values directly, and
+ * `reference` keeps Tailwind from re-declaring --color-brand-* / --font-brand-*
+ * on :root as self-referencing variables; brand/tokens.css stays the only
+ * declaration.
+ */
+@theme inline reference {
+  --color-brand-bg: var(--color-brand-bg);
+  --color-brand-fg: var(--color-brand-fg);
+  --color-brand-muted: var(--color-brand-muted);
+  --color-brand-border: var(--color-brand-border);
+  --color-brand-border-strong: var(--color-brand-border-strong);
+  --color-brand-orb-indigo: var(--color-brand-orb-indigo);
+  --color-brand-orb-violet: var(--color-brand-orb-violet);
+  --color-brand-orb-pink: var(--color-brand-orb-pink);
+
+  --font-brand-sans: var(--font-brand-sans);
+  --font-brand-mono: var(--font-brand-mono);
+
+  --container-shell: 1440px;
+}
+
+/*
+ * Tailwind v3 defaults that v4 dropped: borders without a color utility were
+ * gray-200 (now currentcolor), and buttons had a pointer cursor (now default).
+ */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
 
 /* ==========================================================================
  * Twilight Blade — shared keyframes and brand-scoped classes.
@@ -113,16 +158,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(
-      to right,
-      var(--color-brand-border) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      var(--color-brand-border) 1px,
-      transparent 1px
-    );
+    linear-gradient(to right, var(--color-brand-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-brand-border) 1px, transparent 1px);
   background-size:
     calc(100% / 12) 100%,
     100% 88px;

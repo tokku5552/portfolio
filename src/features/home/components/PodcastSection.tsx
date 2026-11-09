@@ -53,7 +53,7 @@ const PROGRAMS: PodcastProgram[] = [
 ];
 
 const platformLinkClassName =
-  'font-brand-mono text-[12px] uppercase tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-2 transition-colors hover:bg-white/[0.04]';
+  'font-brand-mono text-[12px] uppercase tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-2 transition-colors hover:bg-white/4';
 
 export default function PodcastSection() {
   return (

@@ -73,7 +73,7 @@ function SocialIcon({ label, href, children }: SocialIconProps) {
       href={href}
       external
       aria-label={label}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-[4px] border border-brand-border-strong text-brand-fg transition-colors hover:bg-white/[0.04] hover:border-white/30"
+      className="inline-flex h-9 w-9 items-center justify-center rounded-[4px] border border-brand-border-strong text-brand-fg transition-colors hover:bg-white/4 hover:border-white/30"
     >
       {children}
     </Link>
@@ -115,7 +115,7 @@ export default function Footer() {
           <div className="flex flex-wrap items-center gap-2.5 font-brand-mono text-[12px] tracking-[0.02em] text-brand-muted">
             <span
               aria-hidden="true"
-              className="block h-2 w-2 rotate-45 bg-gradient-to-br from-brand-orb-indigo via-brand-orb-violet to-brand-orb-pink"
+              className="block h-2 w-2 rotate-45 bg-linear-to-br/srgb from-brand-orb-indigo via-brand-orb-violet to-brand-orb-pink"
             />
             <span className="text-brand-fg">tok</span>
             <span>/ shinnosuke tokuda · © {year}</span>
@@ -147,7 +147,7 @@ export default function Footer() {
             <Link
               href={contactGoogleFormUrl}
               external
-              className="ml-2 font-brand-mono text-[12px] tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-2 transition-colors hover:bg-white/[0.04] hover:border-white/30"
+              className="ml-2 font-brand-mono text-[12px] tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-2 transition-colors hover:bg-white/4 hover:border-white/30"
             >
               Get in touch ↗
             </Link>

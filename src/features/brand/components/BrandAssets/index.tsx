@@ -8,7 +8,7 @@ export default function BrandAssets() {
     <section id="assets" className="border-b border-brand-border">
       <Container className="py-20 md:py-28">
         <Eyebrow className="mb-6">{'// Assets'}</Eyebrow>
-        <h2 className="mb-4 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-[-0.025em] text-brand-fg">
+        <h2 className="mb-4 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-tight text-brand-fg">
           Source files for AI and humans.
         </h2>
         <p className="mb-10 max-w-[680px] font-brand-sans text-[clamp(15px,1.1vw,17px)] leading-[1.6] text-brand-muted">
@@ -31,7 +31,7 @@ export default function BrandAssets() {
                 <Link
                   href={asset.url}
                   external
-                  className="font-brand-mono text-[12px] tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-1.5 transition-colors hover:bg-white/[0.04] hover:border-white/30"
+                  className="font-brand-mono text-[12px] tracking-[0.04em] text-brand-fg rounded-[4px] border border-brand-border-strong px-3 py-1.5 transition-colors hover:bg-white/4 hover:border-white/30"
                 >
                   Open ↗
                 </Link>

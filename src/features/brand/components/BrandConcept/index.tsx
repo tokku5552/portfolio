@@ -7,7 +7,7 @@ export default function BrandConcept() {
     <section id="concept" className="border-b border-brand-border">
       <Container className="py-20 md:py-28">
         <Eyebrow className="mb-6">{'// Concept'}</Eyebrow>
-        <h2 className="mb-8 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-[-0.025em] text-brand-fg">
+        <h2 className="mb-8 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-tight text-brand-fg">
           Quiet surface, single accent.
         </h2>
 
