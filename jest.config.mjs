@@ -36,6 +36,7 @@ const esmPackages = [
   'css-tree',
   'entities',
   'lru-cache',
+  'magic-string',
   'parse5',
   'tough-cookie',
 ];

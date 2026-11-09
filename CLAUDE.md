@@ -48,7 +48,7 @@ Shared building blocks live outside features:
 - `src/components/parts/` — hand-written Tailwind primitives (`Button`, `Container`, `Eyebrow`, `GridOverlay`, `Link`, `Orb`) plus `ParticleField`, the raw-WebGL particle background used behind the home page (the hero keeps the CSS `Orb` as its fallback when WebGL is unavailable). All are exported through `src/components/parts/index.ts`. There is no shadcn/ui layer — see `openspec/changes/archive/2026-04-22-platform-migration-pnpm-tailwind-shadcn/design.md` Decision 5 for why.
 - `src/libs/` — pure utilities (`date.ts`, `gtag.ts`, `text.ts`, `cn.ts`). Co-located tests like `date.spec.ts` live here. `cn.ts` exposes the `cn(...)` helper (`twMerge(clsx(inputs))`) used when composing Tailwind classes.
 - `src/config/` — `environment.ts` (env vars) and `constants.ts` (URLs, page titles, social links).
-- `src/styles/globals.css` — Tailwind directives + `brand/tokens.css` import + Twilight Blade-specific keyframes and `tb-*` utility classes (used by `Orb`, `Eyebrow`, `GridOverlay`, gradient period). Loaded once at the top of `src/pages/_app.tsx`.
+- `src/styles/globals.css` — `@import 'tailwindcss'` with the `@theme` brand mapping + `brand/tokens.css` import + Twilight Blade-specific keyframes and `tb-*` utility classes (used by `Orb`, `Eyebrow`, `GridOverlay`, gradient period). Loaded once at the top of `src/pages/_app.tsx`.
 - Global typings come from `@types/*` packages listed in `tsconfig.json` `types` (e.g. `gtag.js` for `window.gtag`); there is no hand-written `src/types/` declaration file. Since `types` is an explicit allowlist, add any new ambient `@types/*` package there.
 
 Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and relative imports appear in the codebase; match whichever style the surrounding file uses.
@@ -57,7 +57,7 @@ Path alias `@/*` → `src/*` is configured in `tsconfig.json`. Both `@/...` and 
 
 `brand/` is a separate top-level directory consumed by both build and runtime:
 
-- `brand/tokens.css` — single source of truth for `--color-brand-*` and `--font-brand-*` CSS variables. Imported by `src/styles/globals.css`; Tailwind references the variables via `theme.extend` in `tailwind.config.ts`.
+- `brand/tokens.css` — single source of truth for `--color-brand-*` and `--font-brand-*` CSS variables. Imported by `src/styles/globals.css`; Tailwind maps utilities onto the variables in the `@theme inline reference` block of `src/styles/globals.css` (there is no `tailwind.config.ts`).
 - `brand/tokens.ts` — typed mirror of `tokens.css`. Consumed by `src/features/brand/components/BrandTokens` to render swatches programmatically. `brand/tokens.spec.ts` enforces value sync between `.css`, `.ts`, and `brand.md` — a test will fail if any drift.
 - `brand/brand.md` — AI-paste / URL-fetch friendly Twilight Blade spec (philosophy, tokens, DO / DO NOT, references). Distributed via `https://cdn.jsdelivr.net/gh/tokku5552/portfolio/brand/brand.md`. Single source of truth for AI rule consumption.
 - `brand/source/twilight-blade-v1/` — original Claude Design handoff bundle (Hero.html). Read-only historical reference; not part of any active deliverable.
@@ -70,7 +70,7 @@ There is no `public/brand-assets/` mirror. The `/brand` page's ASSETS section li
 
 ## Conventions
 
-- **Styling**: Tailwind CSS v3 is the only utility layer. Brand tokens come from `brand/tokens.css` via `var(--color-brand-*)`. Compose Tailwind classes with `cn()` from `src/libs/cn.ts`. Do not introduce a second styling system (Chakra UI, Emotion, Framer Motion, styled-components, vanilla-extract, etc.); they were all removed in TOK-83 and the dependency surface should stay minimal.
+- **Styling**: Tailwind CSS v4 (via `@tailwindcss/postcss`) is the only utility layer. Brand tokens come from `brand/tokens.css` via `var(--color-brand-*)`. Compose Tailwind classes with `cn()` from `src/libs/cn.ts`. Do not introduce a second styling system (Chakra UI, Emotion, Framer Motion, styled-components, vanilla-extract, etc.); they were all removed in TOK-83 and the dependency surface should stay minimal.
 - **Animation**: CSS `@keyframes` declared in `src/styles/globals.css` (`orb-float`, `eyebrow-pulse`) plus Tailwind's `transition-*` / `animate-*` utilities. The one exception is `ParticleField`, written in raw WebGL with its own shaders (no three.js or similar). There is no JS animation library.
 - **Tests**: Jest + `@testing-library/react` in a jsdom environment. Spec files live next to the code they test (`*.spec.ts` / `*.spec.tsx`), except for `src/pages/`, where any file becomes a route: page specs live in `spec/pages/`. `spec/setupTest.ts` provides env stubs as `globalSetup`; `spec/jestPolyfills.ts` provides `setupFiles` polyfills (e.g. for `note.ts` parsing). No project-wide RTL setup file — match neighbor specs (e.g. `Eyebrow.spec.tsx`) when writing new ones; `toBeInTheDocument` from `@testing-library/jest-dom` is **not** wired up, so prefer `expect(el).not.toBeNull()` / DOM querying over jest-dom matchers.
 - **Prettier** config (`.prettierrc`): single quotes, 2-space tabs, trailing commas `es5`, always-parens for arrow params. Enforced via `eslint-plugin-prettier` — `pnpm lint` will fail on formatting drift.

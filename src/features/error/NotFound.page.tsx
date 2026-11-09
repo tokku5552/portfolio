@@ -10,7 +10,7 @@ export default function NotFound() {
       <Orb position="tr" />
       <span aria-hidden="true" className="tb-grain" />
 
-      <Container className="relative z-[2] py-24 md:py-32">
+      <Container className="relative z-2 py-24 md:py-32">
         <Eyebrow className="mb-10">404 · Not found</Eyebrow>
 
         <h1 className="mb-7 font-brand-sans text-[clamp(48px,11vw,140px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg">

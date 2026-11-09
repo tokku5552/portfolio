@@ -33,12 +33,12 @@ export default function TwilightHero({ hideOrb = false }: TwilightHeroProps) {
       </div>
       <span aria-hidden="true" className="tb-grain" />
 
-      <Container className="relative z-[2] py-24 md:py-32">
+      <Container className="relative z-2 py-24 md:py-32">
         <Eyebrow withPulse className="mb-10">
           Portfolio · 2026 — Currently shipping
         </Eyebrow>
 
-        <h1 className="mb-7 font-brand-sans text-[clamp(48px,13.5vw,72px)] sm:text-[clamp(72px,11vw,180px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg break-words [overflow-wrap:anywhere] [hyphens:none]">
+        <h1 className="mb-7 font-brand-sans text-[clamp(48px,13.5vw,72px)] sm:text-[clamp(72px,11vw,180px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg wrap-anywhere [hyphens:none]">
           Shinnosuke
           <br />
           Tokuda

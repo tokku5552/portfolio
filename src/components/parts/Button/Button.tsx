@@ -17,7 +17,7 @@ export const buttonBase = cn(
   'relative inline-flex items-center gap-3 rounded-[4px]',
   'font-brand-sans text-[15px] tracking-[-0.005em] no-underline cursor-pointer',
   'transition-transform duration-200 ease-out',
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orb-violet focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg',
+  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-orb-violet focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg',
   'disabled:cursor-not-allowed disabled:opacity-60'
 );
 
@@ -26,13 +26,13 @@ export const buttonVariantClasses: Record<ButtonVariant, string> = {
     'tb-btn-primary',
     'bg-brand-fg text-brand-bg font-bold',
     'overflow-hidden border-0',
-    'hover:-translate-y-px hover:[&_*]:text-brand-fg'
+    'hover:-translate-y-px hover:**:text-brand-fg'
   ),
   ghost: cn(
     'bg-transparent text-brand-fg font-medium',
     'border border-brand-border-strong',
     'font-brand-mono text-[13px] tracking-[0.02em]',
-    'hover:bg-white/[0.04] hover:border-white/30'
+    'hover:bg-white/4 hover:border-white/30'
   ),
 };
 

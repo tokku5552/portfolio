@@ -30,7 +30,7 @@ export default function TimeTicketConsultation() {
         </p>
       </div>
 
-      <div className="rounded-[4px] border border-brand-border bg-white/[0.02] p-6">
+      <div className="rounded-[4px] border border-brand-border bg-white/2 p-6">
         <div className="mb-3 font-brand-mono text-[11px] uppercase tracking-[0.12em] text-brand-muted">
           こんな悩みがある方向け
         </div>

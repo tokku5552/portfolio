@@ -15,7 +15,7 @@ const base = cn(
   'inline-flex items-center gap-2',
   'text-brand-fg no-underline',
   'transition-colors duration-200 ease-out',
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-orb-violet focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg'
+  'focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-brand-orb-violet focus-visible:ring-offset-2 focus-visible:ring-offset-brand-bg'
 );
 
 export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(

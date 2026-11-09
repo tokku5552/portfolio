@@ -37,7 +37,7 @@ export default function Home({ articles, worksOgpImages }: HomeProps) {
         stages={particleStages}
         onActiveChange={setParticlesActive}
       />
-      <div className="relative z-[1]">
+      <div className="relative z-1">
         <TwilightHero hideOrb={particlesActive} />
         <HeroStrip />
         <PodcastSection />

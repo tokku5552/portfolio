@@ -9,7 +9,7 @@ export default function BrandColophon() {
     <section id="colophon">
       <Container className="py-20 md:py-28">
         <Eyebrow className="mb-6">{'// Colophon'}</Eyebrow>
-        <h2 className="mb-10 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-[-0.025em] text-brand-fg">
+        <h2 className="mb-10 font-brand-sans text-[clamp(28px,4vw,48px)] font-black leading-[1.05] tracking-tight text-brand-fg">
           Set in Geist.
         </h2>
 

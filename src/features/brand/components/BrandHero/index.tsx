@@ -11,12 +11,12 @@ export default function BrandHero() {
       <Orb position="tr" />
       <span aria-hidden="true" className="tb-grain" />
 
-      <Container className="relative z-[2] py-24 md:py-32">
+      <Container className="relative z-2 py-24 md:py-32">
         <Eyebrow withPulse className="mb-10">
           Brand · Twilight Blade
         </Eyebrow>
 
-        <h1 className="mb-7 font-brand-sans text-[clamp(48px,12vw,160px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg break-words [overflow-wrap:anywhere] [hyphens:none]">
+        <h1 className="mb-7 font-brand-sans text-[clamp(48px,12vw,160px)] font-black leading-[0.88] tracking-[-0.045em] text-brand-fg wrap-anywhere [hyphens:none]">
           Twilight Blade
           <span className="tb-period-gradient">.</span>
         </h1>

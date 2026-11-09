@@ -29,13 +29,18 @@ describe('globals.css', () => {
     css = await compileGlobals();
   }, 30000);
 
-  test('expands the @tailwind directives', () => {
-    expect(css).not.toMatch(/@tailwind\s/);
-    // Preflight from `@tailwind base`.
+  test('expands the Tailwind import', () => {
+    expect(css).not.toMatch(/@import\s+['"]tailwindcss['"]/);
+    // Preflight from the tailwindcss import.
     expect(css).toContain('box-sizing: border-box');
   });
 
-  test('generates brand utilities used in src from the theme extension', () => {
+  test('does not shadow brand/tokens.css with self-referencing theme variables', () => {
+    expect(css).toMatch(/--color-brand-bg:\s*#/i);
+    expect(css).not.toMatch(/--color-brand-bg:\s*var\(--color-brand-bg\)/);
+  });
+
+  test('generates brand utilities used in src from the @theme mapping', () => {
     expect(css).toMatch(
       /\.bg-brand-bg\s*\{[^}]*background-color:\s*var\(--color-brand-bg\)/
     );
