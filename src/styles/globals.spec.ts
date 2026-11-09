@@ -1,32 +1,37 @@
 /**
  * @jest-environment node
  */
-import { readFileSync } from 'fs';
+import { execFileSync } from 'child_process';
 import path from 'path';
-import postcss, { AcceptedPlugin } from 'postcss';
 
 const root = path.resolve(__dirname, '../..');
 
-// Run globals.css through the same plugins Next.js loads from postcss.config.js.
-const compileGlobals = async (): Promise<string> => {
-  const { plugins } = require(path.join(root, 'postcss.config.js')) as {
-    plugins: Record<string, object>;
-  };
-  const resolved = Object.entries(plugins).map(([name, options]) =>
-    require(name)(options)
-  ) as AcceptedPlugin[];
-  const file = path.join(root, 'src/styles/globals.css');
-  const result = await postcss(resolved).process(readFileSync(file, 'utf8'), {
-    from: file,
+// Run globals.css through the same plugins Next.js loads from
+// postcss.config.js. This runs in a child Node process because
+// @tailwindcss/node calls module.registerHooks() on import, which Jest 30
+// rejects inside its sandboxed module registry.
+const compileScript = `
+const { readFileSync } = require('fs');
+const postcss = require('postcss');
+const { plugins } = require('./postcss.config.js');
+const file = 'src/styles/globals.css';
+postcss(Object.entries(plugins).map(([name, options]) => require(name)(options)))
+  .process(readFileSync(file, 'utf8'), { from: require('path').resolve(file) })
+  .then((result) => process.stdout.write(result.css));
+`;
+
+const compileGlobals = (): string =>
+  execFileSync(process.execPath, ['-e', compileScript], {
+    cwd: root,
+    encoding: 'utf8',
+    maxBuffer: 64 * 1024 * 1024,
   });
-  return result.css;
-};
 
 describe('globals.css', () => {
   let css: string;
 
-  beforeAll(async () => {
-    css = await compileGlobals();
+  beforeAll(() => {
+    css = compileGlobals();
   }, 30000);
 
   test('expands the Tailwind import', () => {
