@@ -17,5 +17,41 @@ const config = {
   setupFiles: ['<rootDir>/spec/jestPolyfills.ts'],
 };
 
-// createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-export default createJestConfig(config);
+// jsdom's dependency tree ships some ESM-only packages that Jest's CommonJS
+// runtime cannot load untransformed. next/jest only lets custom config append
+// to transformIgnorePatterns, so its node_modules pattern is replaced here.
+// The lookahead is matched at every `/node_modules/` segment, so a package
+// inside pnpm's `.pnpm/<name>@<version>/node_modules/<name>/` is transformed
+// only when it is listed below.
+const esmPackages = [
+  '@asamuzakjp/css-color',
+  '@asamuzakjp/dom-selector',
+  '@bramus/specificity',
+  '@csstools/color-helpers',
+  '@csstools/css-calc',
+  '@csstools/css-color-parser',
+  '@csstools/css-parser-algorithms',
+  '@csstools/css-tokenizer',
+  '@exodus/bytes',
+  'css-tree',
+  'entities',
+  'lru-cache',
+  'parse5',
+  'tough-cookie',
+];
+
+// createJestConfig is wrapped this way to ensure that next/jest can load the Next.js config which is async
+const jestConfig = async () => {
+  const resolved = await createJestConfig(config)();
+  return {
+    ...resolved,
+    transformIgnorePatterns: [
+      `/node_modules/(?!(\\.pnpm|${esmPackages.join('|')})/)`,
+      ...resolved.transformIgnorePatterns.filter(
+        (pattern) => !pattern.includes('node_modules')
+      ),
+    ],
+  };
+};
+
+export default jestConfig;
