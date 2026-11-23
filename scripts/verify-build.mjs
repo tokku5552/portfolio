@@ -23,6 +23,12 @@ const pages = [
     text: 'Twilight Blade',
   },
   {
+    route: '/ai-consulting',
+    file: 'ai-consulting.html',
+    title: `AI導入・エージェント活用相談 | ${siteName}`,
+    text: '名前のついた面倒は',
+  },
+  {
     route: '404',
     file: '404.html',
     title: `404 Not Found | ${siteName}`,
