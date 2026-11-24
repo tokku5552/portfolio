@@ -261,3 +261,26 @@
   --lp-teal: #0a5a58;
   --lp-teal-dark: #064544;
 }
+
+/*
+ * Document-level scroll behaviour for the LP only. `:has()` scopes it to the
+ * page while it is mounted, so other routes keep the default jump scroll.
+ * The bottom padding / margin keep anchor targets and keyboard focus clear of
+ * the fixed mobile CTA bar.
+ */
+html:has(.consulting-lp) {
+  scroll-behavior: smooth;
+}
+@media (max-width: 640px) {
+  html:has(.consulting-lp) {
+    scroll-padding-bottom: 104px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.consulting-lp) {
+    scroll-behavior: auto;
+  }
+}
+.consulting-lp :is(a, button, summary) {
+  scroll-margin-bottom: 110px;
+}

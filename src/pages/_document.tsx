@@ -34,7 +34,6 @@ export default function Document() {
         <link rel="manifest" href="/site.webmanifest" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#4f46e5" />
         <meta name="msapplication-TileColor" content="#0a0a12" />
-        <meta name="theme-color" content="#0a0a12" />
       </Head>
       <body>
         <Main />

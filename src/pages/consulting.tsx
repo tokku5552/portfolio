@@ -1,4 +1,5 @@
 import Seo from '@/components/layouts/Seo';
+import Head from 'next/head';
 import { baseURL } from '../config/constants';
 import Consulting from '../features/service/Consulting.page';
 
@@ -10,6 +11,9 @@ export default function ConsultingPage() {
         pageDescription="AIツールを試したけど、現場の業務に落とし込めていない事業責任者・マネージャーの方へ。AIエージェントを自分で作って毎日の実務で運用しているエンジニアリングマネージャーが、御社の業務の切り分けと、最初に作るべきエージェントの設計を一緒に考えます。"
         pagePath={`${baseURL}/consulting`}
       />
+      <Head>
+        <meta name="theme-color" content="#ffffff" key="theme-color" />
+      </Head>
       <Consulting />
     </>
   );

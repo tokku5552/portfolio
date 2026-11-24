@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useEffect } from 'react';
@@ -24,6 +25,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <Head>
+        {/* Keyed so a page can override it (the light /consulting LP does). */}
+        <meta name="theme-color" content="#0a0a12" key="theme-color" />
+      </Head>
       {GA_MEASUREMENT_ID ? (
         <>
           <Script
