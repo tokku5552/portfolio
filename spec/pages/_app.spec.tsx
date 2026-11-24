@@ -44,6 +44,18 @@ describe('App', () => {
     expect(container.querySelector('footer')).not.toBeNull();
   });
 
+  test('renders a standalone page without BaseLayout', () => {
+    const StandalonePage = Object.assign(() => <p>lp body</p>, {
+      standalone: true,
+    });
+    const { container } = render(
+      <App Component={StandalonePage} pageProps={{}} router={{} as never} />
+    );
+    expect(container.textContent).toBe('lp body');
+    expect(container.querySelector('#main-content')).toBeNull();
+    expect(container.querySelector('header')).toBeNull();
+  });
+
   test('sends a GA page view on every route change', () => {
     renderApp();
     gtagMock.mockClear();

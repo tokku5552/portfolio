@@ -46,14 +46,20 @@ export default function TimeTicketConsultation() {
           ))}
         </ul>
         <Link
-          href={timeTicketUrl}
-          external
+          href="/consulting"
           className={cn(buttonClasses('primary'), 'w-full justify-center')}
         >
-          <span>TimeTicket で相談する</span>
+          <span>相談の内容を詳しく見る</span>
           <span aria-hidden="true" className="font-brand-mono">
             →
           </span>
+        </Link>
+        <Link
+          href={timeTicketUrl}
+          external
+          className="mt-4 w-full justify-center font-brand-mono text-[12px] text-brand-muted underline underline-offset-4 hover:text-brand-fg"
+        >
+          TimeTicket から直接申し込む
         </Link>
       </div>
     </div>

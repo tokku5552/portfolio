@@ -18,6 +18,10 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+  // A page sets `Page.standalone = true` to render without the site chrome
+  // (e.g. the /consulting LP, which brings its own header and footer).
+  const { standalone } = Component as { standalone?: boolean };
+
   return (
     <>
       {GA_MEASUREMENT_ID ? (
@@ -41,9 +45,13 @@ export default function App({ Component, pageProps }: AppProps) {
           />
         </>
       ) : null}
-      <BaseLayout>
+      {standalone ? (
         <Component {...pageProps} />
-      </BaseLayout>
+      ) : (
+        <BaseLayout>
+          <Component {...pageProps} />
+        </BaseLayout>
+      )}
     </>
   );
 }
