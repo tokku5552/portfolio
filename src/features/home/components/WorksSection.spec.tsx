@@ -1,5 +1,8 @@
 import { render } from '@testing-library/react';
-import { lineSummaryLpUrl } from '../../../config/constants';
+import {
+  lineSummaryLpUrl,
+  securityShindanUrl,
+} from '../../../config/constants';
 import WorksSection from './WorksSection';
 
 describe('WorksSection', () => {
@@ -27,6 +30,19 @@ describe('WorksSection', () => {
     expect(container.textContent).toContain(
       'サマリは、LINE グループの会話から'
     );
+  });
+
+  it('lists the security-shindan card with its external link', () => {
+    const { container } = render(<WorksSection />);
+
+    const titles = Array.from(container.querySelectorAll('h3')).map(
+      (h) => h.textContent
+    );
+    expect(titles).toContain('サイトのセキュリティ診断');
+
+    const link = container.querySelector(`a[href="${securityShindanUrl}"]`);
+    expect(link).not.toBeNull();
+    expect(link?.getAttribute('target')).toBe('_blank');
   });
 
   it('renders the og:image when one is provided for the product', () => {

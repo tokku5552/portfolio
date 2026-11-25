@@ -1,5 +1,8 @@
 import Link from '../../../components/parts/Link';
-import { lineSummaryLpUrl } from '../../../config/constants';
+import {
+  lineSummaryLpUrl,
+  securityShindanUrl,
+} from '../../../config/constants';
 import HomeSection from './HomeSection';
 
 interface WorksProduct {
@@ -20,6 +23,14 @@ const PRODUCTS: WorksProduct[] = [
     description:
       'サマリは、LINE グループの会話から、決まったこと・まだ決まっていないこと・やることと担当を議事録にして、あなたとのトークに届けます。前に頼んだことが片づいたかどうかも、次の議事録で分かります。',
     href: lineSummaryLpUrl,
+  },
+  {
+    key: 'security-shindan',
+    name: 'サイトのセキュリティ診断',
+    meta: 'Web App',
+    description:
+      'URL を入れると、HTTPS・セキュリティヘッダ・Cookie・なりすましメール対策など16項目をまとめて検査し、何をどう直せばよいかを日本語で返します。登録は要りません。',
+    href: securityShindanUrl,
   },
 ];
 

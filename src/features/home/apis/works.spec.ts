@@ -1,4 +1,7 @@
-import { lineSummaryLpUrl } from '../../../config/constants';
+import {
+  lineSummaryLpUrl,
+  securityShindanUrl,
+} from '../../../config/constants';
 import { fetchWorksOgpImages } from './works';
 
 describe('fetchWorksOgpImages', () => {
@@ -24,6 +27,7 @@ describe('fetchWorksOgpImages', () => {
 
     await expect(fetchWorksOgpImages()).resolves.toEqual({
       [lineSummaryLpUrl]: 'https://example.com/lp.png',
+      [securityShindanUrl]: 'https://example.com/lp.png',
     });
     expect(fetchMock.mock.calls[0][1]?.signal).toBeInstanceOf(AbortSignal);
   });
