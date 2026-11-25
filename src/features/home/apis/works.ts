@@ -1,10 +1,13 @@
-import { lineSummaryLpUrl } from '../../../config/constants';
+import {
+  lineSummaryLpUrl,
+  securityShindanUrl,
+} from '../../../config/constants';
 import { createDom } from '../../article/apis/createDom';
 import { FETCH_TIMEOUT_MS } from '../../article/apis/fetchConfig';
 import { extractOgp } from '../../article/functions/extractOgp';
 
 /** Product landing pages whose og:image we hydrate at build time. */
-const WORK_OGP_URLS = [lineSummaryLpUrl];
+const WORK_OGP_URLS = [lineSummaryLpUrl, securityShindanUrl];
 
 /**
  * Works セクションの各プロダクト LP から og:image を取得する。

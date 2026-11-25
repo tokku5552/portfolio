@@ -48,3 +48,5 @@ export const timeTicketUrl = 'https://www.timeticket.jp/items/192937/';
 export const inkdoseUrl = 'https://inkdoses.com/';
 export const lineSummaryLpUrl =
   'https://labs.tokku-tech.dev/line-summary?utm_source=portfolio';
+export const securityShindanUrl =
+  'https://play.tokku-tech.dev/security-shindan/?utm_source=portfolio';
