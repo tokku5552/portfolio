@@ -23,6 +23,15 @@ const pages = [
     text: 'Twilight Blade',
   },
   {
+    route: '/consulting',
+    file: 'consulting.html',
+    title: `AI導入・エージェント活用相談 | ${siteName}`,
+    text: '相談を申し込む',
+    // Standalone LP: renders its own header / footer instead of BaseLayout.
+    standalone: true,
+    themeColor: '#ffffff',
+  },
+  {
     route: '404',
     file: '404.html',
     title: `404 Not Found | ${siteName}`,
@@ -73,9 +82,21 @@ for (const page of pages) {
   if (decode(ogTitle?.[1] ?? '') !== page.title)
     fail('og:title missing or wrong');
 
-  if (!html.includes('id="main-content"')) fail('BaseLayout <main> missing');
+  if (page.standalone) {
+    if (html.includes('id="main-content"'))
+      fail('standalone page must not render BaseLayout <main>');
+  } else if (!html.includes('id="main-content"')) {
+    fail('BaseLayout <main> missing');
+  }
   if (!/<header[\s>]/.test(html) || !/<footer[\s>]/.test(html)) {
     fail('Header / Footer missing');
+  }
+  const themeColors = [
+    ...html.matchAll(/<meta[^>]*name="theme-color"[^>]*content="([^"]*)"/g),
+  ].map((m) => m[1]);
+  const themeColor = page.themeColor ?? '#0a0a12';
+  if (themeColors.length !== 1 || themeColors[0] !== themeColor) {
+    fail(`theme-color is [${themeColors}], expected ${themeColor}`);
   }
   const text = decode(html.replace(/<[^>]*>/g, ''));
   if (!text.includes(page.text)) fail(`body text "${page.text}" missing`);

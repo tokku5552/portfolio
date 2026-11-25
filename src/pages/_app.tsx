@@ -1,5 +1,6 @@
 import '@/styles/globals.css';
 import { AppProps } from 'next/app';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Script from 'next/script';
 import { useEffect } from 'react';
@@ -18,8 +19,16 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+  // A page sets `Page.standalone = true` to render without the site chrome
+  // (e.g. the /consulting LP, which brings its own header and footer).
+  const { standalone } = Component as { standalone?: boolean };
+
   return (
     <>
+      <Head>
+        {/* Keyed so a page can override it (the light /consulting LP does). */}
+        <meta name="theme-color" content="#0a0a12" key="theme-color" />
+      </Head>
       {GA_MEASUREMENT_ID ? (
         <>
           <Script
@@ -41,9 +50,13 @@ export default function App({ Component, pageProps }: AppProps) {
           />
         </>
       ) : null}
-      <BaseLayout>
+      {standalone ? (
         <Component {...pageProps} />
-      </BaseLayout>
+      ) : (
+        <BaseLayout>
+          <Component {...pageProps} />
+        </BaseLayout>
+      )}
     </>
   );
 }

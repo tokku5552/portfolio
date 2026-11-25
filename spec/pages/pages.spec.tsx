@@ -7,6 +7,7 @@ import ArticlesPage, {
   getStaticProps as getArticlesStaticProps,
 } from '../../src/pages/articles';
 import BrandPage from '../../src/pages/brand';
+import ConsultingPage from '../../src/pages/consulting';
 import HomePage, {
   getStaticProps as getHomeStaticProps,
 } from '../../src/pages/index';
@@ -99,6 +100,16 @@ describe('pages', () => {
   test('/brand renders', () => {
     const { container } = render(<BrandPage />);
     expect(h1Text(container)).toContain('Twilight Blade');
+  });
+
+  test('/consulting renders as a standalone LP', () => {
+    const { container } = render(<ConsultingPage />);
+    expect(h1Text(container)).toContain('だいたい自動化できる。');
+    expect(container.querySelector('#faq')).not.toBeNull();
+    expect(
+      container.querySelector('a[href="https://forms.gle/fvHkjYuSExq6EvUr9"]')
+    ).not.toBeNull();
+    expect(ConsultingPage.standalone).toBe(true);
   });
 
   test('404 renders', () => {

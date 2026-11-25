@@ -7,7 +7,7 @@ export default function ServicesSection() {
       id="services"
       eyebrow="// Services"
       heading="Work with me"
-      description="現場の AI 導入や、エンジニアリング組織の立ち上げ・改善まわりを TimeTicket で相談として受けています。"
+      description="現場の AI 導入や、エンジニアリング組織の立ち上げ・改善まわりの相談を受けています。"
     >
       <TimeTicketConsultation />
     </HomeSection>

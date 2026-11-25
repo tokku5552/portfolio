@@ -36,7 +36,7 @@ Copy `.env.sample` to `.env` for local work. Tests inject dummy values via `spec
 
 ### Next.js Pages Router
 
-Routing lives in `src/pages/` (classic Pages Router, not App Router). `_app.tsx` is intentionally minimal: it loads `globals.css`, wraps the tree in `BaseLayout`, and wires GA pageview tracking on `routeChangeComplete`. There is no `ChakraProvider` or other framework wrapper. Page files are thin — they call `getStaticProps`, fetch data, and delegate rendering to a `*.page.tsx` component inside the relevant feature folder (`src/pages/index.tsx` → `src/features/home/Home.page.tsx`, `src/pages/articles/index.tsx` → `src/features/article/ArticleList.page.tsx`, `src/pages/brand.tsx` → `src/features/brand/Brand.page.tsx`).
+Routing lives in `src/pages/` (classic Pages Router, not App Router). `_app.tsx` is intentionally minimal: it loads `globals.css`, wraps the tree in `BaseLayout`, and wires GA pageview tracking on `routeChangeComplete`. A page that sets `Page.standalone = true` is rendered without `BaseLayout` (GA still runs); only `/consulting` does this. There is no `ChakraProvider` or other framework wrapper. Page files are thin — they call `getStaticProps`, fetch data, and delegate rendering to a `*.page.tsx` component inside the relevant feature folder (`src/pages/index.tsx` → `src/features/home/Home.page.tsx`, `src/pages/articles/index.tsx` → `src/features/article/ArticleList.page.tsx`, `src/pages/brand.tsx` → `src/features/brand/Brand.page.tsx`, `src/pages/consulting.tsx` → `src/features/service/Consulting.page.tsx`).
 
 ### Feature-based layout under `src/features/<feature>/`
 
@@ -80,6 +80,8 @@ There is no `public/brand-assets/` mirror. The `/brand` page's ASSETS section li
 ## Visual Conventions
 
 This project uses the **Twilight Blade** design system. AI agents working in this repo MUST follow [`brand/brand.md`](brand/brand.md) for every visual decision: colors, typography, gradients, and DO / DO NOT rules. Token values and the full rule set live there as the single source of truth — do not duplicate them inline in this file. See [`/brand`](https://www.tokku-tech.dev/brand) for the rendered reference page, and `brand/tokens.css` / `brand/tokens.ts` for the consumable formats.
+
+**Exception: `/consulting`.** The AI adoption / agent consulting LP is a standalone, light-themed page and does not follow Twilight Blade. It renders without `BaseLayout`, loads Noto Sans JP via `next/font`, and takes its colors from the `--lp-*` variables scoped to `.consulting-lp` in `src/styles/globals.css`. Keep that palette inside the page: do not use `--lp-*` elsewhere, do not move it into `brand/tokens.css`, and do not reuse the dark primitives (`Link`, `Button`) on the LP. `brand/brand.md` is unchanged and still governs every other page.
 
 ## Git workflow
 

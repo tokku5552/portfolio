@@ -243,3 +243,44 @@
   transform: rotate(45deg);
   margin: 0 2px;
 }
+
+/*
+ * /consulting is a standalone, light-themed LP and the one deliberate exception
+ * to Twilight Blade (see CLAUDE.md "Visual Conventions"). Its palette is scoped
+ * to this wrapper class and must not be used anywhere else; do not move these
+ * values into brand/tokens.css.
+ */
+.consulting-lp {
+  color-scheme: light;
+  --lp-bg: #ffffff;
+  --lp-band: #f6f6f6;
+  --lp-ink: #222222;
+  --lp-ink-soft: #444444;
+  --lp-muted: #767676;
+  --lp-line: #e5e5e5;
+  --lp-teal: #0a5a58;
+  --lp-teal-dark: #064544;
+}
+
+/*
+ * Document-level scroll behaviour for the LP only. `:has()` scopes it to the
+ * page while it is mounted, so other routes keep the default jump scroll.
+ * The bottom padding / margin keep anchor targets and keyboard focus clear of
+ * the fixed mobile CTA bar.
+ */
+html:has(.consulting-lp) {
+  scroll-behavior: smooth;
+}
+@media (max-width: 640px) {
+  html:has(.consulting-lp) {
+    scroll-padding-bottom: 104px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:has(.consulting-lp) {
+    scroll-behavior: auto;
+  }
+}
+.consulting-lp :is(a, button, summary) {
+  scroll-margin-bottom: 110px;
+}
